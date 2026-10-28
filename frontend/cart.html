@@ -1,0 +1,208 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Shopping Cart | DONO</title>
+
+    <link rel="stylesheet" href="assets/css/cart.css">
+</head>
+
+<body>
+
+    <main class="cart-page">
+
+        <!-- Page Header -->
+        <header class="cart-header">
+            <h1>Shopping Cart</h1>
+            <p>Review your gifts before checkout.</p>
+        </header>
+
+        <section class="cart-content">
+
+            <!-- Cart Products -->
+            <div class="cart-items">
+
+                <h2 id="cart-count">Your Items (3)</h2>
+
+                <!-- Product 1 -->
+                <article class="cart-item">
+
+                    <img src="assets/images/birthday-gift.jpg.png"
+                         alt="Birthday Gift Box">
+
+                    <div class="cart-item-details">
+
+                        <h3>Birthday Gift Box</h3>
+                        <p>A special gift for a special day.</p>
+
+                        <span class="cart-item-price">25.00 JOD</span>
+
+                        <div class="cart-item-actions">
+
+                            <div class="quantity-control">
+
+                                <button type="button"
+                                        class="quantity-btn"
+                                        aria-label="Decrease Birthday Gift Box quantity">
+                                    −
+                                </button>
+
+                                <span class="quantity-number">1</span>
+
+                                <button type="button"
+                                        class="quantity-btn"
+                                        aria-label="Increase Birthday Gift Box quantity">
+                                    +
+                                </button>
+
+                            </div>
+
+                            <button type="button" class="remove-btn">
+                                Remove
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+                <!-- Product 2 -->
+                <article class="cart-item">
+
+                    <img src="assets/images/flowers-chocolate.jpg.png"
+                         alt="Flowers and Chocolate Box">
+
+                    <div class="cart-item-details">
+
+                        <h3>Flowers &amp; Chocolate Box</h3>
+                        <p>A sweet surprise for someone you love.</p>
+
+                        <span class="cart-item-price">35.00 JOD</span>
+
+                        <div class="cart-item-actions">
+
+                            <div class="quantity-control">
+
+                                <button type="button"
+                                        class="quantity-btn"
+                                        aria-label="Decrease Flowers and Chocolate Box quantity">
+                                    −
+                                </button>
+
+                                <span class="quantity-number">1</span>
+
+                                <button type="button"
+                                        class="quantity-btn"
+                                        aria-label="Increase Flowers and Chocolate Box quantity">
+                                    +
+                                </button>
+
+                            </div>
+
+                            <button type="button" class="remove-btn">
+                                Remove
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+                <!-- Product 3 -->
+                <article class="cart-item">
+
+                    <img src="assets/images/self-care.png"
+                         alt="Self-Care Gift Set">
+
+                    <div class="cart-item-details">
+
+                        <h3>Self-Care Gift Set</h3>
+                        <p>A little relaxation in a box.</p>
+
+                        <span class="cart-item-price">20.00 JOD</span>
+
+                        <div class="cart-item-actions">
+
+                            <div class="quantity-control">
+
+                                <button type="button"
+                                        class="quantity-btn"
+                                        aria-label="Decrease Self-Care Gift Set quantity">
+                                    −
+                                </button>
+
+                                <span class="quantity-number">1</span>
+
+                                <button type="button"
+                                        class="quantity-btn"
+                                        aria-label="Increase Self-Care Gift Set quantity">
+                                    +
+                                </button>
+
+                            </div>
+
+                            <button type="button" class="remove-btn">
+                                Remove
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+                <!-- Empty Cart Message -->
+                <div class="empty-cart" id="empty-cart" hidden>
+                    <h3>Your cart is empty!</h3>
+                    <p>Looks like you haven't added any gifts yet.</p>
+                </div>
+
+            </div>
+
+            <!-- Order Summary -->
+            <aside class="order-summary">
+
+                <h2>Order Summary</h2>
+
+                <div class="summary-row">
+                    <span>Subtotal</span>
+                    <span id="cart-subtotal">80.00 JOD</span>
+                </div>
+
+                <div class="summary-row">
+                    <span>Tax</span>
+                    <span>Calculated at checkout</span>
+                </div>
+
+                <hr>
+
+                <div class="summary-row summary-total">
+                    <span>Subtotal Before Tax</span>
+                    <span id="cart-total">80.00 JOD</span>
+                </div>
+
+                <button type="button" class="checkout-btn">
+                    Proceed to Checkout
+                </button>
+
+                <p class="summary-note">
+                    Final taxes and charges are calculated at checkout.
+                </p>
+
+            </aside>
+
+        </section>
+
+    </main>
+
+    <script src="assets/js/cart.js"></script>
+
+</body>
+
+</html>
