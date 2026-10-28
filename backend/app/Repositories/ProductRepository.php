@@ -34,6 +34,18 @@ class ProductRepository
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    public function categoryExists(int $categoryId): bool
+    {
+        $sql = "SELECT id FROM categories
+                WHERE id = ?
+                AND deleted_at IS NULL";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$categoryId]);
+
+        return $stmt->fetch(PDO::FETCH_ASSOC) !== false;
+    }
+
     public function create(
         int $categoryId,
         string $name,

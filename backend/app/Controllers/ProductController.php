@@ -14,86 +14,72 @@ class ProductController
         try {
             $products = $this->productRepository->getAll();
 
-            http_response_code(200);
+            Response::send(
+                true,
+                "Products retrieved successfully",
+                $products,
+                200
+            );
 
-            header("Content-Type: application/json; charset=utf-8");
-
-            echo json_encode([
-                "success" => true,
-                "message" => "Products retrieved successfully",
-                "data" => $products
-            ], JSON_UNESCAPED_UNICODE);
-
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
 
             error_log($e->getMessage());
 
-            http_response_code(500);
-
-            header("Content-Type: application/json; charset=utf-8");
-
-            echo json_encode([
-                "success" => false,
-                "message" => "Failed to retrieve products"
-            ]);
+            Response::send(
+                false,
+                "Failed to retrieve products",
+                null,
+                500
+            );
         }
     }
 
     public function show(int $productId): void
     {
-        header("Content-Type: application/json; charset=utf-8");
-
         // Check if product ID is valid
         if ($productId <= 0) {
-            http_response_code(400);
-
-            echo json_encode([
-                "success" => false,
-                "message" => "Invalid product ID"
-            ]);
-
-            return;
+            Response::send(
+                false,
+                "Invalid product ID",
+                null,
+                400
+            );
         }
 
         try {
             $product = $this->productRepository->getById($productId);
 
             if (!$product) {
-                http_response_code(404);
-
-                echo json_encode([
-                    "success" => false,
-                    "message" => "Product not found"
-                ]);
-
-                return;
+                Response::send(
+                    false,
+                    "Product not found",
+                    null,
+                    404
+                );
             }
 
-            http_response_code(200);
+            Response::send(
+                true,
+                "Product retrieved successfully",
+                $product,
+                200
+            );
 
-            echo json_encode([
-                "success" => true,
-                "message" => "Product retrieved successfully",
-                "data" => $product
-            ], JSON_UNESCAPED_UNICODE);
-
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
 
             error_log($e->getMessage());
 
-            http_response_code(500);
-
-            echo json_encode([
-                "success" => false,
-                "message" => "Failed to retrieve product"
-            ]);
+            Response::send(
+                false,
+                "Failed to retrieve product",
+                null,
+                500
+            );
         }
     }
 
     public function store(): void
     {
-        header("Content-Type: application/json; charset=utf-8");
-
         // Read JSON data sent by the frontend
         $rawInput = file_get_contents("php://input");
         $input = json_decode($rawInput, true);
@@ -104,14 +90,12 @@ class ProductController
             json_last_error() !== JSON_ERROR_NONE ||
             !str_starts_with(ltrim($rawInput), "{")
         ) {
-            http_response_code(400);
-
-            echo json_encode([
-                "success" => false,
-                "message" => "Invalid JSON data. Expected a JSON object"
-            ]);
-
-            return;
+            Response::send(
+                false,
+                "Invalid JSON data. Expected a JSON object",
+                null,
+                400
+            );
         }
 
         // Get product data
@@ -128,15 +112,12 @@ class ProductController
 
         // Return validation errors
         if (!empty($errors)) {
-            http_response_code(422);
-
-            echo json_encode([
-                "success" => false,
-                "message" => "Validation failed",
-                "errors" => $errors
-            ], JSON_UNESCAPED_UNICODE);
-
-            return;
+            Response::send(
+                false,
+                "Validation failed",
+                ["errors" => $errors],
+                422
+            );
         }
 
         // Clean product name
@@ -144,6 +125,18 @@ class ProductController
 
         // Create product in database
         try {
+            // Check if category exists
+            if (!$this->productRepository->categoryExists($categoryId)) {
+                Response::send(
+                    false,
+                    "Category not found",
+                    ["errors" => [
+                        "category_id" => "Selected category does not exist"
+                    ]],
+                    422
+                );
+            }
+
             $productId = $this->productRepository->create(
                 $categoryId,
                 $name,
@@ -154,15 +147,12 @@ class ProductController
                 $isActive
             );
 
-            http_response_code(201);
-
-            echo json_encode([
-                "success" => true,
-                "message" => "Product created successfully",
-                "data" => [
-                    "id" => $productId
-                ]
-            ], JSON_UNESCAPED_UNICODE);
+            Response::send(
+                true,
+                "Product created successfully",
+                ["id" => $productId],
+                201
+            );
 
         } catch (PDOException $e) {
 
@@ -170,39 +160,33 @@ class ProductController
 
             // Handle database constraint errors
             if ($e->getCode() === "23000") {
-                http_response_code(422);
-
-                echo json_encode([
-                    "success" => false,
-                    "message" => "Invalid product data or category"
-                ]);
-
-                return;
+                Response::send(
+                    false,
+                    "Invalid product data or category",
+                    null,
+                    422
+                );
             }
 
-            http_response_code(500);
-
-            echo json_encode([
-                "success" => false,
-                "message" => "Failed to create product"
-            ]);
+            Response::send(
+                false,
+                "Failed to create product",
+                null,
+                500
+            );
         }
     }
 
     public function update(int $productId): void
     {
-        header("Content-Type: application/json; charset=utf-8");
-
         // Check if product ID is valid
         if ($productId <= 0) {
-            http_response_code(400);
-
-            echo json_encode([
-                "success" => false,
-                "message" => "Invalid product ID"
-            ]);
-
-            return;
+            Response::send(
+                false,
+                "Invalid product ID",
+                null,
+                400
+            );
         }
 
         // Check if product exists
@@ -210,28 +194,24 @@ class ProductController
             $product = $this->productRepository->getById($productId);
 
             if (!$product) {
-                http_response_code(404);
-
-                echo json_encode([
-                    "success" => false,
-                    "message" => "Product not found"
-                ]);
-
-                return;
+                Response::send(
+                    false,
+                    "Product not found",
+                    null,
+                    404
+                );
             }
 
         } catch (PDOException $e) {
 
             error_log($e->getMessage());
 
-            http_response_code(500);
-
-            echo json_encode([
-                "success" => false,
-                "message" => "Failed to retrieve product"
-            ]);
-
-            return;
+            Response::send(
+                false,
+                "Failed to retrieve product",
+                null,
+                500
+            );
         }
 
         // Read JSON data sent by the frontend
@@ -244,14 +224,12 @@ class ProductController
             json_last_error() !== JSON_ERROR_NONE ||
             !str_starts_with(ltrim($rawInput), "{")
         ) {
-            http_response_code(400);
-
-            echo json_encode([
-                "success" => false,
-                "message" => "Invalid JSON data. Expected a JSON object"
-            ]);
-
-            return;
+            Response::send(
+                false,
+                "Invalid JSON data. Expected a JSON object",
+                null,
+                400
+            );
         }
 
         // Validate updated product data
@@ -259,15 +237,12 @@ class ProductController
 
         // Return validation errors
         if (!empty($errors)) {
-            http_response_code(422);
-
-            echo json_encode([
-                "success" => false,
-                "message" => "Validation failed",
-                "errors" => $errors
-            ], JSON_UNESCAPED_UNICODE);
-
-            return;
+            Response::send(
+                false,
+                "Validation failed",
+                ["errors" => $errors],
+                422
+            );
         }
 
         // Get product data
@@ -281,6 +256,18 @@ class ProductController
 
         // Update product in database
         try {
+            // Check if category exists
+            if (!$this->productRepository->categoryExists($categoryId)) {
+                Response::send(
+                    false,
+                    "Category not found",
+                    ["errors" => [
+                        "category_id" => "Selected category does not exist"
+                    ]],
+                    422
+                );
+            }
+
             $updated = $this->productRepository->update(
                 $productId,
                 $categoryId,
@@ -293,22 +280,20 @@ class ProductController
             );
 
             if (!$updated) {
-                http_response_code(500);
-
-                echo json_encode([
-                    "success" => false,
-                    "message" => "Failed to update product"
-                ]);
-
-                return;
+                Response::send(
+                    false,
+                    "Failed to update product",
+                    null,
+                    500
+                );
             }
 
-            http_response_code(200);
-
-            echo json_encode([
-                "success" => true,
-                "message" => "Product updated successfully"
-            ], JSON_UNESCAPED_UNICODE);
+            Response::send(
+                true,
+                "Product updated successfully",
+                null,
+                200
+            );
 
         } catch (PDOException $e) {
 
@@ -316,39 +301,33 @@ class ProductController
 
             // Handle database constraint errors
             if ($e->getCode() === "23000") {
-                http_response_code(422);
-
-                echo json_encode([
-                    "success" => false,
-                    "message" => "Invalid product data or category"
-                ]);
-
-                return;
+                Response::send(
+                    false,
+                    "Invalid product data or category",
+                    null,
+                    422
+                );
             }
 
-            http_response_code(500);
-
-            echo json_encode([
-                "success" => false,
-                "message" => "Failed to update product"
-            ]);
+            Response::send(
+                false,
+                "Failed to update product",
+                null,
+                500
+            );
         }
     }
 
     public function destroy(int $productId): void
     {
-        header("Content-Type: application/json; charset=utf-8");
-
         // Check if product ID is valid
         if ($productId <= 0) {
-            http_response_code(400);
-
-            echo json_encode([
-                "success" => false,
-                "message" => "Invalid product ID"
-            ]);
-
-            return;
+            Response::send(
+                false,
+                "Invalid product ID",
+                null,
+                400
+            );
         }
 
         try {
@@ -356,47 +335,43 @@ class ProductController
             $product = $this->productRepository->getById($productId);
 
             if (!$product) {
-                http_response_code(404);
-
-                echo json_encode([
-                    "success" => false,
-                    "message" => "Product not found"
-                ]);
-
-                return;
+                Response::send(
+                    false,
+                    "Product not found",
+                    null,
+                    404
+                );
             }
 
             // Soft delete product
             $deleted = $this->productRepository->delete($productId);
 
             if (!$deleted) {
-                http_response_code(404);
-
-                echo json_encode([
-                    "success" => false,
-                    "message" => "Product not found or already deleted"
-                ]);
-
-                return;
+                Response::send(
+                    false,
+                    "Product not found or already deleted",
+                    null,
+                    404
+                );
             }
 
-            http_response_code(200);
-
-            echo json_encode([
-                "success" => true,
-                "message" => "Product deleted successfully"
-            ]);
+            Response::send(
+                true,
+                "Product deleted successfully",
+                null,
+                200
+            );
 
         } catch (PDOException $e) {
 
             error_log($e->getMessage());
 
-            http_response_code(500);
-
-            echo json_encode([
-                "success" => false,
-                "message" => "Failed to delete product"
-            ]);
+            Response::send(
+                false,
+                "Failed to delete product",
+                null,
+                500
+            );
         }
     }
 
