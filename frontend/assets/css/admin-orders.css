@@ -1,0 +1,385 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #ffffff;
+    color: #253329;
+}
+
+button,
+input,
+select {
+    font: inherit;
+}
+
+.admin-orders-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 60px 30px;
+}
+
+/* Header */
+
+.page-header {
+    margin-bottom: 35px;
+}
+
+.page-header h1 {
+    font-size: 42px;
+    color: #1d3024;
+    margin-bottom: 12px;
+}
+
+.page-header p {
+    color: #777;
+    line-height: 1.6;
+}
+
+/* Search and Filter */
+
+.orders-toolbar {
+    display: flex;
+    gap: 18px;
+    margin-bottom: 25px;
+}
+
+.orders-toolbar input,
+.orders-toolbar select {
+    padding: 14px 16px;
+    border: 1px solid #dfe8dc;
+    border-radius: 12px;
+    background: #ffffff;
+    color: #253329;
+    outline: none;
+}
+
+.orders-toolbar input {
+    flex: 1;
+    min-width: 0;
+}
+
+.orders-toolbar select {
+    min-width: 190px;
+    cursor: pointer;
+}
+
+.orders-toolbar input:focus,
+.orders-toolbar select:focus,
+#modal-status:focus {
+    border-color: #416b4c;
+}
+
+/* Table */
+
+.orders-table-wrapper {
+    overflow-x: auto;
+    border: 1px solid #edf0eb;
+    border-radius: 18px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.04);
+}
+
+.orders-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.orders-table thead {
+    background: #eaf3e8;
+}
+
+.orders-table th {
+    padding: 20px 16px;
+    color: #263b2b;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.orders-table td {
+    padding: 20px 16px;
+    border-top: 1px solid #edf0eb;
+    font-size: 14px;
+    vertical-align: middle;
+}
+
+.orders-table tbody tr:hover {
+    background: #fafcf9;
+}
+
+.customer-name {
+    font-weight: bold;
+    color: #203529;
+}
+
+.order-number {
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.order-total {
+    font-weight: bold;
+    color: #416b4c;
+    white-space: nowrap;
+}
+
+/* Status */
+
+.order-status {
+    display: inline-block;
+    padding: 8px 12px;
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: capitalize;
+}
+
+.status-pending {
+    background: #fff0cc;
+    color: #956200;
+}
+
+.status-confirmed {
+    background: #e0f3e3;
+    color: #28723d;
+}
+
+.status-cancelled {
+    background: #ffe2e2;
+    color: #b23d3d;
+}
+
+/* View Button */
+
+.view-btn {
+    padding: 10px 18px;
+    background: #416b4c;
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.view-btn:hover {
+    background: #30553a;
+}
+
+.orders-count {
+    margin-top: 20px;
+    color: #818781;
+    font-size: 14px;
+}
+
+.no-orders[hidden] {
+    display: none;
+}
+
+.no-orders {
+    padding: 35px;
+    text-align: center;
+    color: #818781;
+}
+
+/* Modal */
+
+.modal-overlay[hidden] {
+    display: none;
+}
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: rgba(18, 34, 23, 0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.order-modal {
+    width: 100%;
+    max-width: 850px;
+    max-height: 90vh;
+    overflow-y: auto;
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    padding: 25px 30px;
+    border-bottom: 1px solid #edf0eb;
+}
+
+.modal-header h2 {
+    color: #203529;
+    font-size: 24px;
+}
+
+.close-modal {
+    border: none;
+    background: transparent;
+    color: #777;
+    font-size: 32px;
+    cursor: pointer;
+}
+
+.close-modal:hover {
+    color: #203529;
+}
+
+.modal-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    padding: 30px;
+}
+
+.details-column {
+    min-width: 0;
+}
+
+.details-column h3 {
+    font-size: 17px;
+    color: #203529;
+    margin: 20px 0 15px;
+}
+
+.details-column h3:first-child {
+    margin-top: 0;
+}
+
+.details-column p {
+    font-size: 14px;
+    color: #687469;
+    line-height: 1.7;
+    margin-bottom: 8px;
+}
+
+.modal-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 13px 0;
+    border-bottom: 1px solid #edf0eb;
+}
+
+.modal-item-name {
+    font-weight: bold;
+    color: #263b2b;
+    font-size: 14px;
+}
+
+.modal-item-quantity {
+    color: #888;
+    font-size: 13px;
+    margin-top: 5px;
+}
+
+.modal-item-price {
+    color: #416b4c;
+    font-weight: bold;
+    white-space: nowrap;
+    font-size: 14px;
+}
+
+/* Summary */
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 16px;
+    color: #687469;
+    font-size: 14px;
+}
+
+.summary-total {
+    border-top: 1px solid #dfe8dc;
+    padding-top: 18px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #203529;
+}
+
+.update-heading {
+    margin-top: 30px !important;
+}
+
+#modal-status {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #dfe8dc;
+    border-radius: 10px;
+    background: #ffffff;
+    color: #253329;
+    outline: none;
+    cursor: pointer;
+}
+
+.save-btn {
+    width: 100%;
+    margin-top: 18px;
+    padding: 15px;
+    border: none;
+    border-radius: 10px;
+    background: #416b4c;
+    color: #ffffff;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.save-btn:hover {
+    background: #30553a;
+}
+
+.status-message {
+    margin-top: 12px;
+    color: #28723d !important;
+    font-weight: bold;
+}
+
+/* Responsive */
+
+@media (max-width: 700px) {
+    .admin-orders-page {
+        padding: 35px 20px;
+    }
+
+    .page-header h1 {
+        font-size: 32px;
+    }
+
+    .orders-toolbar {
+        flex-direction: column;
+    }
+
+    .orders-toolbar select {
+        width: 100%;
+    }
+
+    .orders-table {
+        min-width: 750px;
+    }
+
+    .modal-content {
+        grid-template-columns: 1fr;
+        padding: 20px;
+    }
+
+    .modal-header {
+        padding: 20px;
+    }
+}

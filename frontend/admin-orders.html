@@ -1,0 +1,161 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Manage Orders | DONO</title>
+
+    <link rel="stylesheet" href="assets/css/admin-orders.css">
+</head>
+
+<body>
+
+    <main class="admin-orders-page">
+
+        <header class="page-header">
+            <h1>Manage Orders</h1>
+            <p>View, search and manage customer orders.</p>
+        </header>
+
+        <!-- Search and Filter -->
+        <section class="orders-toolbar">
+
+            <input
+                type="search"
+                id="order-search"
+                placeholder="Search by order number or customer name..."
+            >
+
+            <select id="status-filter">
+                <option value="all">All Status</option>
+                <option value="pending">Pending</option>
+                <option value="confirmed">Confirmed</option>
+                <option value="cancelled">Cancelled</option>
+            </select>
+
+        </section>
+
+        <!-- Orders Table -->
+        <section class="orders-table-wrapper">
+
+            <table class="orders-table">
+
+                <thead>
+                    <tr>
+                        <th>Order #</th>
+                        <th>Customer</th>
+                        <th>Date</th>
+                        <th>Items</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody id="orders-table-body"></tbody>
+
+            </table>
+
+            <p id="no-orders" class="no-orders" hidden>
+                No orders found.
+            </p>
+
+        </section>
+
+        <p id="orders-count" class="orders-count"></p>
+
+    </main>
+
+    <!-- Order Details Modal -->
+    <div class="modal-overlay" id="order-modal" hidden>
+
+        <section
+            class="order-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-title"
+        >
+
+            <div class="modal-header">
+                <h2 id="modal-title">Order Details</h2>
+
+                <button
+                    type="button"
+                    id="close-modal"
+                    class="close-modal"
+                    aria-label="Close order details"
+                >
+                    &times;
+                </button>
+            </div>
+
+            <div class="modal-content">
+
+                <div class="details-column">
+
+                    <h3>Customer Information</h3>
+                    <p id="modal-customer"></p>
+
+                    <h3>Order Information</h3>
+                    <p id="modal-number"></p>
+                    <p id="modal-date"></p>
+
+                    <h3>Order Items</h3>
+                    <div id="modal-items"></div>
+
+                </div>
+
+                <div class="details-column">
+
+                    <h3>Order Summary</h3>
+
+                    <div class="summary-row">
+                        <span>Subtotal</span>
+                        <span id="modal-subtotal"></span>
+                    </div>
+
+                    <div class="summary-row">
+                        <span>Discount</span>
+                        <span id="modal-discount"></span>
+                    </div>
+
+                    <div class="summary-row">
+                        <span>Shipping</span>
+                        <span id="modal-shipping"></span>
+                    </div>
+
+                    <div class="summary-row summary-total">
+                        <span>Total</span>
+                        <span id="modal-total"></span>
+                    </div>
+
+                    <h3 class="update-heading">Update Order Status</h3>
+
+                    <select id="modal-status">
+                        <option value="pending">Pending</option>
+                        <option value="confirmed">Confirmed</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
+
+                    <button type="button" id="save-status" class="save-btn">
+                        Save Changes
+                    </button>
+
+                    <p id="status-message" class="status-message" role="status"></p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </div>
+
+    <script src="assets/js/admin-orders.js"></script>
+
+</body>
+
+</html>
