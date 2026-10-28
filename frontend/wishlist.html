@@ -1,0 +1,145 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Wishlist | DONO</title>
+
+    <link rel="stylesheet" href="assets/css/wishlist.css">
+</head>
+
+<body>
+
+    <main class="wishlist-page">
+
+        <header class="wishlist-header">
+            <h1>My Wishlist</h1>
+            <p>Your favorite gifts, all in one place.</p>
+        </header>
+
+        <section class="wishlist-section">
+
+            <h2 id="wishlist-count">Your Favorites (0)</h2>
+
+            <!-- Restore Products -->
+            <button type="button" id="restore-wishlist-btn">
+                Restore Original Favorites
+            </button>
+
+            <!-- Undo Message -->
+            <div class="undo-message" id="wishlist-undo" hidden>
+                <span>Product removed from your wishlist.</span>
+
+                <button type="button" id="wishlist-undo-btn">
+                    Undo
+                </button>
+            </div>
+
+            <!-- Wishlist Products -->
+            <div class="wishlist-grid" id="wishlist-grid">
+
+                <!-- Product 1 -->
+                <article class="wishlist-card" data-id="4">
+
+                    <div class="wishlist-image">
+                    
+                     <img src="assets/images/coffee-gift.png.png" alt="Coffee Lover Gift Box">
+                        <button type="button"
+                                class="wishlist-heart active"
+                                aria-label="Remove Coffee Lover Gift Box from wishlist"
+                                aria-pressed="true">
+                            ♥
+                        </button>
+                    </div>
+
+                    <div class="wishlist-details">
+                        <h3>Coffee Lover Gift Box</h3>
+
+                        <p>The perfect surprise for coffee lovers.</p>
+
+                        <span class="wishlist-price">28.00 JOD</span>
+
+                        <button type="button" class="move-cart-btn">
+                            Move to Cart
+                        </button>
+                    </div>
+
+                </article>
+
+                <!-- Product 2 -->
+                <article class="wishlist-card" data-id="5">
+
+                    <div class="wishlist-image">
+                        <img src="assets/images/candle-gift.png.png" alt="Scented Candle Set">
+
+
+                        <button type="button"
+                                class="wishlist-heart active"
+                                aria-label="Remove Scented Candle Set from wishlist"
+                                aria-pressed="true">
+                            ♥
+                        </button>
+                    </div>
+
+                    <div class="wishlist-details">
+                        <h3>Scented Candle Set</h3>
+
+                        <p>A cozy gift filled with relaxing scents.</p>
+
+                        <span class="wishlist-price">18.00 JOD</span>
+
+                        <button type="button" class="move-cart-btn">
+                            Move to Cart
+                        </button>
+                    </div>
+
+                </article>
+
+                <!-- Product 3 -->
+                <article class="wishlist-card" data-id="6">
+
+                    <div class="wishlist-image">
+                      <img src="assets/images/chocolate-gift.png.png" alt="Luxury Chocolate Box">
+
+                        <button type="button"
+                                class="wishlist-heart active"
+                                aria-label="Remove Luxury Chocolate Box from wishlist"
+                                aria-pressed="true">
+                            ♥
+                        </button>
+                    </div>
+
+                    <div class="wishlist-details">
+                        <h3>Luxury Chocolate Box</h3>
+
+                        <p>A delicious selection of premium chocolates.</p>
+
+                        <span class="wishlist-price">32.00 JOD</span>
+
+                        <button type="button" class="move-cart-btn">
+                            Move to Cart
+                        </button>
+                    </div>
+
+                </article>
+
+            </div>
+
+            <!-- Empty Wishlist -->
+            <div class="empty-wishlist" id="empty-wishlist" hidden>
+                <h3>Your wishlist is empty!</h3>
+                <p>Save your favorite gifts to see them here.</p>
+            </div>
+
+        </section>
+
+    </main>
+
+    <script src="assets/js/wishlist.js"></script>
+
+</body>
+
+</html>
