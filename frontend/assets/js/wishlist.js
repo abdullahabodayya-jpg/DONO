@@ -1,224 +1,168 @@
 
-/* =========================
-   Wishlist | DONO
-========================= */
+// =========================
+// Wishlist | DONO
+// =========================
 
+const wishlistGrid = document.getElementById("wishlist-grid");
 const wishlistCount = document.getElementById("wishlist-count");
 const emptyWishlist = document.getElementById("empty-wishlist");
+const wishlistMessage = document.getElementById("wishlist-message");
 
-const wishlistCards = document.querySelectorAll(".wishlist-card");
+// API endpoints - verify paths when backend routes are ready
+const wishlistApi = "/DONO-repo/backend/public/api/wishlist";
+const cartApi = "/DONO-repo/backend/public/api/cart";
 
-const undoMessage = document.getElementById("wishlist-undo");
-const undoButton = document.getElementById("wishlist-undo-btn");
+// Load wishlist from backend
+async function loadWishlist() {
+    wishlistMessage.textContent = "";
+    emptyWishlist.hidden = true;
 
-const restoreButton = document.getElementById("restore-wishlist-btn");
+    try {
+        const response = await fetch(wishlistApi);
+        const result = await response.json();
 
-
-// =========================
-// Initial Favorite Products
-// =========================
-
-const initialWishlist = ["4", "5", "6"];
-
-
-// =========================
-// Load Wishlist
-// =========================
-
-if (localStorage.getItem("donoWishlist") === null) {
-
-    localStorage.setItem(
-        "donoWishlist",
-        JSON.stringify(initialWishlist)
-    );
-
-}
-
-let wishlist = JSON.parse(localStorage.getItem("donoWishlist")) || [];
-
-let lastRemovedId = null;
-
-
-// =========================
-// Save Wishlist
-// =========================
-
-function saveWishlist() {
-
-    localStorage.setItem("donoWishlist", JSON.stringify(wishlist));
-
-}
-
-
-// =========================
-// Display Wishlist
-// =========================
-
-function displayWishlist() {
-
-    let count = 0;
-
-    wishlistCards.forEach(function(card) {
-
-        const productId = card.dataset.id;
-
-        if (wishlist.includes(productId)) {
-
-            card.hidden = false;
-            count++;
-
-        } else {
-
-            card.hidden = true;
-
+        if (!response.ok || !result.success) {
+            throw new Error(result.message || "Unable to load wishlist.");
         }
 
-    });
+        displayWishlist(result.data.items || []);
 
-    wishlistCount.textContent = "Your Favorites (" + count + ")";
-
-    emptyWishlist.hidden = count !== 0;
-
-}
-
-
-// =========================
-// Remove From Wishlist
-// =========================
-
-function removeFromWishlist(productId, allowUndo = true) {
-
-    wishlist = wishlist.filter(function(id) {
-        return id !== productId;
-    });
-
-    if (allowUndo) {
-
-        lastRemovedId = productId;
-        undoMessage.hidden = false;
-
-    } else {
-
-        lastRemovedId = null;
-        undoMessage.hidden = true;
-
+    } catch (error) {
+        wishlistGrid.replaceChildren();
+        wishlistCount.textContent = "Your Favorites (0)";
+        wishlistMessage.textContent = error.message;
     }
-
-    saveWishlist();
-    displayWishlist();
-
 }
 
+// Display products
+function displayWishlist(products) {
+    wishlistGrid.replaceChildren();
 
-// =========================
-// Setup Wishlist Cards
-// =========================
+    wishlistCount.textContent = `Your Favorites (${products.length})`;
+    emptyWishlist.hidden = products.length !== 0;
 
-wishlistCards.forEach(function(card) {
+    products.forEach(function (product) {
+        const card = document.createElement("article");
+        card.className = "wishlist-card";
 
-    const productId = card.dataset.id;
+        const imageBox = document.createElement("div");
+        imageBox.className = "wishlist-image";
 
-    const heartButton = card.querySelector(".wishlist-heart");
-    const moveButton = card.querySelector(".move-cart-btn");
+        const image = document.createElement("img");
+        image.src = product.image || "assets/images/placeholder.png";
+        image.alt = product.name;
 
-    // Remove using heart
-    heartButton.addEventListener("click", function() {
+        const heartButton = document.createElement("button");
+        heartButton.type = "button";
+        heartButton.className = "wishlist-heart active";
+        heartButton.textContent = "♥";
+        heartButton.setAttribute("aria-label", "Remove from wishlist");
 
-        removeFromWishlist(productId);
-
-    });
-
-    // Move to Cart
-    moveButton.addEventListener("click", function() {
-
-        const product = {
-            id: productId,
-            name: card.querySelector("h3").textContent.trim(),
-            description: card.querySelector(".wishlist-details p").textContent.trim(),
-            price: parseFloat(card.querySelector(".wishlist-price").textContent),
-            image: card.querySelector("img").getAttribute("src"),
-            quantity: 1
-        };
-
-        const cart = JSON.parse(localStorage.getItem("donoCart")) || [];
-
-        const existingProduct = cart.find(function(item) {
-            return item.id === product.id;
+        heartButton.addEventListener("click", function () {
+            removeWishlistItem(product.id);
         });
 
-        if (existingProduct) {
+        imageBox.append(image, heartButton);
 
-            existingProduct.quantity++;
+        const details = document.createElement("div");
+        details.className = "wishlist-details";
 
-        } else {
+        const name = document.createElement("h3");
+        name.textContent = product.name;
 
-            cart.push(product);
+        const description = document.createElement("p");
+        description.textContent = product.description || "";
 
+        const price = document.createElement("span");
+        price.className = "wishlist-price";
+        price.textContent = Number(product.price).toFixed(2) + " JOD";
+
+        const moveButton = document.createElement("button");
+        moveButton.type = "button";
+        moveButton.className = "move-cart-btn";
+        moveButton.textContent = "Move to Cart";
+
+        moveButton.addEventListener("click", function () {
+            moveToCart(product.id);
+        });
+
+        details.append(name, description, price, moveButton);
+        card.append(imageBox, details);
+        wishlistGrid.appendChild(card);
+    });
+}
+
+// Remove product from wishlist
+async function removeWishlistItem(productId) {
+    wishlistMessage.textContent = "";
+
+    try {
+        const response = await fetch(wishlistApi + "/items", {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ product_id: productId })
+        });
+
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+            throw new Error(result.message || "Unable to remove product.");
         }
 
-        localStorage.setItem("donoCart", JSON.stringify(cart));
+        await loadWishlist();
 
-        // Remove from Wishlist
-        removeFromWishlist(productId, false);
+    } catch (error) {
+        wishlistMessage.textContent = error.message;
+    }
+}
 
-        // Open Cart
+// Move product to cart
+async function moveToCart(productId) {
+    wishlistMessage.textContent = "";
+
+    try {
+        const response = await fetch(cartApi, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                product_id: productId,
+                quantity: 1
+            })
+        });
+
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+            throw new Error(result.message || "Unable to add product to cart.");
+        }
+
+        // Remove only after successfully adding to cart
+        const removeResponse = await fetch(wishlistApi + "/items", {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ product_id: productId })
+        });
+
+        const removeResult = await removeResponse.json();
+
+        if (!removeResponse.ok || !removeResult.success) {
+            throw new Error(
+                "Added to cart, but could not remove from wishlist."
+            );
+        }
+
         window.location.href = "cart.html";
 
-    });
-
-});
-
-
-// =========================
-// Undo Removal
-// =========================
-
-undoButton.addEventListener("click", function() {
-
-    if (lastRemovedId === null) {
-        return;
+    } catch (error) {
+        wishlistMessage.textContent = error.message;
     }
+}
 
-    if (!wishlist.includes(lastRemovedId)) {
-        wishlist.push(lastRemovedId);
-    }
-
-    lastRemovedId = null;
-    undoMessage.hidden = true;
-
-    saveWishlist();
-    displayWishlist();
-
-});
-
-
-// =========================
-// Restore Original Favorites
-// =========================
-
-restoreButton.addEventListener("click", function() {
-
-    initialWishlist.forEach(function(productId) {
-
-        if (!wishlist.includes(productId)) {
-
-            wishlist.push(productId);
-
-        }
-
-    });
-
-    lastRemovedId = null;
-    undoMessage.hidden = true;
-
-    saveWishlist();
-    displayWishlist();
-
-});
-
-
-// =========================
-// Initial Display
-// =========================
-
-displayWishlist();
+// Initial load
+loadWishlist();
