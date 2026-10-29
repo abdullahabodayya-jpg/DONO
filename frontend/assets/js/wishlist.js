@@ -1,5 +1,5 @@
 
-// =========================
+ // =========================
 // Wishlist | DONO
 // =========================
 
@@ -8,7 +8,7 @@ const wishlistCount = document.getElementById("wishlist-count");
 const emptyWishlist = document.getElementById("empty-wishlist");
 const wishlistMessage = document.getElementById("wishlist-message");
 
-// API endpoints - verify paths when backend routes are ready
+// API endpoints
 const wishlistApi = "/DONO-repo/backend/public/api/wishlist";
 const cartApi = "/DONO-repo/backend/public/api/cart";
 
@@ -30,6 +30,7 @@ async function loadWishlist() {
     } catch (error) {
         wishlistGrid.replaceChildren();
         wishlistCount.textContent = "Your Favorites (0)";
+        emptyWishlist.hidden = true;
         wishlistMessage.textContent = error.message;
     }
 }
@@ -49,8 +50,13 @@ function displayWishlist(products) {
         imageBox.className = "wishlist-image";
 
         const image = document.createElement("img");
-        image.src = product.image || "assets/images/placeholder.png";
         image.alt = product.name;
+
+        if (product.image_url) {
+            image.src = product.image_url;
+        } else {
+            image.alt = "No image available";
+        }
 
         const heartButton = document.createElement("button");
         heartButton.type = "button";
@@ -97,13 +103,12 @@ async function removeWishlistItem(productId) {
     wishlistMessage.textContent = "";
 
     try {
-        const response = await fetch(wishlistApi + "/items", {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ product_id: productId })
-        });
+        const response = await fetch(
+            wishlistApi + "/items/" + productId,
+            {
+                method: "DELETE"
+            }
+        );
 
         const result = await response.json();
 
@@ -141,13 +146,12 @@ async function moveToCart(productId) {
         }
 
         // Remove only after successfully adding to cart
-        const removeResponse = await fetch(wishlistApi + "/items", {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ product_id: productId })
-        });
+        const removeResponse = await fetch(
+            wishlistApi + "/items/" + productId,
+            {
+                method: "DELETE"
+            }
+        );
 
         const removeResult = await removeResponse.json();
 
