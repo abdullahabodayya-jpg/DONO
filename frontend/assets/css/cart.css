@@ -66,23 +66,16 @@ body {
 
 #restore-products-btn {
     display: inline-block;
-
     background-color: #eaf3e8;
     color: #30553a;
-
     border: 1px solid #cbdcc9;
     border-radius: 10px;
-
     padding: 12px 18px;
     margin-bottom: 25px;
-
     font-size: 14px;
     font-weight: bold;
     cursor: pointer;
-
-    transition:
-        background-color 0.3s ease,
-        transform 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 #restore-products-btn:hover {
@@ -96,20 +89,13 @@ body {
     display: flex;
     align-items: center;
     gap: 24px;
-
     background-color: #ffffff;
     border: 1px solid #edf0eb;
     border-radius: 20px;
-
     padding: 20px;
     margin-bottom: 20px;
-
     box-shadow: 0 5px 25px rgba(0, 0, 0, 0.04);
-
-    transition:
-        transform 0.3s ease,
-        box-shadow 0.3s ease,
-        border-color 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
 .cart-item:hover {
@@ -123,10 +109,8 @@ body {
 .cart-item > img {
     width: 155px;
     height: 155px;
-
     flex-shrink: 0;
     object-fit: cover;
-
     border-radius: 15px;
     background-color: #f4f6f2;
 }
@@ -175,36 +159,26 @@ body {
     display: flex;
     align-items: center;
     gap: 15px;
-
     background-color: #f5f8f4;
     border: 1px solid #e5ece3;
     border-radius: 12px;
-
     padding: 6px;
 }
 
 .quantity-btn {
     width: 32px;
     height: 32px;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     background-color: #ffffff;
     border: 1px solid #e2e9df;
     border-radius: 8px;
-
     color: #416b4c;
     font-size: 19px;
     font-weight: 600;
-
     cursor: pointer;
-
-    transition:
-        background-color 0.3s ease,
-        color 0.3s ease,
-        transform 0.3s ease;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
 }
 
 .quantity-btn:hover {
@@ -216,7 +190,6 @@ body {
 .quantity-number {
     min-width: 18px;
     text-align: center;
-
     font-size: 15px;
     font-weight: bold;
     color: #263b2b;
@@ -227,16 +200,11 @@ body {
 .remove-btn {
     background: transparent;
     border: none;
-
     color: #c76b6b;
     font-size: 14px;
     font-weight: 600;
-
     cursor: pointer;
-
-    transition:
-        color 0.3s ease,
-        transform 0.3s ease;
+    transition: color 0.3s ease, transform 0.3s ease;
 }
 
 .remove-btn:hover {
@@ -246,7 +214,9 @@ body {
 
 /* Undo Message */
 
-.undo-message[hidden] {
+.undo-message[hidden],
+.empty-cart[hidden],
+#discount-row[hidden] {
     display: none;
 }
 
@@ -255,28 +225,22 @@ body {
     align-items: center;
     justify-content: space-between;
     gap: 15px;
-
     background-color: #f1f7f0;
     border: 1px solid #cbdcc9;
     border-radius: 12px;
-
     padding: 15px 20px;
     margin-bottom: 20px;
-
     color: #30553a;
     font-size: 14px;
-
     animation: fadeUp 0.3s ease;
 }
 
 .undo-message button {
     background: transparent;
     border: none;
-
     color: #30553a;
     font-size: 15px;
     font-weight: bold;
-
     text-decoration: underline;
     cursor: pointer;
 }
@@ -291,14 +255,10 @@ body {
     background-color: #f8faf7;
     border: 1px solid #e4ece1;
     border-radius: 20px;
-
     padding: 28px;
-
     box-shadow: 0 8px 30px rgba(49, 90, 59, 0.05);
-
     position: sticky;
     top: 25px;
-
     animation: fadeUp 0.5s ease both;
 }
 
@@ -315,9 +275,7 @@ body {
     justify-content: space-between;
     align-items: center;
     gap: 15px;
-
     margin-bottom: 20px;
-
     color: #707970;
     font-size: 14px;
 }
@@ -332,6 +290,82 @@ body {
     border: none;
     border-top: 1px solid #dfe8dc;
     margin: 25px 0;
+}
+
+/* Coupon Section */
+
+.coupon-section {
+    margin: 25px 0;
+}
+
+.coupon-section label {
+    display: block;
+    font-size: 14px;
+    font-weight: bold;
+    color: #263b2b;
+    margin-bottom: 12px;
+}
+
+.coupon-input-group {
+    display: flex;
+    gap: 10px;
+}
+
+.coupon-input-group input {
+    min-width: 0;
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #dfe8dc;
+    border-radius: 10px;
+    font-size: 13px;
+    outline: none;
+    background-color: #ffffff;
+}
+
+.coupon-input-group input:focus {
+    border-color: #416b4c;
+}
+
+#apply-coupon-btn {
+    padding: 12px 16px;
+    background-color: #416b4c;
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#apply-coupon-btn:hover:not(:disabled) {
+    background-color: #30553a;
+}
+
+#apply-coupon-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+#coupon-message {
+    font-size: 12px;
+    line-height: 1.5;
+    margin-top: 10px;
+}
+
+#coupon-message:empty {
+    display: none;
+}
+
+#coupon-message.success {
+    color: #30553a;
+}
+
+#coupon-message.error {
+    color: #c76b6b;
+}
+
+#cart-discount {
+    color: #416b4c;
 }
 
 /* Total */
@@ -356,21 +390,14 @@ body {
 .checkout-btn {
     width: 100%;
     padding: 16px 20px;
-
     background-color: #416b4c;
     border: none;
     border-radius: 12px;
-
     color: #ffffff;
     font-size: 15px;
     font-weight: bold;
-
     cursor: pointer;
-
-    transition:
-        background-color 0.3s ease,
-        transform 0.3s ease,
-        box-shadow 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .checkout-btn:hover:not(:disabled) {
@@ -391,24 +418,17 @@ body {
     font-size: 12px;
     line-height: 1.6;
     color: #919991;
-
     text-align: center;
     margin-top: 15px;
 }
 
 /* Empty Cart */
 
-.empty-cart[hidden] {
-    display: none;
-}
-
 .empty-cart {
     padding: 55px 20px;
-
     background-color: #f8faf7;
     border: 1px dashed #cbdcc9;
     border-radius: 20px;
-
     text-align: center;
 }
 
@@ -427,7 +447,6 @@ body {
 /* Animations */
 
 @keyframes fadeUp {
-
     from {
         opacity: 0;
         transform: translateY(15px);
@@ -442,7 +461,6 @@ body {
 /* Tablet */
 
 @media (max-width: 950px) {
-
     .cart-content {
         grid-template-columns: minmax(0, 1fr);
     }
@@ -456,7 +474,6 @@ body {
 /* Mobile */
 
 @media (max-width: 600px) {
-
     .cart-page {
         padding: 35px 20px;
     }
@@ -505,12 +522,12 @@ body {
 /* Reduced Motion */
 
 @media (prefers-reduced-motion: reduce) {
-
     .cart-item,
     .quantity-btn,
     .remove-btn,
     .checkout-btn,
-    #restore-products-btn {
+    #restore-products-btn,
+    #apply-coupon-btn {
         transition: none;
     }
 

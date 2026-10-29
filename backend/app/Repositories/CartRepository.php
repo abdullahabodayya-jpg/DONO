@@ -141,11 +141,27 @@ final class CartRepository
         return $stmt->rowCount() > 0;
     }
 
-    // Get all products in the cart
+    // Get all cart items with product details
     public function getCartItems(int $orderId): array
     {
-        $sql = "SELECT * FROM order_items
-                WHERE order_id = ?";
+        $sql = "SELECT
+                    oi.product_id,
+                    oi.product_name,
+                    oi.unit_price,
+                    oi.quantity,
+                    oi.line_total,
+                    p.description,
+                    (
+                        SELECT pi.image_url
+                        FROM product_images pi
+                        WHERE pi.product_id = oi.product_id
+                        AND pi.is_primary = 1
+                        LIMIT 1
+                    ) AS image
+                FROM order_items oi
+                LEFT JOIN products p
+                    ON oi.product_id = p.id
+                WHERE oi.order_id = ?";
 
         $stmt = $this->db->prepare($sql);
         $stmt->execute([$orderId]);

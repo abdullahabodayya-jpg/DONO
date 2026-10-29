@@ -160,3 +160,82 @@ $router->post('/api/coupons/validate', function () use ($database): void {
         ]
     );
 });
+
+
+// ========================================
+// CART API ROUTES
+// ========================================
+
+// Load the CartController class
+require_once __DIR__ . '/../app/Controllers/CartController.php';
+
+// Create CartController and pass the database connection
+$cartController = new CartController($database->getConnection());
+
+
+// ----------------------------------------
+// GET CART
+// ----------------------------------------
+
+// Get the current user's cart
+$router->get('/api/cart', function (): void {
+
+    // Authentication is required before accessing the cart
+    Response::send(
+        false,
+        'Authentication required.',
+        null,
+        401
+    );
+});
+
+
+// ----------------------------------------
+// ADD TO CART
+// ----------------------------------------
+
+// Add a product to the current user's cart
+$router->post('/api/cart', function (): void {
+
+    // Prevent adding products without authentication
+    Response::send(
+        false,
+        'Authentication required.',
+        null,
+        401
+    );
+});
+
+
+// ----------------------------------------
+// UPDATE CART QUANTITY
+// ----------------------------------------
+
+// Update the quantity of a product in the cart
+$router->put('/api/cart/items', function (): void {
+
+    // Prevent cart updates without authentication
+    Response::send(
+        false,
+        'Authentication required.',
+        null,
+        401
+    );
+});
+
+
+// ----------------------------------------
+// REMOVE FROM CART
+// ----------------------------------------
+
+// Remove a product from the cart
+$router->delete('/api/cart/items', function (): void {
+
+    // Prevent deleting cart items without authentication
+    Response::send(
+        false,
+        'Authentication required.',
+        null,
+        401
+    );
+});

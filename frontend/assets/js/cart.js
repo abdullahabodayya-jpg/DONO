@@ -1,303 +1,244 @@
 
-/* =========================
-   Shopping Cart | DONO
-========================= */
+/* DONO | Shopping Cart */
 
-const cartProducts = document.getElementById("cart-products");
+// API URLs
+const cartApi = "/DONO-repo/backend/public/index.php/api/cart";
+const couponApi = "/DONO-repo/backend/public/index.php/api/coupons/validate";
 
-const subtotalElement = document.getElementById("cart-subtotal");
-const totalElement = document.getElementById("cart-total");
-const countElement = document.getElementById("cart-count");
+// Page Elements
+const productsBox = document.getElementById("cart-products");
+const subtotalBox = document.getElementById("cart-subtotal");
+const totalBox = document.getElementById("cart-total");
+const countBox = document.getElementById("cart-count");
+const emptyBox = document.getElementById("empty-cart");
+const checkoutBtn = document.querySelector(".checkout-btn");
 
-const emptyMessage = document.getElementById("empty-cart");
-const checkoutButton = document.querySelector(".checkout-btn");
+const couponInput = document.getElementById("coupon-code");
+const couponBtn = document.getElementById("apply-coupon-btn");
+const couponMessage = document.getElementById("coupon-message");
+const discountRow = document.getElementById("discount-row");
+const discountBox = document.getElementById("cart-discount");
 
-const cartUndoMessage = document.getElementById("cart-undo");
-const cartUndoButton = document.getElementById("cart-undo-btn");
+// Hide old demo controls
+document.getElementById("restore-products-btn").hidden = true;
+document.getElementById("cart-undo").hidden = true;
 
-const restoreButton = document.getElementById("restore-products-btn");
+let cartSubtotal = 0;
+let couponCode = "";
+let requestVersion = 0;
 
+// Send request to backend
+async function apiRequest(url, method = "GET", body = null) {
+    const options = {
+        method,
+        credentials: "same-origin"
+    };
 
-// =========================
-// Original Demo Products
-// =========================
-
-const initialProducts = [
-    {
-        id: "1",
-        name: "Birthday Gift Box",
-        description: "A special gift for a special day.",
-        price: 25,
-        image: "assets/images/birthday-gift.jpg.png",
-        quantity: 1
-    },
-    {
-        id: "2",
-        name: "Flowers & Chocolate Box",
-        description: "A sweet surprise for someone you love.",
-        price: 35,
-        image: "assets/images/flowers-chocolate.jpg.png",
-        quantity: 1
-    },
-    {
-        id: "3",
-        name: "Self-Care Gift Set",
-        description: "A little relaxation in a box.",
-        price: 20,
-        image: "assets/images/self-care.png",
-        quantity: 1
+    if (body !== null) {
+        options.headers = { "Content-Type": "application/json" };
+        options.body = JSON.stringify(body);
     }
-];
 
+    const response = await fetch(url, options);
+    const result = await response.json();
 
-// =========================
-// Load Cart
-// =========================
+    if (!response.ok || result.success === false) {
+        throw new Error(result.message || "Request failed.");
+    }
 
-// Add original products only on first visit
-if (localStorage.getItem("donoCart") === null) {
-
-    localStorage.setItem("donoCart", JSON.stringify(initialProducts));
-
+    return result;
 }
 
-let cart = JSON.parse(localStorage.getItem("donoCart")) || [];
-
-// Store last removed product for Undo
-let lastRemovedProduct = null;
-let lastRemovedIndex = -1;
-
-
-// =========================
-// Save Cart
-// =========================
-
-function saveCart() {
-
-    localStorage.setItem("donoCart", JSON.stringify(cart));
-
+// Show coupon message
+function showCouponMessage(message, type = "") {
+    couponMessage.textContent = message;
+    couponMessage.className = type;
 }
 
+// Validate coupon using backend
+async function validateCoupon(code) {
+    const version = ++requestVersion;
 
-// =========================
-// Update Cart Summary
-// =========================
+    discountRow.hidden = true;
+    totalBox.textContent = cartSubtotal.toFixed(2) + " JOD";
+    couponBtn.disabled = true;
 
-function updateCart() {
+    try {
+        const result = await apiRequest(couponApi, "POST", {
+            code,
+            subtotal: cartSubtotal
+        });
 
-    let subtotal = 0;
-    let count = 0;
+        if (version !== requestVersion) return;
 
-    cart.forEach(function(product) {
+        couponCode = code;
+        discountBox.textContent =
+            "-" + Number(result.data.discount_amount).toFixed(2) + " JOD";
 
-        subtotal += product.price * product.quantity;
-        count += product.quantity;
+        totalBox.textContent =
+            Number(result.data.total_after_discount).toFixed(2) + " JOD";
 
-    });
+        discountRow.hidden = false;
+        showCouponMessage("Coupon applied successfully.", "success");
 
-    subtotalElement.textContent = subtotal.toFixed(2) + " JOD";
-    totalElement.textContent = subtotal.toFixed(2) + " JOD";
+    } catch (error) {
+        if (version !== requestVersion) return;
 
-    countElement.textContent = "Your Items (" + count + ")";
+        couponCode = "";
+        showCouponMessage(error.message, "error");
 
-    emptyMessage.hidden = cart.length !== 0;
-
-    checkoutButton.disabled = cart.length === 0;
-
+    } finally {
+        if (version === requestVersion) {
+            couponBtn.disabled = cartSubtotal <= 0;
+        }
+    }
 }
 
+// Load cart from backend
+async function loadCart() {
+    try {
+        const result = await apiRequest(cartApi);
 
-// =========================
-// Display Cart Products
-// =========================
+        const cart = result.data.cart;
+        const items = result.data.items || [];
 
-function displayCart() {
+        cartSubtotal = Number(cart?.subtotal || 0);
 
-    cartProducts.innerHTML = "";
+        subtotalBox.textContent = cartSubtotal.toFixed(2) + " JOD";
+        totalBox.textContent =
+            Number(cart?.total_amount || 0).toFixed(2) + " JOD";
 
-    cart.forEach(function(product) {
+        countBox.textContent = "Your Items (" + items.length + ")";
+        emptyBox.hidden = items.length > 0;
+        checkoutBtn.disabled = items.length === 0;
+        couponBtn.disabled = items.length === 0;
 
-        const item = document.createElement("article");
-        item.className = "cart-item";
+        productsBox.innerHTML = "";
 
-        // Image
-        const image = document.createElement("img");
-        image.src = product.image;
-        image.alt = product.name;
+        items.forEach(function(product) {
+            const item = document.createElement("article");
+            item.className = "cart-item";
 
-        // Details
-        const details = document.createElement("div");
-        details.className = "cart-item-details";
+            const image = document.createElement("img");
+            image.src = product.image || "assets/images/placeholder.png";
+            image.alt = product.product_name;
 
-        const name = document.createElement("h3");
-        name.textContent = product.name;
+            const details = document.createElement("div");
+            details.className = "cart-item-details";
 
-        const description = document.createElement("p");
-        description.textContent = product.description;
+            const name = document.createElement("h3");
+            name.textContent = product.product_name;
 
-        const price = document.createElement("span");
-        price.className = "cart-item-price";
-        price.textContent = Number(product.price).toFixed(2) + " JOD";
+            const description = document.createElement("p");
+            description.textContent = product.description || "";
 
-        // Actions
-        const actions = document.createElement("div");
-        actions.className = "cart-item-actions";
+            const price = document.createElement("span");
+            price.className = "cart-item-price";
+            price.textContent =
+                Number(product.unit_price).toFixed(2) + " JOD";
 
-        const quantityControl = document.createElement("div");
-        quantityControl.className = "quantity-control";
+            const actions = document.createElement("div");
+            actions.className = "cart-item-actions";
 
-        const minusButton = document.createElement("button");
-        minusButton.type = "button";
-        minusButton.className = "quantity-btn";
-        minusButton.textContent = "−";
+            const quantity = document.createElement("div");
+            quantity.className = "quantity-control";
 
-        const quantityNumber = document.createElement("span");
-        quantityNumber.className = "quantity-number";
-        quantityNumber.textContent = product.quantity;
+            const minus = document.createElement("button");
+            minus.className = "quantity-btn";
+            minus.textContent = "−";
 
-        const plusButton = document.createElement("button");
-        plusButton.type = "button";
-        plusButton.className = "quantity-btn";
-        plusButton.textContent = "+";
+            const number = document.createElement("span");
+            number.className = "quantity-number";
+            number.textContent = product.quantity;
 
-        const removeButton = document.createElement("button");
-        removeButton.type = "button";
-        removeButton.className = "remove-btn";
-        removeButton.textContent = "Remove";
+            const plus = document.createElement("button");
+            plus.className = "quantity-btn";
+            plus.textContent = "+";
 
-        // Decrease Quantity
-        minusButton.addEventListener("click", function() {
+            const remove = document.createElement("button");
+            remove.className = "remove-btn";
+            remove.textContent = "Remove";
 
-            if (product.quantity > 1) {
+            minus.onclick = function() {
+                if (Number(product.quantity) > 1) {
+                    changeQuantity(product.product_id, Number(product.quantity) - 1);
+                }
+            };
 
-                product.quantity--;
+            plus.onclick = function() {
+                changeQuantity(product.product_id, Number(product.quantity) + 1);
+            };
 
-                saveCart();
-                displayCart();
+            remove.onclick = function() {
+                removeProduct(product.product_id);
+            };
 
+            quantity.append(minus, number, plus);
+            actions.append(quantity, remove);
+            details.append(name, description, price, actions);
+            item.append(image, details);
+            productsBox.appendChild(item);
+        });
+
+        // Revalidate coupon after cart changes
+        if (couponCode && cartSubtotal > 0) {
+            await validateCoupon(couponCode);
+        } else {
+            requestVersion++;
+            discountRow.hidden = true;
+            if (cartSubtotal <= 0) {
+                couponCode = "";
+                showCouponMessage("");
             }
+        }
 
-        });
-
-        // Increase Quantity
-        plusButton.addEventListener("click", function() {
-
-            product.quantity++;
-
-            saveCart();
-            displayCart();
-
-        });
-
-        // Remove Product
-        removeButton.addEventListener("click", function() {
-
-            lastRemovedProduct = { ...product };
-
-            lastRemovedIndex = cart.findIndex(function(item) {
-                return item.id === product.id;
-            });
-
-            cart.splice(lastRemovedIndex, 1);
-
-            cartUndoMessage.hidden = false;
-
-            saveCart();
-            displayCart();
-
-        });
-
-        // Build Quantity Controls
-        quantityControl.appendChild(minusButton);
-        quantityControl.appendChild(quantityNumber);
-        quantityControl.appendChild(plusButton);
-
-        actions.appendChild(quantityControl);
-        actions.appendChild(removeButton);
-
-        details.appendChild(name);
-        details.appendChild(description);
-        details.appendChild(price);
-        details.appendChild(actions);
-
-        item.appendChild(image);
-        item.appendChild(details);
-
-        cartProducts.appendChild(item);
-
-    });
-
-    updateCart();
-
+    } catch (error) {
+        productsBox.textContent = error.message;
+        checkoutBtn.disabled = true;
+        couponBtn.disabled = true;
+    }
 }
 
+// Update quantity
+async function changeQuantity(productId, quantity) {
+    try {
+        await apiRequest(cartApi + "/items", "PUT", {
+            product_id: Number(productId),
+            quantity
+        });
 
-// =========================
-// Undo Remove
-// =========================
+        await loadCart();
+    } catch (error) {
+        alert(error.message);
+    }
+}
 
-cartUndoButton.addEventListener("click", function() {
+// Remove product
+async function removeProduct(productId) {
+    try {
+        await apiRequest(cartApi + "/items", "DELETE", {
+            product_id: Number(productId)
+        });
 
-    if (lastRemovedProduct === null) {
+        await loadCart();
+    } catch (error) {
+        alert(error.message);
+    }
+}
+
+// Apply coupon
+couponBtn.onclick = function() {
+    const code = couponInput.value.trim();
+
+    if (!code) {
+        showCouponMessage("Please enter a coupon code.", "error");
         return;
     }
 
-    // Avoid duplicate products if already restored
-    const existingProduct = cart.find(function(item) {
-        return item.id === lastRemovedProduct.id;
-    });
+    if (cartSubtotal <= 0) return;
 
-    if (!existingProduct) {
+    validateCoupon(code);
+};
 
-        cart.splice(lastRemovedIndex, 0, lastRemovedProduct);
-
-    }
-
-    lastRemovedProduct = null;
-    lastRemovedIndex = -1;
-
-    cartUndoMessage.hidden = true;
-
-    saveCart();
-    displayCart();
-
-});
-
-
-// =========================
-// Restore Original Products
-// =========================
-
-restoreButton.addEventListener("click", function() {
-
-    initialProducts.forEach(function(product) {
-
-        const exists = cart.some(function(item) {
-            return item.id === product.id;
-        });
-
-        // Only restore missing products
-        if (!exists) {
-
-            cart.push({ ...product });
-
-        }
-
-    });
-
-    // Clear old Undo state
-    lastRemovedProduct = null;
-    lastRemovedIndex = -1;
-    cartUndoMessage.hidden = true;
-
-    saveCart();
-    displayCart();
-
-});
-
-
-// =========================
-// Initial Display
-// =========================
-
-displayCart();
+// Load page
+loadCart();
