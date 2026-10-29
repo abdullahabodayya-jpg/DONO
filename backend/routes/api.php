@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/../app/Repositories/CouponRepository.php';
 require_once __DIR__ . '/../app/Controllers/CouponController.php';
+require_once __DIR__ . '/../app/Middleware/AdminMiddleware.php';
+
 
 
 $router->get('/api/health', function () use ($database): void {
