@@ -34,6 +34,95 @@ class ProductController
         }
     }
 
+    public function publicIndex(): void
+    {
+        // Get page and limit from query parameters
+        $page = filter_var(
+            $_GET["page"] ?? 1,
+            FILTER_VALIDATE_INT,
+            ["options" => ["min_range" => 1, "max_range" => 1000000]]
+        );
+
+        $limit = filter_var(
+            $_GET["limit"] ?? 12,
+            FILTER_VALIDATE_INT,
+            ["options" => ["min_range" => 1, "max_range" => 100]]
+        );
+
+        // Validate pagination values
+        if ($page === false || $limit === false) {
+            Response::send(
+                false,
+                "Page and limit must be valid positive integers",
+                null,
+                422
+            );
+        }
+
+        // Calculate how many products to skip
+        $offset = ($page - 1) * $limit;
+
+        try {
+            // Get active products with category and primary image
+            $products = $this->productRepository->getActiveProducts(
+                $limit,
+                $offset
+            );
+
+            // Count all active products
+            $total = $this->productRepository->countActiveProducts();
+
+            // Calculate total pages
+            $totalPages = (int) ceil($total / $limit);
+
+            // Prepare public product data
+            $items = [];
+
+            foreach ($products as $product) {
+                $items[] = [
+                    "id" => (int) $product["id"],
+                    "name" => $product["name"],
+                    "description" => $product["description"],
+                    "price" => $product["price"],
+                    "product_type" => $product["product_type"],
+                    "image_url" => $product["image_url"],
+                    "category" => [
+                        "id" => (int) $product["category_id"],
+                        "name" => $product["category_name"]
+                    ],
+                    "is_active" => (bool) $product["is_active"]
+                ];
+            }
+
+            // Send products with pagination information
+            Response::send(
+                true,
+                "Products retrieved successfully",
+                [
+                    "items" => $items,
+                    "pagination" => [
+                        "page" => $page,
+                        "limit" => $limit,
+                        "total" => $total,
+                        "total_pages" => $totalPages
+                    ]
+                ],
+                200
+            );
+
+        } catch (Throwable $e) {
+
+            error_log($e->getMessage());
+
+            Response::send(
+                false,
+                "Failed to retrieve products",
+                null,
+                500
+            );
+        }
+    }
+
     public function show(int $productId): void
     {
         // Check if product ID is valid
