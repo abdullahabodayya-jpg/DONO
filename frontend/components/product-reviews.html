@@ -1,0 +1,147 @@
+<!-- ===================================
+     DONO - PRODUCT REVIEWS COMPONENT
+=================================== -->
+
+<section
+    class="dono-reviews"
+    aria-label="Product reviews"
+>
+    <!-- Reviews Header -->
+    <div class="dono-reviews-header">
+        <div>
+            <h2>Customer Reviews</h2>
+            <p>See what customers think about this product.</p>
+        </div>
+
+        <!-- Rating Summary -->
+        <div class="dono-reviews-summary">
+            <strong data-review-average>—</strong>
+            <div>
+                <span
+                    class="dono-reviews-summary-stars"
+                    data-review-stars
+                >
+                    ☆☆☆☆☆
+                </span>
+                <small data-review-count>Loading reviews...</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- API Feedback -->
+    <p
+        class="dono-reviews-feedback"
+        data-review-feedback
+        role="status"
+        aria-live="polite"
+        hidden
+    ></p>
+
+    <!-- Existing Reviews -->
+    <div class="dono-reviews-list-section">
+        <h3>Reviews</h3>
+
+        <div
+            class="dono-reviews-list"
+            data-review-list
+        >
+            <p class="dono-reviews-empty">Loading reviews...</p>
+        </div>
+    </div>
+
+    <!-- Add Review Form -->
+    <div class="dono-reviews-form-section">
+        <h3>Write a Review</h3>
+        <p class="dono-reviews-form-description">Share your experience with this product.</p>
+
+        <form data-review-form>
+            <!-- Star Rating -->
+            <fieldset class="dono-reviews-rating-fieldset">
+                <legend>Your Rating *</legend>
+
+                <div class="dono-reviews-rating-picker">
+                    <label>
+                        <input
+                            type="radio"
+                            name="rating"
+                            value="1"
+                            required
+                        />
+                        <span aria-hidden="true">★</span>
+                        <span class="visually-hidden">1 star</span>
+                    </label>
+
+                    <label>
+                        <input
+                            type="radio"
+                            name="rating"
+                            value="2"
+                        />
+                        <span aria-hidden="true">★</span>
+                        <span class="visually-hidden">2 stars</span>
+                    </label>
+
+                    <label>
+                        <input
+                            type="radio"
+                            name="rating"
+                            value="3"
+                        />
+                        <span aria-hidden="true">★</span>
+                        <span class="visually-hidden">3 stars</span>
+                    </label>
+
+                    <label>
+                        <input
+                            type="radio"
+                            name="rating"
+                            value="4"
+                        />
+                        <span aria-hidden="true">★</span>
+                        <span class="visually-hidden">4 stars</span>
+                    </label>
+
+                    <label>
+                        <input
+                            type="radio"
+                            name="rating"
+                            value="5"
+                        />
+                        <span aria-hidden="true">★</span>
+                        <span class="visually-hidden">5 stars</span>
+                    </label>
+                </div>
+            </fieldset>
+
+            <!-- Review Comment -->
+            <div class="dono-reviews-form-group">
+                <label for="donoReviewComment"> Your Review (Optional) </label>
+
+                <textarea
+                    id="donoReviewComment"
+                    name="comment"
+                    rows="4"
+                    maxlength="2000"
+                    placeholder="Tell us what you liked about this product..."
+                ></textarea>
+            </div>
+
+            <!-- Form Message -->
+            <p
+                class="dono-reviews-form-message"
+                data-review-form-message
+                role="status"
+                aria-live="polite"
+                hidden
+            ></p>
+
+            <button
+                type="submit"
+                class="dono-reviews-submit"
+                data-review-submit
+            >
+                Submit Review
+            </button>
+        </form>
+    </div>
+</section>
