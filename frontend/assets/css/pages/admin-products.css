@@ -125,3 +125,206 @@
         margin-bottom: var(--space-4);
     }
 }
+/* ===================================
+   6. ADD PRODUCT MODAL
+=================================== */
+
+.admin-product-dialog {
+    width: min(880px, calc(100vw - 48px));
+    max-width: 880px;
+    margin: auto;
+    padding: 0;
+    border: none;
+    border-radius: 24px;
+    background: #ffffff;
+    box-shadow: 0 24px 60px rgba(15, 23, 20, 0.18);
+    overflow: hidden;
+}
+
+.admin-product-dialog::backdrop {
+    background: rgba(15, 23, 20, 0.45);
+    backdrop-filter: blur(3px);
+}
+
+.admin-product-dialog-shell {
+    padding: 24px 28px;
+}
+
+.admin-product-modal-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 22px;
+}
+
+.admin-product-modal-copy {
+    flex: 1;
+    min-width: 0;
+}
+
+.admin-product-modal-copy h2 {
+    margin: 0 0 8px;
+    font-size: 2rem;
+    line-height: 1.15;
+    font-weight: 700;
+    color: var(--color-text-heading);
+}
+
+.admin-product-modal-subtitle {
+    margin: 0;
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+}
+
+.admin-product-modal-close {
+    flex-shrink: 0;
+    width: 42px;
+    height: 42px;
+    border: 1px solid var(--color-border);
+    border-radius: 50%;
+    background: #f6f8f7;
+    color: var(--color-text-heading);
+    font-size: 1.6rem;
+    line-height: 1;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition:
+        background-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.admin-product-modal-close:hover {
+    background: #eef2ef;
+    transform: scale(1.03);
+}
+
+.admin-product-modal-close:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+.admin-product-form {
+    display: block;
+}
+
+.admin-product-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px 20px;
+}
+
+.admin-product-form-grid .form-group {
+    margin-bottom: 0;
+}
+
+.admin-product-form-grid .form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--color-text-heading);
+}
+
+.admin-product-form-grid .form-control {
+    width: 100%;
+    min-height: 50px;
+    padding: 12px 16px;
+    border: 1px solid var(--color-border);
+    border-radius: 14px;
+    background-color: #ffffff;
+    color: var(--color-text);
+    font-size: 0.95rem;
+    box-shadow: none;
+}
+
+.admin-product-form-grid select.form-control {
+    appearance: auto;
+}
+
+.admin-product-form-grid textarea.form-control {
+    min-height: 110px;
+    resize: none;
+    padding-top: 14px;
+}
+
+.admin-product-form-grid .form-control:focus {
+    border-color: var(--color-primary);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(27, 94, 32, 0.12);
+}
+
+.admin-product-full-width {
+    grid-column: 1 / -1;
+}
+
+.admin-product-form-note {
+    margin: 18px 0 0;
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: #f6f8f7;
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+}
+
+.admin-product-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 20px;
+    padding-top: 18px;
+    border-top: 1px solid var(--color-border);
+}
+
+.admin-product-modal-actions .btn {
+    min-width: 130px;
+}
+
+@media (max-width: 860px) {
+    .admin-product-dialog {
+        width: min(720px, calc(100vw - 32px));
+    }
+
+    .admin-product-dialog-shell {
+        padding: 22px;
+    }
+}
+
+@media (max-width: 700px) {
+    .admin-product-dialog {
+        width: calc(100vw - 24px);
+        border-radius: 20px;
+    }
+
+    .admin-product-dialog-shell {
+        padding: 18px;
+    }
+
+    .admin-product-modal-header {
+        gap: 12px;
+        margin-bottom: 18px;
+    }
+
+    .admin-product-modal-copy h2 {
+        font-size: 1.55rem;
+    }
+
+    .admin-product-form-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .admin-product-full-width {
+        grid-column: auto;
+    }
+
+    .admin-product-modal-actions {
+        flex-direction: column-reverse;
+    }
+
+    .admin-product-modal-actions .btn {
+        width: 100%;
+    }
+}
