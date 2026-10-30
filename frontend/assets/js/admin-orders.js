@@ -1,417 +1,209 @@
 
-/* =========================
-   Admin Manage Orders | DONO
-========================= */
+const API = "/DONO-repo/backend/public/api/admin/orders";
+const $ = id => document.getElementById(id);
 
-const ordersTableBody = document.getElementById("orders-table-body");
-const orderSearch = document.getElementById("order-search");
-const statusFilter = document.getElementById("status-filter");
-const ordersCount = document.getElementById("orders-count");
-const noOrders = document.getElementById("no-orders");
+let orders = [];
+let page = 1;
+let selectedId = null;
+let sortBy = "created_at";
+let direction = -1;
 
-const orderModal = document.getElementById("order-modal");
-const closeModalButton = document.getElementById("close-modal");
-const modalTitle = document.getElementById("modal-title");
-const modalCustomer = document.getElementById("modal-customer");
-const modalNumber = document.getElementById("modal-number");
-const modalDate = document.getElementById("modal-date");
-const modalItems = document.getElementById("modal-items");
+const perPage = 5;
+const price = n => Number(n).toFixed(2) + " JOD";
 
-const modalSubtotal = document.getElementById("modal-subtotal");
-const modalDiscount = document.getElementById("modal-discount");
-const modalShipping = document.getElementById("modal-shipping");
-const modalTotal = document.getElementById("modal-total");
+// Protect text displayed inside HTML
+const safe = value => String(value ?? "").replace(/[&<>"']/g, c => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;",
+    '"': "&quot;", "'": "&#39;"
+})[c]);
 
-const modalStatus = document.getElementById("modal-status");
-const saveStatusButton = document.getElementById("save-status");
-const statusMessage = document.getElementById("status-message");
+// Get orders from database
+async function loadOrders() {
+    try {
+        const response = await fetch(API);
+        const result = await response.json();
 
-
-// =========================
-// Demo Orders
-// =========================
-
-const initialOrders = [
-    {
-        id: 1,
-        user_id: 1,
-        customer_name: "Sara Ahmad",
-        order_number: "DONO-1001",
-        status: "pending",
-        subtotal: 60,
-        discount_amount: 5,
-        shipping_fee: 3,
-        total_amount: 58,
-        created_at: "2026-10-25",
-        items: [
-            {
-                id: 1,
-                order_id: 1,
-                product_id: 1,
-                product_name: "Birthday Gift Box",
-                unit_price: 25,
-                quantity: 1,
-                line_total: 25
-            },
-            {
-                id: 2,
-                order_id: 1,
-                product_id: 2,
-                product_name: "Flowers & Chocolate Box",
-                unit_price: 35,
-                quantity: 1,
-                line_total: 35
-            }
-        ]
-    },
-    {
-        id: 2,
-        user_id: 2,
-        customer_name: "Omar Khalid",
-        order_number: "DONO-1002",
-        status: "confirmed",
-        subtotal: 28,
-        discount_amount: 0,
-        shipping_fee: 3,
-        total_amount: 31,
-        created_at: "2026-10-27",
-        items: [
-            {
-                id: 3,
-                order_id: 2,
-                product_id: 4,
-                product_name: "Coffee Lover Gift Box",
-                unit_price: 28,
-                quantity: 1,
-                line_total: 28
-            }
-        ]
-    },
-    {
-        id: 3,
-        user_id: 3,
-        customer_name: "Lina Haddad",
-        order_number: "DONO-1003",
-        status: "cancelled",
-        subtotal: 32,
-        discount_amount: 0,
-        shipping_fee: 0,
-        total_amount: 32,
-        created_at: "2026-10-28",
-        items: [
-            {
-                id: 4,
-                order_id: 3,
-                product_id: 6,
-                product_name: "Luxury Chocolate Box",
-                unit_price: 32,
-                quantity: 1,
-                line_total: 32
-            }
-        ]
-    }
-];
-
-
-// =========================
-// Load Orders
-// =========================
-
-if (localStorage.getItem("donoAdminOrders") === null) {
-    localStorage.setItem(
-        "donoAdminOrders",
-        JSON.stringify(initialOrders)
-    );
-}
-
-let orders = JSON.parse(localStorage.getItem("donoAdminOrders")) || [];
-
-let selectedOrderId = null;
-
-
-// =========================
-// Save Orders
-// =========================
-
-function saveOrders() {
-    localStorage.setItem("donoAdminOrders", JSON.stringify(orders));
-}
-
-
-// =========================
-// Format Price
-// =========================
-
-function formatPrice(amount) {
-    return Number(amount).toFixed(2) + " JOD";
-}
-
-
-// =========================
-// Display Orders
-// =========================
-
-function displayOrders() {
-
-    ordersTableBody.innerHTML = "";
-
-    const searchText = orderSearch.value.trim().toLowerCase();
-    const selectedStatus = statusFilter.value;
-
-    const filteredOrders = orders.filter(function(order) {
-
-        // Do not display shopping carts
-        if (order.status === "cart") {
-            return false;
+        if (!response.ok || !result.success) {
+            throw new Error(result.message || "Failed to load orders");
         }
 
-        const matchesSearch =
-            order.order_number.toLowerCase().includes(searchText) ||
-            order.customer_name.toLowerCase().includes(searchText);
-
-        const matchesStatus =
-            selectedStatus === "all" ||
-            order.status === selectedStatus;
-
-        return matchesSearch && matchesStatus;
-
-    });
-
-    ordersCount.textContent =
-        "Showing " + filteredOrders.length + " orders";
-
-    noOrders.hidden = filteredOrders.length !== 0;
-
-    filteredOrders.forEach(function(order) {
-
-        const row = document.createElement("tr");
-
-        // Order Number
-        const numberCell = document.createElement("td");
-        numberCell.className = "order-number";
-        numberCell.textContent = order.order_number;
-
-        // Customer
-        const customerCell = document.createElement("td");
-
-        const customerName = document.createElement("span");
-        customerName.className = "customer-name";
-        customerName.textContent = order.customer_name;
-
-        customerCell.appendChild(customerName);
-
-        // Date
-        const dateCell = document.createElement("td");
-        dateCell.textContent = order.created_at;
-
-        // Items Count
-        const itemsCell = document.createElement("td");
-
-        let totalQuantity = 0;
-
-        order.items.forEach(function(item) {
-            totalQuantity += item.quantity;
-        });
-
-        itemsCell.textContent = totalQuantity + " items";
-
-        // Total
-        const totalCell = document.createElement("td");
-        totalCell.className = "order-total";
-        totalCell.textContent = formatPrice(order.total_amount);
-
-        // Status
-        const statusCell = document.createElement("td");
-
-        const statusBadge = document.createElement("span");
-        statusBadge.className =
-            "order-status status-" + order.status;
-
-        statusBadge.textContent = order.status;
-
-        statusCell.appendChild(statusBadge);
-
-        // Actions
-        const actionsCell = document.createElement("td");
-
-        const viewButton = document.createElement("button");
-        viewButton.type = "button";
-        viewButton.className = "view-btn";
-        viewButton.textContent = "View";
-
-        viewButton.addEventListener("click", function() {
-            openOrderDetails(order.id);
-        });
-
-        actionsCell.appendChild(viewButton);
-
-        // Build Row
-        row.appendChild(numberCell);
-        row.appendChild(customerCell);
-        row.appendChild(dateCell);
-        row.appendChild(itemsCell);
-        row.appendChild(totalCell);
-        row.appendChild(statusCell);
-        row.appendChild(actionsCell);
-
-        ordersTableBody.appendChild(row);
-
-    });
-
+        orders = result.data;
+        displayOrders();
+    } catch (error) {
+        orders = [];
+        displayOrders();
+        $("orders-count").textContent = error.message;
+    }
 }
 
+// Display, filter, sort and paginate
+function displayOrders() {
+    const search = $("order-search").value.toLowerCase();
+    const status = $("status-filter").value;
 
-// =========================
-// Open Order Details
-// =========================
+    let list = orders.filter(o =>
+        o.status !== "cart" &&
+        (o.order_number.toLowerCase().includes(search) ||
+         o.customer_name.toLowerCase().includes(search)) &&
+        (status === "all" || o.status === status)
+    );
 
-function openOrderDetails(orderId) {
+    const value = o => sortBy === "items"
+        ? o.items.reduce((sum, i) => sum + Number(i.quantity), 0)
+        : o[sortBy];
 
-    const order = orders.find(function(item) {
-        return item.id === orderId;
+    list.sort((a, b) => {
+        const x = value(a), y = value(b);
+        return (sortBy === "items" || sortBy === "total_amount"
+            ? Number(x) - Number(y)
+            : String(x).localeCompare(String(y), undefined, { numeric: true })
+        ) * direction;
     });
 
-    if (!order) {
-        return;
-    }
+    const pages = Math.max(1, Math.ceil(list.length / perPage));
+    page = Math.min(page, pages);
+    const visible = list.slice((page - 1) * perPage, page * perPage);
 
-    selectedOrderId = order.id;
+    $("orders-table-body").innerHTML = visible.map(o => `
+        <tr>
+            <td class="order-number">${safe(o.order_number)}</td>
+            <td class="customer-name">${safe(o.customer_name)}</td>
+            <td>${safe(o.created_at)}</td>
+            <td>${valueItems(o)} items</td>
+            <td class="order-total">${price(o.total_amount)}</td>
+            <td>
+                <span class="order-status status-${safe(o.status)}">
+                    ${safe(o.status)}
+                </span>
+            </td>
+            <td>
+                <button class="view-btn" data-id="${Number(o.id)}">View</button>
+            </td>
+        </tr>
+    `).join("");
 
-    modalTitle.textContent =
-        "Order Details - " + order.order_number;
-
-    modalCustomer.textContent = order.customer_name;
-
-    modalNumber.textContent =
-        "Order Number: " + order.order_number;
-
-    modalDate.textContent =
-        "Order Date: " + order.created_at;
-
-    modalSubtotal.textContent = formatPrice(order.subtotal);
-    modalDiscount.textContent = formatPrice(order.discount_amount);
-    modalShipping.textContent = formatPrice(order.shipping_fee);
-    modalTotal.textContent = formatPrice(order.total_amount);
-
-    modalStatus.value = order.status;
-
-    statusMessage.textContent = "";
-
-    // Display order_items
-    modalItems.innerHTML = "";
-
-    order.items.forEach(function(product) {
-
-        const item = document.createElement("div");
-        item.className = "modal-item";
-
-        const info = document.createElement("div");
-
-        const name = document.createElement("div");
-        name.className = "modal-item-name";
-        name.textContent = product.product_name;
-
-        const quantity = document.createElement("div");
-        quantity.className = "modal-item-quantity";
-
-        quantity.textContent =
-            product.quantity + " × " +
-            formatPrice(product.unit_price);
-
-        const price = document.createElement("span");
-        price.className = "modal-item-price";
-        price.textContent = formatPrice(product.line_total);
-
-        info.appendChild(name);
-        info.appendChild(quantity);
-
-        item.appendChild(info);
-        item.appendChild(price);
-
-        modalItems.appendChild(item);
-
-    });
-
-    orderModal.hidden = false;
-
+    $("no-orders").hidden = list.length > 0;
+    $("orders-count").textContent = `Showing ${visible.length} of ${list.length} orders`;
+    $("page-info").textContent = `Page ${page} of ${pages}`;
+    $("prev-page").disabled = page === 1;
+    $("next-page").disabled = page === pages;
 }
 
+function valueItems(order) {
+    return (order.items || []).reduce((sum, item) => sum + Number(item.quantity), 0);
+}
 
-// =========================
-// Save Order Status
-// =========================
-
-saveStatusButton.addEventListener("click", function() {
-
-    const order = orders.find(function(item) {
-        return item.id === selectedOrderId;
+// Search and status filter
+["order-search", "status-filter"].forEach(id => {
+    $(id).addEventListener(id === "order-search" ? "input" : "change", () => {
+        page = 1;
+        displayOrders();
     });
+});
 
-    if (!order) {
-        return;
-    }
+// Sorting
+document.querySelectorAll(".sort-btn").forEach(button => {
+    button.onclick = () => {
+        direction = sortBy === button.dataset.sort ? -direction : 1;
+        sortBy = button.dataset.sort;
+        page = 1;
+        displayOrders();
+    };
+});
 
-    const newStatus = modalStatus.value;
-
-    const allowedStatuses = [
-        "pending",
-        "confirmed",
-        "cancelled"
-    ];
-
-    if (!allowedStatuses.includes(newStatus)) {
-        return;
-    }
-
-    order.status = newStatus;
-
-    saveOrders();
+// Pagination
+$("prev-page").onclick = () => {
+    if (page > 1) page--;
     displayOrders();
+};
 
-    statusMessage.textContent = "Order status updated successfully!";
+$("next-page").onclick = () => {
+    page++;
+    displayOrders();
+};
 
-});
+// View order
+$("orders-table-body").onclick = event => {
+    const button = event.target.closest(".view-btn");
+    if (!button) return;
 
+    const o = orders.find(order => Number(order.id) === Number(button.dataset.id));
+    if (!o) return;
 
-// =========================
-// Close Modal
-// =========================
+    selectedId = o.id;
 
-function closeOrderModal() {
-    orderModal.hidden = true;
-    selectedOrderId = null;
+    $("modal-title").textContent = "Order Details - " + o.order_number;
+    $("modal-customer").textContent = o.customer_name;
+    $("modal-number").textContent = "Order Number: " + o.order_number;
+    $("modal-date").textContent = "Order Date: " + o.created_at;
+
+    ["subtotal", "total"].forEach(key => {
+        $("modal-" + key).textContent = price(
+            key === "total" ? o.total_amount : o.subtotal
+        );
+    });
+
+    $("modal-discount").textContent = price(o.discount_amount);
+    $("modal-shipping").textContent = price(o.shipping_fee);
+    $("modal-status").value = o.status;
+    $("status-message").textContent = "";
+
+    $("modal-items").innerHTML = (o.items || []).map(i => `
+        <div class="modal-item">
+            <div>
+                <div class="modal-item-name">${safe(i.product_name)}</div>
+                <div class="modal-item-quantity">
+                    ${Number(i.quantity)} × ${price(i.unit_price)}
+                </div>
+            </div>
+            <span class="modal-item-price">${price(i.line_total)}</span>
+        </div>
+    `).join("");
+
+    $("order-modal").hidden = false;
+};
+
+// Update status in database
+$("save-status").onclick = async () => {
+    if (selectedId === null) return;
+
+    $("save-status").disabled = true;
+
+    try {
+        const response = await fetch(`${API}/${selectedId}/status`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ status: $("modal-status").value })
+        });
+
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+            throw new Error(result.message || "Update failed");
+        }
+
+        await loadOrders();
+        $("status-message").textContent = "Status updated successfully!";
+    } catch (error) {
+        $("status-message").textContent = error.message;
+    }
+
+    $("save-status").disabled = false;
+};
+
+// Close modal
+function closeModal() {
+    $("order-modal").hidden = true;
+    selectedId = null;
 }
 
-closeModalButton.addEventListener("click", closeOrderModal);
+$("close-modal").onclick = closeModal;
+$("order-modal").onclick = e => {
+    if (e.target === $("order-modal")) closeModal();
+};
 
-orderModal.addEventListener("click", function(event) {
+document.onkeydown = e => {
+    if (e.key === "Escape") closeModal();
+};
 
-    if (event.target === orderModal) {
-        closeOrderModal();
-    }
-
-});
-
-document.addEventListener("keydown", function(event) {
-
-    if (event.key === "Escape" && !orderModal.hidden) {
-        closeOrderModal();
-    }
-
-});
-
-
-// =========================
-// Search and Filter
-// =========================
-
-orderSearch.addEventListener("input", displayOrders);
-
-statusFilter.addEventListener("change", displayOrders);
-
-
-// =========================
-// Initial Display
-// =========================
-
-displayOrders();
+loadOrders();

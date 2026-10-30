@@ -127,6 +127,26 @@ select {
     white-space: nowrap;
 }
 
+/* Sorting */
+
+.sort-btn {
+    background: transparent;
+    border: none;
+    color: #263b2b;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.sort-btn:hover {
+    color: #416b4c;
+}
+
+.sort-btn:focus-visible {
+    outline: 2px solid #416b4c;
+    outline-offset: 4px;
+}
+
 /* Status */
 
 .order-status {
@@ -170,10 +190,49 @@ select {
     background: #30553a;
 }
 
-.orders-count {
+/* Pagination */
+
+.pagination-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
     margin-top: 20px;
+}
+
+.orders-count {
     color: #818781;
     font-size: 14px;
+}
+
+.pagination {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.pagination button {
+    padding: 10px 15px;
+    border: 1px solid #dfe8dc;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #416b4c;
+    cursor: pointer;
+}
+
+.pagination button:hover:not(:disabled) {
+    background: #eaf3e8;
+}
+
+.pagination button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+#page-info {
+    color: #687469;
+    font-size: 14px;
+    white-space: nowrap;
 }
 
 .no-orders[hidden] {
@@ -345,6 +404,11 @@ select {
     background: #30553a;
 }
 
+.save-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
 .status-message {
     margin-top: 12px;
     color: #28723d !important;
@@ -362,12 +426,18 @@ select {
         font-size: 32px;
     }
 
-    .orders-toolbar {
+    .orders-toolbar,
+    .pagination-container {
         flex-direction: column;
+        align-items: stretch;
     }
 
     .orders-toolbar select {
         width: 100%;
+    }
+
+    .pagination {
+        justify-content: center;
     }
 
     .orders-table {

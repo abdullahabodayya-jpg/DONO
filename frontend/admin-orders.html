@@ -7,7 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Manage Orders | DONO</title>
-
     <link rel="stylesheet" href="assets/css/admin-orders.css">
 </head>
 
@@ -45,12 +44,12 @@
 
                 <thead>
                     <tr>
-                        <th>Order #</th>
-                        <th>Customer</th>
-                        <th>Date</th>
-                        <th>Items</th>
-                        <th>Total</th>
-                        <th>Status</th>
+                        <th><button type="button" class="sort-btn" data-sort="order_number">Order # ↕</button></th>
+                        <th><button type="button" class="sort-btn" data-sort="customer_name">Customer ↕</button></th>
+                        <th><button type="button" class="sort-btn" data-sort="created_at">Date ↕</button></th>
+                        <th><button type="button" class="sort-btn" data-sort="items">Items ↕</button></th>
+                        <th><button type="button" class="sort-btn" data-sort="total_amount">Total ↕</button></th>
+                        <th><button type="button" class="sort-btn" data-sort="status">Status ↕</button></th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -65,7 +64,18 @@
 
         </section>
 
-        <p id="orders-count" class="orders-count"></p>
+        <!-- Pagination -->
+        <div class="pagination-container">
+
+            <p id="orders-count" class="orders-count"></p>
+
+            <div class="pagination">
+                <button type="button" id="prev-page">Previous</button>
+                <span id="page-info">Page 1 of 1</span>
+                <button type="button" id="next-page">Next</button>
+            </div>
+
+        </div>
 
     </main>
 
@@ -80,6 +90,7 @@
         >
 
             <div class="modal-header">
+
                 <h2 id="modal-title">Order Details</h2>
 
                 <button
@@ -90,6 +101,7 @@
                 >
                     &times;
                 </button>
+
             </div>
 
             <div class="modal-content">
