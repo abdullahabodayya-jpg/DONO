@@ -1,5 +1,6 @@
 /* =========================================================
    DONO landing.css  —  ملف كامل ومرتّب (يستبدل القديم بالكامل)
+   + Full responsive (لابتوب / تابلت / موبايل / موبايل صغير / لاندسكيب)
    ========================================================= */
 
 :root{
@@ -17,7 +18,7 @@
 }
 
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;scroll-snap-type:y proximity;scrollbar-width:thin;scrollbar-color:var(--g4) var(--g8)}
+html{scroll-behavior:smooth;scroll-snap-type:y proximity;scrollbar-width:thin;scrollbar-color:var(--g4) var(--g8);-webkit-text-size-adjust:100%;text-size-adjust:100%}
 body{font-family:'Work Sans',sans-serif;background:var(--g8);color:var(--ink);overflow-x:clip;-webkit-font-smoothing:antialiased}
 a{color:inherit;text-decoration:none}
 h1,h2,.big{font-family:'Archivo',sans-serif;font-weight:900;letter-spacing:-.035em;line-height:.9}
@@ -90,7 +91,7 @@ nav .logo:hover{scale:1.12}
 
 /* ---------- السيكشنات ---------- */
 .scene{
-  position:relative;height:100svh;min-height:680px;overflow:hidden;isolation:isolate;
+  position:relative;height:100vh;height:100svh;min-height:680px;overflow:hidden;isolation:isolate;
   scroll-snap-align:start;
 }
 .scene>*{position:relative;z-index:1;max-width:100%}
@@ -323,41 +324,136 @@ nav .logo:hover{scale:1.12}
 /* ---------- أداء: وقّف الأنيميشن للسيكشنات الغير ظاهرة ---------- */
 .scene:not(.on) *,.scene:not(.on) *::before,.scene:not(.on) *::after{animation-play-state:paused!important}
 
-/* ---------- موبايل ---------- */
+
+/* =========================================================
+   RESPONSIVE
+   الترتيب: من الأكبر للأصغر (آخر قاعدة تغلب)
+   ========================================================= */
+
+/* ---------- لابتوب صغير / تابلت أفقي (حتى 1100px) ---------- */
+@media(max-width:1100px){
+  .s1 .tag{max-width:16ch}
+
+  .d1,.d3{height:min(44vh,400px)}
+  .d2{width:min(18vw,26vh)}
+
+  .s5 h2{max-width:52vw}
+  .s5 .sub{width:min(42vw,460px)}
+  .collage{width:42vw}
+
+  .paper{width:34vw}
+  .cats{left:2vw}
+  .s6 .ph1{width:28vw;right:-6vw}
+
+  .s7 .txt{width:min(34vw,420px)}
+
+  .s8 h2{max-width:80vw}
+  .notes{padding:0 4vw;gap:2vw}
+  .note{width:24vw}
+  .note h3{padding:2vw 1.8vw;height:10vw}
+  .note p{padding:2.2vw 1.8vw}
+}
+
+/* ---------- موبايل + تابلت عمودي (حتى 800px) ---------- */
 @media(max-width:800px){
-  nav{padding:12px 4vw}
+  nav{padding:12px 4vw;padding-top:max(12px,env(safe-area-inset-top))}
   .acts{gap:6px}
   .btn{padding:0 14px;font-size:13px;height:36px}
-  .dsk{display:none}
+  .dsk{display:none!important}
+  .paper,.cats,.s6 .ph1{display:none!important}
 
+  /* --- S1 --- */
   .mega{flex-direction:column;align-items:center;gap:4vh;font-size:26vw}
   .mega .hw{font-size:.36em}
-  .s2 .row{font-size:20vw;align-items:flex-start;padding-top:12vh}
-  .phone{width:min(54vw,34vh)}
-  .bub:nth-child(n+9){display:none}
-  .bub{width:calc(var(--w)*1.8)}
-  .s3 h2{font-size:9vw;top:58%}
-  .url{width:86vw;top:36%}
+  .s1 .slot{width:calc(var(--w)*2.4)}
+  .s1 .chip{font-size:13px}
+  .s1 .chip:nth-of-type(2){left:auto!important;right:4vw}
+
+  /* --- S2: Your فوق Shop والتلفون تحتهم --- */
+  .s2 .row{
+    top:0;flex-direction:column;justify-content:flex-start;align-items:center;
+    gap:0;padding:11vh 4vw 0;font-size:21vw;
+  }
+  .phone{width:min(54vw,34vh);top:58%}
+  .bub{width:calc(var(--w)*1.6)}
+
+  /* --- S3 --- */
+  .s3>div:nth-of-type(1){left:6vw!important;top:9vh!important;width:36vw!important}
+  .s3>div:nth-of-type(2){left:54vw!important;top:13vh!important;width:30vw!important}
+  .url{width:86vw;top:38%;padding:0 5vw;overflow:hidden;white-space:nowrap}
+  .s3 h2{font-size:12vw;top:54%;white-space:normal}
+  .s3 h2 span{display:block}
+  .s3 h2 br{display:none}
+
+  /* --- S4 --- */
   .d1,.d3{display:none}
-  .d2{width:46vw}
+  .d2{width:min(54vw,36vh)}
   .s4 h2{font-size:11vw}
-  .s5 h2{font-size:11vw;max-width:88vw}
-  .s5 .sub{top:36vh;width:86vw}
-  .collage{width:80vw;height:30vh;right:6vw;top:56vh}
-  .tabs{bottom:4vh}
+
+  /* --- S5 --- */
+  .s5 h2{font-size:10.5vw;max-width:90vw;left:5vw}
+  .s5 .sub{top:36vh;width:90vw;left:5vw}
+  .collage{width:84vw;height:30vh;right:8vw;top:56vh}
+  .tabs{left:5vw;right:5vw;bottom:4vh;gap:2vw;flex-wrap:nowrap}
+  .tabs button{flex:1;height:42px;padding:0 2vw;font-size:14px}
+
+  /* --- S6 --- */
   .s6 h2{font-size:10.5vw;top:12vh}
   .pills{top:32vh}
   .pill{font-size:clamp(18px,6.2vw,34px)}
-  .paper,.cats,.s6 .ph1{display:none}
-  .s7 .big{font-size:24vw;top:30vh}
-  .s7 .al{top:24vh}
-  .s7 .txt{width:82vw;font-size:18px;bottom:3vh}
-  .s8 h2{font-size:10.5vw;max-width:88vw}
-  .s8 .btn{top:auto;bottom:4vh;right:6vw}
-  .notes{flex-direction:column;bottom:9vh;gap:2vh}
-  .note{width:78vw}
-  .note h3{height:auto;padding:3vw 4vw}
+
+  /* --- S7: Best / Price فوق، والكروت تحتهم --- */
+  .s7 .big{font-size:20vw}
+  .s7 .big:nth-of-type(1){top:12vh;left:4vw!important}
+  .s7 .big:nth-of-type(2){top:calc(12vh + 16vw);right:4vw!important;left:auto!important}
+  .s7 .al{top:13vh;right:3vw;font-size:11vw}
+  .col{top:calc(12vh + 36vw);bottom:20vh;width:clamp(150px,44vw,230px)}
+  .pc{padding:3vw 3vw 2.4vw;font-size:13px}
+  .pc span{margin-bottom:1.6vw}
+  .s7 .txt{width:88vw;left:6vw;font-size:17px;bottom:3vh}
+
+  /* --- S8 --- */
+  .s8 h2{font-size:10.5vw;max-width:90vw;left:5vw;top:10vh}
+  .notes{flex-direction:column;align-items:center;bottom:5vh;gap:2.2vh;padding:0 4vw}
+  .note{width:84vw}
+  .note h3{height:auto;padding:3vw 4vw;font-size:15px}
   .note p{padding:3vw 4vw;font-size:13px}
+
+  /* --- S9 --- */
+  .s9 .big{font-size:11.5vw;top:18vh}
+  .s9 form{top:52vh}
+  .foot{font-size:13px}
+}
+
+/* ---------- موبايل صغير (حتى 480px) ---------- */
+@media(max-width:480px){
+  nav .logo{font-size:20px}
+  .btn{height:34px;padding:0 12px;font-size:12.5px}
+  .pillbtn{height:50px;font-size:17px;padding:0 26px}
+
+  .tabs button{font-size:13px;padding:0 1vw}
+  .note h3{font-size:14px}
+
+  .s9 form{flex-direction:column;top:46vh;gap:12px}
+  .s9 input{flex:none;width:100%;height:50px}
+  .s9 .pillbtn{width:100%}
+}
+
+/* ---------- موبايل صغير جداً (حتى 360px) ---------- */
+@media(max-width:360px){
+  .acts .btn:not(.fill){display:none}
+  .tabs button{font-size:12px}
+  .note p{font-size:12px}
+  .s7 .txt{font-size:15px}
+}
+
+/* ---------- شاشات قصيرة (لاندسكيب موبايل) ---------- */
+@media(max-height:560px) and (orientation:landscape){
+  .scene{min-height:0}
+  nav{padding-block:8px}
+  .btn{height:32px;font-size:13px}
+  .pillbtn{height:44px;font-size:16px}
+  .s1 .tag{display:none}
 }
 
 @media(prefers-reduced-motion:reduce){
