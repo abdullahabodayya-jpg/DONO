@@ -1,0 +1,680 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+        />
+
+        <title>Dashboard | DONO Admin</title>
+
+        <!-- Global Styles -->
+        <link
+            rel="stylesheet"
+            href="../assets/css/global.css"
+        />
+
+        <!-- Admin Shared Layout -->
+        <link
+            rel="stylesheet"
+            href="../assets/css/pages/admin-layout.css"
+        />
+
+        <!-- Admin Dashboard Styles -->
+        <link
+            rel="stylesheet"
+            href="../assets/css/pages/admin-dashboard.css"
+        />
+
+        <!-- Lucide Icons -->
+        <script
+            src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"
+            defer
+        ></script>
+
+        <!-- Chart.js -->
+        <script
+            src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"
+            defer
+        ></script>
+
+        <!-- Shared Admin Layout -->
+        <script
+            src="../assets/js/admin/admin-layout.js"
+            defer
+        ></script>
+
+        <!-- Admin Dashboard JavaScript -->
+        <script
+            src="../assets/js/admin/admin-dashboard.js"
+            defer
+        ></script>
+    </head>
+
+    <body>
+        <div class="admin-layout">
+            <!-- Mobile Drawer Overlay -->
+            <div
+                class="admin-drawer-overlay"
+                id="adminDrawerOverlay"
+                aria-hidden="true"
+            ></div>
+
+            <!-- Shared Admin Sidebar -->
+            <aside
+                class="admin-sidebar"
+                id="adminSidebar"
+                aria-label="Admin navigation"
+            ></aside>
+
+            <!-- Main Admin Area -->
+            <main class="admin-main">
+                <!-- Shared Admin Topbar -->
+                <header
+                    class="admin-topbar"
+                    id="adminTopbar"
+                ></header>
+
+                <!-- Dashboard Content -->
+                <div class="admin-content admin-dashboard">
+                    <!-- Dashboard Heading -->
+                    <section
+                        class="dashboard-heading"
+                        aria-labelledby="dashboardHeading"
+                    >
+                        <div class="dashboard-heading-text">
+                            <h2 id="dashboardHeading">Store Overview</h2>
+
+                            <p class="text-muted">
+                                Monitor store performance, sales and daily operations.
+                            </p>
+                        </div>
+
+                        <!-- Date Filter -->
+                        <div class="dashboard-date-filter form-group">
+                            <label
+                                for="dashboardPeriod"
+                                class="form-label"
+                            >
+                                Time Period
+                            </label>
+
+                            <select
+                                id="dashboardPeriod"
+                                class="form-control"
+                            >
+                                <option value="7">Last 7 Days</option>
+                                <option
+                                    value="30"
+                                    selected
+                                >
+                                    Last 30 Days
+                                </option>
+                                <option value="90">Last 90 Days</option>
+                            </select>
+                        </div>
+                    </section>
+
+                    <!-- KPI Cards -->
+                    <section
+                        class="dashboard-section"
+                        aria-labelledby="dashboardKpiTitle"
+                    >
+                        <div class="dashboard-section-heading">
+                            <h3 id="dashboardKpiTitle">Performance Summary</h3>
+                        </div>
+
+                        <div class="dashboard-kpi-grid">
+                            <!-- Net Sales -->
+                            <article class="dashboard-kpi-card">
+                                <div class="dashboard-kpi-top">
+                                    <span class="dashboard-kpi-label"> Net Sales </span>
+
+                                    <span class="dashboard-kpi-icon dashboard-kpi-icon-green">
+                                        <i
+                                            data-lucide="wallet"
+                                            aria-hidden="true"
+                                        ></i>
+                                    </span>
+                                </div>
+
+                                <p
+                                    class="dashboard-kpi-value"
+                                    id="dashboardNetSales"
+                                    aria-live="polite"
+                                >
+                                    —
+                                </p>
+
+                                <p class="dashboard-kpi-description">
+                                    Sales during selected period
+                                </p>
+                            </article>
+
+                            <!-- Total Orders -->
+                            <article class="dashboard-kpi-card">
+                                <div class="dashboard-kpi-top">
+                                    <span class="dashboard-kpi-label"> Total Orders </span>
+
+                                    <span class="dashboard-kpi-icon dashboard-kpi-icon-blue">
+                                        <i
+                                            data-lucide="shopping-bag"
+                                            aria-hidden="true"
+                                        ></i>
+                                    </span>
+                                </div>
+
+                                <p
+                                    class="dashboard-kpi-value"
+                                    id="dashboardTotalOrders"
+                                    aria-live="polite"
+                                >
+                                    —
+                                </p>
+
+                                <p class="dashboard-kpi-description">
+                                    Orders placed during selected period
+                                </p>
+                            </article>
+
+                            <!-- Average Order Value -->
+                            <article class="dashboard-kpi-card">
+                                <div class="dashboard-kpi-top">
+                                    <span class="dashboard-kpi-label"> Average Order Value </span>
+
+                                    <span class="dashboard-kpi-icon dashboard-kpi-icon-purple">
+                                        <i
+                                            data-lucide="chart-no-axes-column"
+                                            aria-hidden="true"
+                                        ></i>
+                                    </span>
+                                </div>
+
+                                <p
+                                    class="dashboard-kpi-value"
+                                    id="dashboardAverageOrder"
+                                    aria-live="polite"
+                                >
+                                    —
+                                </p>
+
+                                <p class="dashboard-kpi-description">Average value per order</p>
+                            </article>
+
+                            <!-- Pending Orders -->
+                            <article class="dashboard-kpi-card">
+                                <div class="dashboard-kpi-top">
+                                    <span class="dashboard-kpi-label"> Pending Orders </span>
+
+                                    <span class="dashboard-kpi-icon dashboard-kpi-icon-amber">
+                                        <i
+                                            data-lucide="clock-3"
+                                            aria-hidden="true"
+                                        ></i>
+                                    </span>
+                                </div>
+
+                                <p
+                                    class="dashboard-kpi-value"
+                                    id="dashboardPendingOrders"
+                                    aria-live="polite"
+                                >
+                                    —
+                                </p>
+
+                                <p class="dashboard-kpi-description">
+                                    Orders waiting for processing
+                                </p>
+                            </article>
+                        </div>
+                    </section>
+
+                    <!-- Analytics Charts -->
+                    <section
+                        class="dashboard-section"
+                        aria-labelledby="dashboardAnalyticsTitle"
+                    >
+                        <div class="dashboard-section-heading">
+                            <h3 id="dashboardAnalyticsTitle">Sales Analytics</h3>
+                        </div>
+
+                        <div class="dashboard-analytics-grid">
+                            <!-- Sales Chart -->
+                            <article class="dashboard-panel dashboard-sales-panel">
+                                <div class="dashboard-panel-heading">
+                                    <div>
+                                        <h4 id="dashboardSalesTitle">Sales Performance</h4>
+
+                                        <p class="text-muted">
+                                            Revenue trend over the selected period
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="dashboard-chart-container">
+                                    <!-- Sales Chart -->
+                                    <canvas
+                                        id="dashboardSalesChart"
+                                        role="img"
+                                        aria-label="Sales performance chart"
+                                        aria-describedby="dashboardSalesStatus"
+                                        hidden
+                                    ></canvas>
+
+                                    <!-- Sales Empty State -->
+                                    <div
+                                        class="dashboard-chart-empty"
+                                        id="dashboardSalesEmpty"
+                                        role="status"
+                                    >
+                                        <span class="dashboard-empty-icon">
+                                            <i
+                                                data-lucide="chart-no-axes-combined"
+                                                aria-hidden="true"
+                                            ></i>
+                                        </span>
+
+                                        <h5>No sales data available</h5>
+
+                                        <p>
+                                            Sales analytics will appear here when data becomes
+                                            available.
+                                        </p>
+                                    </div>
+
+                                    <!-- Sales Loading State -->
+                                    <div
+                                        class="dashboard-chart-loading"
+                                        id="dashboardSalesLoading"
+                                        role="status"
+                                        hidden
+                                    >
+                                        <span class="dashboard-loading-placeholder"></span>
+                                        <span class="dashboard-loading-placeholder"></span>
+                                        <span class="dashboard-loading-placeholder"></span>
+
+                                        <p>Loading sales data...</p>
+                                    </div>
+
+                                    <!-- Sales Error State -->
+                                    <div
+                                        class="dashboard-chart-error"
+                                        id="dashboardSalesError"
+                                        role="alert"
+                                        hidden
+                                    >
+                                        <i
+                                            data-lucide="alert-circle"
+                                            aria-hidden="true"
+                                        ></i>
+                                        <h5>Unable to load sales data</h5>
+                                        <p>Please try again later.</p>
+                                    </div>
+                                </div>
+
+                                <p
+                                    class="dashboard-chart-status"
+                                    id="dashboardSalesStatus"
+                                    hidden
+                                ></p>
+                            </article>
+
+                            <!-- Orders Status Chart -->
+                            <article class="dashboard-panel dashboard-orders-panel">
+                                <div class="dashboard-panel-heading">
+                                    <div>
+                                        <h4 id="dashboardOrdersTitle">Orders by Status</h4>
+
+                                        <p class="text-muted">Distribution of store orders</p>
+                                    </div>
+                                </div>
+
+                                <div class="dashboard-chart-container">
+                                    <canvas
+                                        id="dashboardOrderStatusChart"
+                                        role="img"
+                                        aria-label="Orders grouped by status"
+                                        aria-describedby="dashboardOrderStatusMessage"
+                                        hidden
+                                    ></canvas>
+
+                                    <!-- Orders Empty State -->
+                                    <div
+                                        class="dashboard-chart-empty"
+                                        id="dashboardOrdersEmpty"
+                                        role="status"
+                                    >
+                                        <span class="dashboard-empty-icon">
+                                            <i
+                                                data-lucide="chart-pie"
+                                                aria-hidden="true"
+                                            ></i>
+                                        </span>
+
+                                        <h5>No orders data available</h5>
+
+                                        <p>
+                                            Order distribution will appear when data becomes
+                                            available.
+                                        </p>
+                                    </div>
+
+                                    <!-- Orders Loading State -->
+                                    <div
+                                        class="dashboard-chart-loading"
+                                        id="dashboardOrdersLoading"
+                                        role="status"
+                                        hidden
+                                    >
+                                        <span class="dashboard-loading-placeholder"></span>
+                                        <span class="dashboard-loading-placeholder"></span>
+                                        <span class="dashboard-loading-placeholder"></span>
+
+                                        <p>Loading order statistics...</p>
+                                    </div>
+
+                                    <!-- Orders Error State -->
+                                    <div
+                                        class="dashboard-chart-error"
+                                        id="dashboardOrdersError"
+                                        role="alert"
+                                        hidden
+                                    >
+                                        <i
+                                            data-lucide="alert-circle"
+                                            aria-hidden="true"
+                                        ></i>
+                                        <h5>Unable to load order statistics</h5>
+                                        <p>Please try again later.</p>
+                                    </div>
+                                </div>
+
+                                <p
+                                    class="dashboard-chart-status"
+                                    id="dashboardOrderStatusMessage"
+                                    hidden
+                                ></p>
+                            </article>
+                        </div>
+                    </section>
+
+                    <!-- Product Insights and Alerts -->
+                    <section
+                        class="dashboard-section"
+                        aria-labelledby="dashboardOperationsTitle"
+                    >
+                        <div class="dashboard-section-heading">
+                            <h3 id="dashboardOperationsTitle">Products & Operations</h3>
+                        </div>
+
+                        <div class="dashboard-insights-grid">
+                            <!-- Top Selling Products -->
+                            <article class="dashboard-panel">
+                                <div class="dashboard-panel-heading">
+                                    <div>
+                                        <h4 id="dashboardTopProductsTitle">Top Selling Products</h4>
+
+                                        <p class="text-muted">Products ranked by units sold</p>
+                                    </div>
+                                </div>
+
+                                <div class="dashboard-chart-container">
+                                    <canvas
+                                        id="dashboardTopProductsChart"
+                                        role="img"
+                                        aria-label="Top selling products chart"
+                                        aria-describedby="dashboardTopProductsStatus"
+                                        hidden
+                                    ></canvas>
+
+                                    <!-- Products Empty State -->
+                                    <div
+                                        class="dashboard-chart-empty"
+                                        id="dashboardTopProductsEmpty"
+                                        role="status"
+                                    >
+                                        <span class="dashboard-empty-icon">
+                                            <i
+                                                data-lucide="chart-bar"
+                                                aria-hidden="true"
+                                            ></i>
+                                        </span>
+
+                                        <h5>No product sales data</h5>
+
+                                        <p>
+                                            Best-selling products will appear when sales data
+                                            becomes available.
+                                        </p>
+                                    </div>
+
+                                    <!-- Products Loading State -->
+                                    <div
+                                        class="dashboard-chart-loading"
+                                        id="dashboardTopProductsLoading"
+                                        role="status"
+                                        hidden
+                                    >
+                                        <span class="dashboard-loading-placeholder"></span>
+                                        <span class="dashboard-loading-placeholder"></span>
+                                        <span class="dashboard-loading-placeholder"></span>
+
+                                        <p>Loading product statistics...</p>
+                                    </div>
+
+                                    <!-- Products Error State -->
+                                    <div
+                                        class="dashboard-chart-error"
+                                        id="dashboardTopProductsError"
+                                        role="alert"
+                                        hidden
+                                    >
+                                        <i
+                                            data-lucide="alert-circle"
+                                            aria-hidden="true"
+                                        ></i>
+                                        <h5>Unable to load product statistics</h5>
+                                        <p>Please try again later.</p>
+                                    </div>
+                                </div>
+
+                                <p
+                                    class="dashboard-chart-status"
+                                    id="dashboardTopProductsStatus"
+                                    hidden
+                                ></p>
+                            </article>
+
+                            <!-- Needs Attention -->
+                            <article class="dashboard-panel">
+                                <div class="dashboard-panel-heading">
+                                    <div>
+                                        <h4>Needs Attention</h4>
+
+                                        <p class="text-muted">
+                                            Store operations requiring follow-up
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="dashboard-alerts-list">
+                                    <!-- Low Stock Alert -->
+                                    <div class="dashboard-alert-item">
+                                        <span class="dashboard-alert-icon dashboard-alert-amber">
+                                            <i
+                                                data-lucide="package-minus"
+                                                aria-hidden="true"
+                                            ></i>
+                                        </span>
+
+                                        <div class="dashboard-alert-content">
+                                            <h5>Low Stock Products</h5>
+                                            <p>Products running low on inventory</p>
+                                        </div>
+
+                                        <span
+                                            class="dashboard-alert-value"
+                                            id="dashboardLowStockCount"
+                                            >—</span
+                                        >
+                                    </div>
+
+                                    <!-- Pending Orders Alert -->
+                                    <div class="dashboard-alert-item">
+                                        <span class="dashboard-alert-icon dashboard-alert-blue">
+                                            <i
+                                                data-lucide="clipboard-list"
+                                                aria-hidden="true"
+                                            ></i>
+                                        </span>
+
+                                        <div class="dashboard-alert-content">
+                                            <h5>Pending Orders</h5>
+                                            <p>Orders waiting for processing</p>
+                                        </div>
+
+                                        <span
+                                            class="dashboard-alert-value"
+                                            id="dashboardPendingOrdersAlert"
+                                            >—</span
+                                        >
+                                    </div>
+
+                                    <!-- Pending Reviews Alert -->
+                                    <div class="dashboard-alert-item">
+                                        <span class="dashboard-alert-icon dashboard-alert-purple">
+                                            <i
+                                                data-lucide="message-square"
+                                                aria-hidden="true"
+                                            ></i>
+                                        </span>
+
+                                        <div class="dashboard-alert-content">
+                                            <h5>Pending Reviews</h5>
+                                            <p>Customer reviews awaiting moderation</p>
+                                        </div>
+
+                                        <span
+                                            class="dashboard-alert-value"
+                                            id="dashboardPendingReviews"
+                                            >—</span
+                                        >
+                                    </div>
+
+                                    <!-- Payment Issues Alert -->
+                                    <div class="dashboard-alert-item">
+                                        <span class="dashboard-alert-icon dashboard-alert-red">
+                                            <i
+                                                data-lucide="credit-card"
+                                                aria-hidden="true"
+                                            ></i>
+                                        </span>
+
+                                        <div class="dashboard-alert-content">
+                                            <h5>Payment Issues</h5>
+                                            <p>Failed or unresolved transactions</p>
+                                        </div>
+
+                                        <span
+                                            class="dashboard-alert-value"
+                                            id="dashboardPaymentIssues"
+                                            >—</span
+                                        >
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+                    </section>
+
+                    <!-- Recent Orders and Inventory -->
+                    <section
+                        class="dashboard-section"
+                        aria-labelledby="dashboardActivityTitle"
+                    >
+                        <div class="dashboard-section-heading">
+                            <h3 id="dashboardActivityTitle">Recent Activity</h3>
+                        </div>
+
+                        <div class="dashboard-activity-grid">
+                            <!-- Recent Orders -->
+                            <article class="dashboard-panel">
+                                <div class="dashboard-panel-heading">
+                                    <div>
+                                        <h4>Recent Orders</h4>
+
+                                        <p class="text-muted">Latest orders placed in the store</p>
+                                    </div>
+                                </div>
+
+                                <div class="dashboard-table-wrapper">
+                                    <table class="dashboard-table">
+                                        <caption class="visually-hidden">
+                                            Latest store orders
+                                        </caption>
+
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Order</th>
+                                                <th scope="col">Amount</th>
+                                                <th scope="col">Status</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody id="dashboardRecentOrdersBody">
+                                            <tr>
+                                                <td
+                                                    colspan="3"
+                                                    class="dashboard-table-message"
+                                                >
+                                                    Recent orders are not loaded yet.
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </article>
+
+                            <!-- Low Stock Products -->
+                            <article class="dashboard-panel">
+                                <div class="dashboard-panel-heading">
+                                    <div>
+                                        <h4>Low Stock Products</h4>
+
+                                        <p class="text-muted">Products that may need restocking</p>
+                                    </div>
+                                </div>
+
+                                <div class="dashboard-table-wrapper">
+                                    <table class="dashboard-table">
+                                        <caption class="visually-hidden">
+                                            Products with low inventory
+                                        </caption>
+
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Product</th>
+                                                <th scope="col">Stock</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody id="dashboardLowStockBody">
+                                            <tr>
+                                                <td
+                                                    colspan="2"
+                                                    class="dashboard-table-message"
+                                                >
+                                                    Inventory data is not loaded yet.
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </article>
+                        </div>
+                    </section>
+                </div>
+            </main>
+        </div>
+    </body>
+</html>

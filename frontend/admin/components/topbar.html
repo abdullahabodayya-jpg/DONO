@@ -1,0 +1,75 @@
+<!-- ===================================
+     DONO ADMIN - SHARED TOPBAR
+     Used across all Admin pages
+=================================== -->
+
+<!-- Page Navigation and Context -->
+<div class="admin-topbar-left">
+    <!-- Tablet and Mobile Menu Button -->
+    <button
+        type="button"
+        class="admin-menu-button"
+        id="adminMenuButton"
+        aria-label="Open navigation menu"
+        aria-controls="adminSidebar"
+        aria-expanded="false"
+    >
+        <i
+            data-lucide="menu"
+            aria-hidden="true"
+        ></i>
+    </button>
+
+    <!-- Page Context -->
+    <div class="admin-topbar-context">
+        <!-- Breadcrumb -->
+        <nav
+            class="admin-breadcrumb"
+            aria-label="Breadcrumb"
+        >
+            <span id="adminBreadcrumb">Admin / Dashboard</span>
+        </nav>
+
+        <!-- Current Page Title -->
+        <h1
+            class="admin-topbar-title"
+            id="adminPageTitle"
+        >
+            Dashboard
+        </h1>
+    </div>
+</div>
+
+<!-- Admin Account -->
+<div
+    class="admin-account"
+    aria-label="Admin account"
+>
+    <!-- Avatar -->
+    <div
+        class="admin-account-avatar"
+        aria-hidden="true"
+    >
+        <i
+            data-lucide="user-round"
+            aria-hidden="true"
+        ></i>
+    </div>
+
+    <!-- Account Information -->
+    <div class="admin-account-info">
+        <span
+            class="admin-account-name"
+            id="adminAccountName"
+        >
+            Admin
+        </span>
+
+        <span
+            class="admin-account-role"
+            id="adminAccountRole"
+        >
+            Administrator
+        </span>
+    </div>
+</div>
