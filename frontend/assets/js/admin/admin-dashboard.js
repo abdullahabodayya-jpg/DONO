@@ -441,5 +441,323 @@ document.addEventListener("DOMContentLoaded", function () {
         setChartState: setChartState,
     };
 
+    // ===================================
+    // 6. DASHBOARD API INTEGRATION
+    // ===================================
+
+    // Use the script location so the URL works inside the DONO project folder
+    const dashboardScriptUrl = new URL(
+        "../assets/js/admin/admin-dashboard.js",
+        window.location.href,
+    );
+
+    const dashboardApiUrl = new URL(
+        "../../../../backend/public/api/admin/dashboard",
+        dashboardScriptUrl,
+    );
+
+    const dashboardPeriod = document.getElementById("dashboardPeriod");
+    let currentRequest = null;
+
+    // Update a single value without changing the dashboard HTML
+    function setDashboardValue(id, value) {
+        const element = document.getElementById(id);
+
+        if (element) {
+            element.textContent = value;
+        }
+    }
+
+    // MySQL DECIMAL values may arrive as strings in JSON
+    function toNumber(value) {
+        if (value === null || value === undefined || value === "") {
+            return null;
+        }
+
+        const number = Number(value);
+
+        return Number.isFinite(number) && number >= 0 ? number : null;
+    }
+
+    function formatCount(value) {
+        const number = toNumber(value);
+
+        return number === null ? "—" : Math.round(number).toLocaleString("en-US");
+    }
+
+    function formatMoney(value) {
+        const number = toNumber(value);
+
+        return number === null ? "—" : number.toFixed(2) + " JOD";
+    }
+
+    function setTableMessage(body, message, colSpan) {
+        if (!body) {
+            return;
+        }
+
+        body.replaceChildren();
+
+        const row = document.createElement("tr");
+        const cell = document.createElement("td");
+
+        cell.colSpan = colSpan;
+        cell.className = "dashboard-table-message";
+        cell.textContent = message;
+
+        row.appendChild(cell);
+        body.appendChild(row);
+    }
+
+    function appendTableCell(row, value) {
+        const cell = document.createElement("td");
+
+        cell.textContent = value;
+
+        row.appendChild(cell);
+    }
+
+    const recentOrdersBody = document.getElementById("dashboardRecentOrdersBody");
+
+    const lowStockBody = document.getElementById("dashboardLowStockBody");
+
+    // The reviews table has no approval/pending status in DONO's database
+    const reviewsAlert = document.getElementById("dashboardPendingReviews");
+
+    if (reviewsAlert) {
+        const alertItem = reviewsAlert.closest(".dashboard-alert-item");
+
+        if (alertItem) {
+            const heading = alertItem.querySelector("h5");
+            const description = alertItem.querySelector("p");
+
+            if (heading) {
+                heading.textContent = "Total Reviews";
+            }
+
+            if (description) {
+                description.textContent = "Customer reviews received";
+            }
+        }
+    }
+
+    const metricIds = [
+        "dashboardNetSales",
+        "dashboardTotalOrders",
+        "dashboardAverageOrder",
+        "dashboardPendingOrders",
+        "dashboardLowStockCount",
+        "dashboardPendingOrdersAlert",
+        "dashboardPendingReviews",
+        "dashboardPaymentIssues",
+    ];
+
+    function resetDashboard(message, chartState) {
+        metricIds.forEach(function (id) {
+            setDashboardValue(id, "—");
+        });
+
+        Object.keys(charts).forEach(function (name) {
+            setChartState(name, chartState);
+        });
+
+        setTableMessage(recentOrdersBody, message, 3);
+        setTableMessage(lowStockBody, message, 2);
+    }
+
+    function renderRecentOrders(orders) {
+        if (orders.length === 0) {
+            setTableMessage(recentOrdersBody, "No recent orders available.", 3);
+            return;
+        }
+
+        recentOrdersBody.replaceChildren();
+
+        orders.forEach(function (order) {
+            const row = document.createElement("tr");
+
+            const orderLabel = order.order_number || "Order #" + order.id;
+
+            appendTableCell(row, String(orderLabel));
+
+            appendTableCell(row, formatMoney(order.total_amount));
+
+            appendTableCell(row, String(order.status || "—"));
+
+            recentOrdersBody.appendChild(row);
+        });
+    }
+
+    function renderLowStockProducts(items) {
+        if (items.length === 0) {
+            setTableMessage(lowStockBody, "No low stock products.", 2);
+            return;
+        }
+
+        lowStockBody.replaceChildren();
+
+        items.forEach(function (product) {
+            const row = document.createElement("tr");
+
+            appendTableCell(row, String(product.name || "Product #" + product.id));
+
+            appendTableCell(row, formatCount(product.stock_quantity));
+
+            lowStockBody.appendChild(row);
+        });
+    }
+
+    // Convert numeric strings from PHP/PDO into Chart.js numbers
+    function normalizeChartData(data) {
+        if (!data || !Array.isArray(data.labels) || !Array.isArray(data.values)) {
+            return null;
+        }
+
+        return {
+            labels: data.labels.map(function (label) {
+                return String(label);
+            }),
+
+            values: data.values.map(function (value) {
+                if (value === null || value === "") {
+                    return NaN;
+                }
+
+                return Number(value);
+            }),
+        };
+    }
+
+    function renderDashboard(data) {
+        if (
+            !data ||
+            !data.kpis ||
+            !data.charts ||
+            !data.alerts ||
+            !Array.isArray(data.recent_orders) ||
+            !Array.isArray(data.low_stock_products)
+        ) {
+            throw new Error("Unexpected dashboard data from the server.");
+        }
+
+        // Update KPI Cards
+        setDashboardValue("dashboardNetSales", formatMoney(data.kpis.net_sales));
+
+        setDashboardValue("dashboardTotalOrders", formatCount(data.kpis.total_orders));
+
+        setDashboardValue("dashboardAverageOrder", formatMoney(data.kpis.average_order_value));
+
+        setDashboardValue("dashboardPendingOrders", formatCount(data.kpis.pending_orders));
+
+        // Update Needs Attention
+        setDashboardValue("dashboardLowStockCount", formatCount(data.alerts.low_stock_count));
+
+        setDashboardValue("dashboardPendingOrdersAlert", formatCount(data.alerts.pending_orders));
+
+        setDashboardValue("dashboardPendingReviews", formatCount(data.alerts.total_reviews));
+
+        setDashboardValue("dashboardPaymentIssues", formatCount(data.alerts.payment_issues));
+
+        // Update Charts
+        updateChart("sales", normalizeChartData(data.charts.sales));
+
+        updateChart("orders", normalizeChartData(data.charts.orders));
+
+        updateChart("topProducts", normalizeChartData(data.charts.top_products));
+
+        // Update Tables
+        renderRecentOrders(data.recent_orders);
+        renderLowStockProducts(data.low_stock_products);
+    }
+
+    async function loadDashboard() {
+        if (!dashboardPeriod) {
+            console.error("Dashboard period selector is missing.");
+            return;
+        }
+
+        // Cancel an older request if the admin changes the period quickly
+        if (currentRequest) {
+            currentRequest.abort();
+        }
+
+        const controller = new AbortController();
+        currentRequest = controller;
+
+        const period = Number(dashboardPeriod.value);
+
+        if (![7, 30, 90].includes(period)) {
+            resetDashboard("Invalid dashboard period.", "error");
+            return;
+        }
+
+        resetDashboard("Loading dashboard data...", "loading");
+
+        const url = new URL(dashboardApiUrl);
+        url.searchParams.set("period", String(period));
+
+        try {
+            const response = await fetch(url, {
+                method: "GET",
+                credentials: "same-origin",
+                headers: {
+                    Accept: "application/json",
+                },
+                signal: controller.signal,
+            });
+
+            if (response.status === 401) {
+                throw new Error("Please log in as admin to view the dashboard.");
+            }
+
+            if (response.status === 403) {
+                throw new Error("Admin access is required.");
+            }
+
+            if (response.status === 404) {
+                throw new Error("Dashboard API is not connected yet.");
+            }
+
+            let result;
+
+            try {
+                result = await response.json();
+            } catch (error) {
+                throw new Error("The dashboard API returned invalid JSON.");
+            }
+
+            if (!response.ok || result.success !== true) {
+                throw new Error(result.message || "Unable to load dashboard data.");
+            }
+
+            // Do not overwrite newer data with a previous request's result
+            if (currentRequest !== controller) {
+                return;
+            }
+
+            renderDashboard(result.data);
+        } catch (error) {
+            if (error.name === "AbortError" || currentRequest !== controller) {
+                return;
+            }
+
+            console.error("Dashboard API error:", error);
+
+            resetDashboard(error.message, "error");
+        } finally {
+            if (currentRequest === controller) {
+                currentRequest = null;
+            }
+        }
+    }
+
+    // Reload dashboard when the time period changes
+    if (dashboardPeriod) {
+        dashboardPeriod.addEventListener("change", loadDashboard);
+    }
+
+    // Load real dashboard data when the page opens
+    loadDashboard();
+
     console.log("DONO Dashboard: Chart components initialized.");
 });
