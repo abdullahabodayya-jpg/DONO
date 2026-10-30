@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#00341e">
+<meta name="description" content="Thoughtful gifts for every person, every moment, every kind of love. Find your kind of magic with DONO.">
+<title>DONO — Find the feeling. Give the gift.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800;900&family=Work+Sans:wght@400;500;600;700;800&family=Caveat:wght@600;700&family=Fraunces:wght@700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/userpage.css">
+</head>
+<body data-theme="cream">
+<div id="bar"></div>
+
+<!-- ================= NAV ================= -->
+<nav>
+  <button class="nav-filter-toggle" id="filterLaunch" type="button" aria-label="Open filters" title="Open filters" aria-controls="filterSidebar" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="nav-links" aria-label="Main navigation">
+    <a href="#shop">Shop gifts</a>
+    <a href="?cat=Flowers#shop">Flowers</a>
+    <a href="?cat=Gift+Boxes#shop">Gift boxes</a>
+  </div>
+  <form class="search" action="#shop" method="get" role="search">
+    <span>⌕</span>
+    <input id="navSearch" name="q" type="search" value="" placeholder="Find a little something…" aria-label="Search gifts">
+  </form>
+  <div class="acts">
+    <button class="btn cart-btn" id="cartBtn" type="button" aria-label="Open shopping bag">Bag <b id="cartCount">0</b></button>
+  </div>
+</nav>
+
+<!-- ================= SHOP ================= -->
+<main class="catalog-page" id="shop">
+  <section class="shop-intro shop-intro-minimal" aria-label="Shop gifts">
+    <div class="shop-intro-copy">
+      <h1>Find their <em>kind of gift.</em></h1>
+    </div>
+  </section>
+  <div class="filter-overlay" id="filterOverlay"></div>
+  <div class="catalog-layout">
+    <aside class="filter-sidebar" id="filterSidebar" aria-hidden="true">
+      <div class="filter-heading"><h2>Filters</h2><div class="filter-head-actions"><a href="#shop">Reset</a><button class="filter-close" id="filterClose" type="button" aria-label="Close filters">×</button></div></div>
+      <form id="shopForm" action="#shop" method="get">
+        <label class="side-search"><span>⌕</span><input id="shopSearch" name="q" type="search" value="" placeholder="Search gifts..." aria-label="Search products"></label>
+        <h3>Category</h3>
+        <!-- بتتعبّى من userpage.js -->
+        <div class="side-categories"></div>
+        <h3>Price</h3>
+        <div class="side-budget">
+          <label><input type="radio" name="price" value="all" checked><span>Any budget</span></label>
+          <label><input type="radio" name="price" value="under25"><span>Under 25 JOD</span></label>
+          <label><input type="radio" name="price" value="25to40"><span>25–40 JOD</span></label>
+          <label><input type="radio" name="price" value="over40"><span>40+ JOD</span></label>
+        </div>
+        <input type="hidden" name="cat" value="All">
+        <h3>Sort by</h3>
+        <select name="sort" aria-label="Sort products" data-auto>
+          <option value="featured" selected>Featured</option>
+          <option value="low">Price: low to high</option>
+          <option value="high">Price: high to low</option>
+          <option value="name">Name A–Z</option>
+        </select>
+        <button class="side-apply" type="submit">Apply filters</button>
+        <button class="favorites-filter side-fav" id="favoritesOnly" type="button" aria-pressed="false">♡ Favorites only</button>
+      </form>
+    </aside>
+    <section class="catalog-results" aria-label="Gift products">
+      <div class="catalog-toolbar"><span id="productCount"><b>24</b> thoughtful finds</span><span class="toolbar-sort-label">PICKED WITH LOVE <b aria-hidden="true">✳</b></span></div>
+      <!-- الكروت بتنرسم من userpage.js -->
+      <div class="shop-products" id="products"></div>
+    </section>
+  </div>
+</main>
+
+<!-- ================= MODAL / CART / GIFT GUIDE ================= -->
+<div class="modal" id="modal" aria-hidden="true">
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+    <button class="modal-x" data-close aria-label="Close">✕</button>
+    <div class="modal-img"><img id="mImg" src="" alt=""></div>
+    <div class="modal-info">
+      <span class="dono-card-cat" id="mCat"></span>
+      <h3 id="mTitle"></h3>
+      <p id="mDesc"></p>
+      <ul class="modal-perks"><li>✳ Free handwritten gift note</li><li>✳ Hand-wrapped with love</li><li>✳ Same-day delivery in Amman</li></ul>
+      <div class="modal-foot">
+        <b id="mPrice"></b>
+        <div class="qty"><button type="button" id="qMinus">−</button><span id="qVal">1</span><button type="button" id="qPlus">+</button></div>
+      </div>
+      <div class="modal-actions">
+        <button class="dark-pill" id="mAdd" type="button">Add to cart <span>＋</span></button>
+        <button class="fav-btn" id="mFav" type="button" aria-label="Save">♡</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<aside class="drawer" id="drawer" aria-hidden="true">
+  <div class="drawer-head"><h3>Your cart ♡</h3><button class="modal-x static" id="drawerClose" aria-label="Close">✕</button></div>
+  <div class="drawer-list" id="drawerList"></div>
+  <div class="drawer-foot">
+    <div class="drawer-total"><span>Total</span><b id="drawerTotal">0 JOD</b></div>
+    <button class="dark-pill" id="checkout" type="button">Checkout <span>↗</span></button>
+  </div>
+</aside>
+<div class="drawer-backdrop" id="drawerBackdrop"></div>
+
+<section class="chat-panel" id="giftAssistant" aria-hidden="true" aria-label="Dono gift helper">
+  <div class="chat-panel-head"><div><b>Your little gift guide ✨</b><small>Let’s find something lovely</small></div><button type="button" id="giftAssistantClose" aria-label="Close gift guide">×</button></div>
+  <div class="chat-messages"><p class="bot-message">Who are we making smile today?</p></div>
+  <div class="gift-guide-options">
+    <a href="?cat=Flowers#shop">🌷 Flowers</a>
+    <a href="?cat=Gift+Boxes#shop">🎁 Gift boxes</a>
+    <a href="?cat=Self+Care#shop">🕯️ Self-care</a>
+    <a href="?cat=Personalized#shop">💌 Personalised gifts</a>
+  </div>
+</section>
+<button class="chat-float" id="giftAssistantToggle" type="button" aria-label="Open gift guide" aria-expanded="false">
+  <svg class="ai-mark" width="29" height="29" viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M16 2.5 18.8 12l9.7-3.2-7 7.2 7 7.1-9.7-3.1L16 29.5l-2.8-9.5-9.7 3.1 7-7.1-7-7.2 9.7 3.2L16 2.5Z" fill="currentColor"/><circle cx="25.5" cy="5.5" r="2" fill="#DDF4D3"/></svg>
+</button>
+<button class="dono-top" id="topButton" aria-label="Back to top"></button>
+<div id="toast" style="position:fixed;left:50%;bottom:24px;translate:-50% 20px;background:#00341e;color:#d4f5cb;padding:12px 20px;border-radius:99px;z-index:200;opacity:0;transition:.25s;pointer-events:none;font-weight:700"></div>
+
+<script src="assets/js/userpage.js"></script>
+</body>
+</html>
