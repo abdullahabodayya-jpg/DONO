@@ -88,15 +88,14 @@ class UserRepository
         ]);
     }
 
-
-    public function updateProfileDetails(int $userId, string $phone, string $gender, string $address): bool
-    {
-        $sql = "UPDATE users 
-                SET phone = ?, gender = ?, address = ? 
-                WHERE id = ? AND deleted_at IS NULL";
-        $stmt = $this->db->prepare($sql);
-        return $stmt->execute([$phone, $gender, $address, $userId]);
-    }
+public function updateProfileDetails(int $userId, ?string $name, string $phone, string $gender, string $address): bool
+{
+    $sql = "UPDATE users 
+            SET name = ?, phone = ?, gender = ?, address = ?, updated_at = NOW() 
+            WHERE id = ? AND deleted_at IS NULL";
+    $stmt = $this->db->prepare($sql);
+    return $stmt->execute([$name, $phone, $gender, $address, $userId]);
+}
 
  
     public function updatePassword(int $userId, string $newPasswordHash): bool
