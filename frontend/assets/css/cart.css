@@ -1,0 +1,590 @@
+
+/* =====================================
+   DONO | Shopping Cart
+===================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #ffffff;
+    color: #253329;
+}
+
+/* Main Container */
+
+.cart-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 60px 30px;
+}
+
+/* Header */
+
+.cart-header {
+    margin-bottom: 45px;
+}
+
+.cart-header h1 {
+    font-size: 42px;
+    color: #1d3024;
+    margin-bottom: 12px;
+}
+
+.cart-header p {
+    font-size: 16px;
+    color: #777777;
+    line-height: 1.6;
+}
+
+/* Cart Layout */
+
+.cart-content {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 340px;
+    gap: 35px;
+    align-items: start;
+}
+
+/* Cart Items */
+
+.cart-items {
+    min-width: 0;
+}
+
+.cart-items h2 {
+    font-size: 23px;
+    color: #263b2b;
+    margin-bottom: 20px;
+}
+
+/* Restore Button */
+
+#restore-products-btn {
+    display: inline-block;
+    background-color: #eaf3e8;
+    color: #30553a;
+    border: 1px solid #cbdcc9;
+    border-radius: 10px;
+    padding: 12px 18px;
+    margin-bottom: 25px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#restore-products-btn[hidden] {
+    display: none;
+}
+
+#restore-products-btn:hover {
+    background-color: #dcebd9;
+}
+
+/* Product Card */
+
+.cart-item {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    background-color: #ffffff;
+    border: 1px solid #edf0eb;
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.04);
+    transition: transform 0.3s ease,
+                box-shadow 0.3s ease,
+                border-color 0.3s ease;
+}
+
+.cart-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(49, 90, 59, 0.09);
+    border-color: #cbdcc9;
+}
+
+/* Product Image */
+
+.cart-item > img {
+    width: 155px;
+    height: 155px;
+    flex-shrink: 0;
+    object-fit: cover;
+    border-radius: 15px;
+    background-color: #f4f6f2;
+}
+
+/* Product Details */
+
+.cart-item-details {
+    flex: 1;
+    min-width: 0;
+}
+
+.cart-item-details h3 {
+    font-size: 20px;
+    color: #203529;
+    margin-bottom: 10px;
+}
+
+.cart-item-details p {
+    font-size: 14px;
+    color: #818781;
+    line-height: 1.6;
+    margin-bottom: 14px;
+}
+
+.cart-item-price {
+    display: block;
+    font-size: 18px;
+    font-weight: bold;
+    color: #416b4c;
+    margin-bottom: 18px;
+}
+
+/* Product Actions */
+
+.cart-item-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+/* Quantity Control */
+
+.quantity-control {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background-color: #f5f8f4;
+    border: 1px solid #e5ece3;
+    border-radius: 12px;
+    padding: 6px;
+}
+
+.quantity-btn {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff;
+    border: 1px solid #e2e9df;
+    border-radius: 8px;
+    color: #416b4c;
+    font-size: 19px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.quantity-btn:hover {
+    background-color: #416b4c;
+    color: #ffffff;
+    transform: scale(1.05);
+}
+
+.quantity-number {
+    min-width: 18px;
+    text-align: center;
+    font-size: 15px;
+    font-weight: bold;
+    color: #263b2b;
+}
+
+/* Remove Button */
+
+.remove-btn {
+    background: transparent;
+    border: none;
+    color: #c76b6b;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.remove-btn:hover {
+    color: #a94242;
+}
+
+/* Hidden Elements */
+
+.undo-message[hidden],
+.empty-cart[hidden],
+#discount-row[hidden] {
+    display: none;
+}
+
+/* Undo Message */
+
+.undo-message {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    background-color: #f1f7f0;
+    border: 1px solid #cbdcc9;
+    border-radius: 12px;
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    color: #30553a;
+    font-size: 14px;
+}
+
+.undo-message button {
+    background: transparent;
+    border: none;
+    color: #30553a;
+    font-size: 15px;
+    font-weight: bold;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+/* Order Summary */
+
+.order-summary {
+    background-color: #f8faf7;
+    border: 1px solid #e4ece1;
+    border-radius: 20px;
+    padding: 28px;
+    box-shadow: 0 8px 30px rgba(49, 90, 59, 0.05);
+    position: sticky;
+    top: 25px;
+    animation: fadeUp 0.5s ease both;
+}
+
+.order-summary h2 {
+    font-size: 23px;
+    color: #203529;
+    margin-bottom: 28px;
+}
+
+/* Summary Rows */
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    color: #707970;
+    font-size: 14px;
+}
+
+.summary-row span:last-child {
+    text-align: right;
+    color: #263b2b;
+    font-weight: 600;
+}
+
+.order-summary hr {
+    border: none;
+    border-top: 1px solid #dfe8dc;
+    margin: 25px 0;
+}
+
+/* =====================================
+   Promo Code Section
+===================================== */
+
+.order-summary .coupon-section {
+    width: 100%;
+    margin: 24px 0;
+}
+
+.order-summary .coupon-section label {
+    display: block;
+    margin-bottom: 12px;
+    color: #263b2b;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+/* Input and Apply Button Together */
+
+.order-summary .coupon-form {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    width: 100%;
+    height: 48px;
+    background-color: #ffffff;
+    border: 1px solid #dfe8dc;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.order-summary .coupon-form:focus-within {
+    border-color: #416b4c;
+}
+
+/* Promo Input */
+
+.order-summary .coupon-form input {
+    display: block;
+    flex: 1;
+    min-width: 0;
+    width: 100%;
+    height: 100%;
+    padding: 0 14px;
+    margin: 0;
+    border: none;
+    border-radius: 0;
+    outline: none;
+    box-shadow: none;
+    background-color: #ffffff;
+    color: #263b2b;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    appearance: none;
+}
+
+.order-summary .coupon-form input::placeholder {
+    color: #929b92;
+}
+
+/* Apply Button */
+
+.order-summary #apply-coupon-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: auto;
+    height: 100%;
+    margin: 0;
+    padding: 0 18px;
+    border: none;
+    border-radius: 0;
+    background-color: #416b4c;
+    color: #ffffff;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.order-summary #apply-coupon-btn:hover:not(:disabled) {
+    background-color: #30553a;
+}
+
+.order-summary #apply-coupon-btn:disabled {
+    background-color: #89a592;
+    color: #ffffff;
+    cursor: not-allowed;
+}
+
+/* Coupon Message */
+
+#coupon-message {
+    margin-top: 10px;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+#coupon-message:empty {
+    display: none;
+}
+
+#coupon-message.success {
+    color: #30553a;
+}
+
+#coupon-message.error {
+    color: #c76b6b;
+}
+
+/* Discount */
+
+#cart-discount {
+    color: #416b4c;
+}
+
+/* Total */
+
+.summary-total {
+    margin-bottom: 25px;
+}
+
+.summary-total span {
+    color: #203529;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.summary-total span:last-child {
+    font-size: 20px;
+    color: #416b4c;
+}
+
+/* Checkout Button */
+
+.checkout-btn {
+    width: 100%;
+    padding: 16px 20px;
+    background-color: #416b4c;
+    border: none;
+    border-radius: 12px;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease,
+                transform 0.3s ease,
+                box-shadow 0.3s ease;
+}
+
+.checkout-btn:hover:not(:disabled) {
+    background-color: #30553a;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(48, 85, 58, 0.18);
+}
+
+.checkout-btn:disabled {
+    background-color: #a9b8aa;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+/* Summary Note */
+
+.summary-note {
+    font-size: 12px;
+    line-height: 1.6;
+    color: #919991;
+    text-align: center;
+    margin-top: 15px;
+}
+
+/* Empty Cart */
+
+.empty-cart {
+    padding: 55px 20px;
+    background-color: #f8faf7;
+    border: 1px dashed #cbdcc9;
+    border-radius: 20px;
+    text-align: center;
+}
+
+.empty-cart h3 {
+    font-size: 24px;
+    color: #203529;
+    margin-bottom: 12px;
+}
+
+.empty-cart p {
+    font-size: 15px;
+    color: #818781;
+    line-height: 1.6;
+}
+
+/* Animation */
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Tablet */
+
+@media (max-width: 950px) {
+    .cart-content {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .order-summary {
+        position: static;
+        width: 100%;
+    }
+}
+
+/* Mobile */
+
+@media (max-width: 600px) {
+    .cart-page {
+        padding: 35px 20px;
+    }
+
+    .cart-header {
+        margin-bottom: 30px;
+    }
+
+    .cart-header h1 {
+        font-size: 32px;
+    }
+
+    .cart-content {
+        gap: 25px;
+    }
+
+    .cart-item {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 18px;
+        padding: 15px;
+    }
+
+    .cart-item > img {
+        width: 100%;
+        height: 220px;
+    }
+
+    .cart-item-details h3 {
+        font-size: 19px;
+    }
+
+    .cart-item-actions {
+        gap: 12px;
+    }
+
+    .order-summary {
+        padding: 22px;
+    }
+
+    .undo-message {
+        flex-wrap: wrap;
+    }
+
+    .order-summary .coupon-form {
+        height: 46px;
+    }
+
+    .order-summary .coupon-form input {
+        padding: 0 10px;
+    }
+
+    .order-summary #apply-coupon-btn {
+        padding: 0 14px;
+    }
+}
+
+/* Reduced Motion */
+
+@media (prefers-reduced-motion: reduce) {
+    .cart-item,
+    .checkout-btn,
+    .order-summary #apply-coupon-btn {
+        transition: none;
+    }
+
+    .order-summary {
+        animation: none;
+    }
+}
