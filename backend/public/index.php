@@ -50,8 +50,12 @@ if (!is_string($requestPath)) {
     $requestPath = '/' . trim($requestPath, '/');
 
     $router->dispatch($method, $requestPath);
-} catch (Throwable $e){
-    error_log($e->getMessage());
+} catch (Throwable $e) {
+    error_log(
+        "ERROR: " . $e->getMessage() .
+        " | FILE: " . $e->getFile() .
+        " | LINE: " . $e->getLine()
+    );
 
     http_response_code(500);
 
@@ -59,5 +63,4 @@ if (!is_string($requestPath)) {
         'success' => false,
         'message' => 'Internal server error.',
     ]);
-
 }

@@ -41,9 +41,15 @@ final class Router
 
     public function dispatch(string $method, string $path): void
     {
+
+      
         $routes = $this->routes[$method] ?? [];
         error_log("DEBUG METHOD: " . $method);
         error_log("DEBUG PATH: " . $path);
+        error_log("FINAL METHOD: " . $method);
+        error_log("FINAL PATH: " . $path);
+        error_log("REGISTERED ROUTES: " . print_r(array_keys($routes), true));
+error_log("REQUEST PATH: " . $path);
         
         if (isset($routes[$path])) {
             ($routes[$path])();
