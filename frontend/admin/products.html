@@ -175,6 +175,7 @@
                 </div>
             </main>
         </div>
+
         <!-- Add Product Modal -->
         <dialog
             class="admin-product-dialog"
@@ -185,7 +186,10 @@
                 <div class="admin-product-modal-header">
                     <div class="admin-product-modal-copy">
                         <h2 id="addProductDialogTitle">Add Product</h2>
-                        <p class="admin-product-modal-subtitle">
+                        <p
+                            class="admin-product-modal-subtitle"
+                            id="addProductDialogSubtitle"
+                        >
                             Enter the product information below.
                         </p>
                     </div>
@@ -204,6 +208,13 @@
                     id="addProductForm"
                     class="admin-product-form"
                 >
+                    <!-- Used when editing an existing product -->
+                    <input
+                        type="hidden"
+                        id="editingProductId"
+                        value=""
+                    />
+
                     <div class="admin-product-form-grid">
                         <div class="form-group">
                             <label
@@ -328,9 +339,13 @@
                         </div>
                     </div>
 
-                    <p class="admin-product-form-note">
+                    <p
+                        class="admin-product-form-note"
+                        id="productImageNote"
+                    >
                         Product images can be uploaded after creating the product.
                     </p>
+
                     <p
                         id="addProductMessage"
                         class="admin-product-form-note"
@@ -354,6 +369,165 @@
                             id="saveProductBtn"
                         >
                             Save Product
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </dialog>
+
+        <!-- Delete Product Confirmation Modal -->
+        <dialog
+            class="admin-product-dialog admin-delete-dialog"
+            id="deleteProductDialog"
+            aria-labelledby="deleteProductDialogTitle"
+            aria-describedby="deleteProductDescription"
+        >
+            <div class="admin-product-dialog-shell">
+                <div class="admin-product-modal-header">
+                    <div class="admin-product-modal-copy">
+                        <h2 id="deleteProductDialogTitle">Delete Product</h2>
+                        <p
+                            class="admin-product-modal-subtitle"
+                            id="deleteProductDescription"
+                        >
+                            Are you sure you want to delete this product?
+                        </p>
+                    </div>
+
+                    <button
+                        type="button"
+                        class="admin-product-modal-close"
+                        id="closeDeleteProductDialog"
+                        aria-label="Close dialog"
+                    >
+                        &times;
+                    </button>
+                </div>
+
+                <p
+                    class="admin-product-delete-name"
+                    id="deleteProductName"
+                ></p>
+
+                <p class="admin-product-form-note">
+                    This product will be hidden from the store. Existing orders will not be deleted.
+                </p>
+
+                <p
+                    class="admin-product-form-note"
+                    id="deleteProductMessage"
+                    role="status"
+                    aria-live="polite"
+                    hidden
+                ></p>
+
+                <div class="admin-product-modal-actions">
+                    <button
+                        type="button"
+                        class="btn btn-outline"
+                        id="cancelDeleteProduct"
+                    >
+                        Cancel
+                    </button>
+
+                    <button
+                        type="button"
+                        class="btn btn-primary admin-delete-confirm-btn"
+                        id="confirmDeleteProductBtn"
+                    >
+                        Delete Product
+                    </button>
+                </div>
+            </div>
+        </dialog>
+
+        <!-- Product Images Management Modal -->
+        <dialog
+            class="admin-product-dialog admin-images-dialog"
+            id="productImagesDialog"
+            aria-labelledby="productImagesDialogTitle"
+        >
+            <div class="admin-product-dialog-shell">
+                <div class="admin-product-modal-header">
+                    <div class="admin-product-modal-copy">
+                        <h2 id="productImagesDialogTitle">Product Images</h2>
+                        <p
+                            class="admin-product-modal-subtitle"
+                            id="imagesProductName"
+                        >
+                            Manage product images and the primary image.
+                        </p>
+                    </div>
+
+                    <button
+                        type="button"
+                        class="admin-product-modal-close"
+                        id="closeProductImagesDialog"
+                        aria-label="Close dialog"
+                    >
+                        &times;
+                    </button>
+                </div>
+
+                <!-- Existing product images (filled by JavaScript) -->
+                <div
+                    class="admin-product-images-grid"
+                    id="productImagesList"
+                    aria-live="polite"
+                >
+                    <p class="text-muted">No product images uploaded yet.</p>
+                </div>
+
+                <!-- Upload a new image -->
+                <form
+                    id="productImageUploadForm"
+                    enctype="multipart/form-data"
+                >
+                    <div class="form-group">
+                        <label
+                            class="form-label"
+                            for="productImageFile"
+                        >
+                            Upload New Image
+                        </label>
+
+                        <input
+                            type="file"
+                            class="form-control"
+                            id="productImageFile"
+                            name="image"
+                            accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
+                            required
+                        />
+
+                        <p class="admin-product-form-note">
+                            JPG, PNG or WEBP. Maximum file size: 5 MB.
+                        </p>
+                    </div>
+
+                    <p
+                        id="productImagesMessage"
+                        class="admin-product-form-note"
+                        role="status"
+                        aria-live="polite"
+                        hidden
+                    ></p>
+
+                    <div class="admin-product-modal-actions">
+                        <button
+                            type="button"
+                            class="btn btn-outline"
+                            id="cancelProductImages"
+                        >
+                            Close
+                        </button>
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary"
+                            id="uploadProductImageBtn"
+                        >
+                            Upload Image
                         </button>
                     </div>
                 </form>

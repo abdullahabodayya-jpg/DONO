@@ -125,6 +125,7 @@
         margin-bottom: var(--space-4);
     }
 }
+
 /* ===================================
    6. ADD PRODUCT MODAL
 =================================== */
@@ -326,5 +327,285 @@
 
     .admin-product-modal-actions .btn {
         width: 100%;
+    }
+}
+
+/* ===================================
+   7. PRODUCT TABLE IMAGES AND ACTIONS
+=================================== */
+
+/* Product thumbnail in the table */
+.admin-product-thumbnail {
+    display: block;
+    width: 54px;
+    height: 54px;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 1px solid var(--color-border);
+    background: #f6f8f7;
+}
+
+/* Product action buttons */
+.admin-product-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.admin-product-action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 34px;
+    padding: 7px 12px;
+    border-radius: 9px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    line-height: 1.2;
+    white-space: nowrap;
+    cursor: pointer;
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.admin-product-action-btn:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+/* Delete action in the products table */
+.admin-product-delete-btn {
+    color: #b74646;
+    border-color: #e8c5c5;
+    background-color: #ffffff;
+}
+
+.admin-product-delete-btn:hover {
+    color: #9f3232;
+    border-color: #dbaaaa;
+    background-color: #fff2f2;
+}
+
+/* Keep enough space for the product actions */
+.admin-products-table th:last-child,
+.admin-products-table td:last-child {
+    min-width: 215px;
+}
+
+/* ===================================
+   8. DELETE PRODUCT CONFIRMATION MODAL
+=================================== */
+
+/* A smaller modal for delete confirmation */
+.admin-delete-dialog {
+    width: min(490px, calc(100vw - 32px));
+    max-width: 490px;
+}
+
+/* Product name displayed before deletion */
+.admin-product-delete-name {
+    margin: 0;
+    padding: 14px 16px;
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    background-color: #fafbf9;
+    color: var(--color-text);
+    font-size: 1rem;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+
+/* Delete confirmation button */
+.admin-delete-confirm-btn {
+    background-color: #b74646;
+    border-color: #b74646;
+    color: #ffffff;
+}
+
+.admin-delete-confirm-btn:hover {
+    background-color: #9f3232;
+    border-color: #9f3232;
+}
+
+.admin-delete-confirm-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* ===================================
+   9. PRODUCT IMAGES MANAGEMENT MODAL
+=================================== */
+
+.admin-images-dialog {
+    width: min(760px, calc(100vw - 48px));
+    max-width: 760px;
+    max-height: 88vh;
+    max-height: 88dvh;
+    overflow-y: auto;
+}
+
+/* Product images grid */
+.admin-product-images-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: 22px;
+}
+
+/* Message when there are no images */
+.admin-product-images-grid > .text-muted {
+    grid-column: 1 / -1;
+    margin: 0;
+    padding: 24px 16px;
+    border: 1px dashed var(--color-border);
+    border-radius: 14px;
+    background-color: #fafbf9;
+    text-align: center;
+}
+
+/* Single product image card */
+.admin-product-image-card {
+    min-width: 0;
+    padding: 10px;
+    border: 1px solid var(--color-border);
+    border-radius: 15px;
+    background-color: #ffffff;
+}
+
+/* Product image preview */
+.admin-product-image-preview {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 10px;
+    background-color: #f6f8f7;
+}
+
+/* Image management buttons */
+.admin-product-image-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+/* Primary image label */
+.admin-product-primary-label {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 32px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    background-color: #eef5ed;
+    color: #326b40;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+/* Image upload section */
+.admin-images-dialog #productImageUploadForm {
+    padding-top: 18px;
+    border-top: 1px solid var(--color-border);
+}
+
+.admin-images-dialog #productImageUploadForm .form-group {
+    margin-bottom: 0;
+}
+
+.admin-images-dialog #productImageFile {
+    display: block;
+    width: 100%;
+    margin-top: 8px;
+    padding: 10px;
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    background-color: #ffffff;
+    color: var(--color-text);
+    font-size: 0.875rem;
+}
+
+.admin-images-dialog #productImageFile::file-selector-button {
+    padding: 8px 12px;
+    margin-right: 12px;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    background-color: #f6f8f7;
+    color: var(--color-text);
+    font: inherit;
+    cursor: pointer;
+}
+
+/* ===================================
+   10. ADDITIONAL RESPONSIVE STYLES
+=================================== */
+
+/* Tablet */
+@media (max-width: 860px) {
+    .admin-images-dialog {
+        width: min(680px, calc(100vw - 32px));
+    }
+
+    .admin-product-images-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* Mobile */
+@media (max-width: 700px) {
+    .admin-delete-dialog,
+    .admin-images-dialog {
+        width: calc(100vw - 24px);
+        max-width: none;
+    }
+
+    .admin-products-table {
+        min-width: 820px;
+    }
+
+    .admin-product-thumbnail {
+        width: 46px;
+        height: 46px;
+    }
+
+    .admin-product-actions {
+        gap: 6px;
+    }
+
+    .admin-product-action-btn {
+        padding: 7px 10px;
+        font-size: 0.75rem;
+    }
+
+    .admin-product-images-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    .admin-product-image-card {
+        padding: 8px;
+    }
+
+    .admin-product-image-actions {
+        gap: 6px;
+    }
+}
+
+/* Small mobile */
+@media (max-width: 420px) {
+    .admin-product-images-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-product-image-preview {
+        max-height: 210px;
+    }
+
+    .admin-product-modal-actions .btn {
+        min-width: 0;
     }
 }

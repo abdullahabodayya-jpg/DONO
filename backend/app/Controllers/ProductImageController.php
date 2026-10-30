@@ -179,7 +179,9 @@ class ProductImageController
         // Generate a unique and safe filename
         try {
             $fileName = bin2hex(random_bytes(16)) . "." . $extension;
+
         } catch (Throwable $e) {
+
             error_log($e->getMessage());
 
             Response::send(
