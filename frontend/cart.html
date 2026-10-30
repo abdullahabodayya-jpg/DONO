@@ -1,0 +1,129 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Shopping Cart | DONO</title>
+
+    <link rel="stylesheet" href="assets/css/cart.css?v=3">
+</head>
+
+<body>
+
+    <main class="cart-page">
+
+        <!-- Page Header -->
+        <header class="cart-header">
+            <h1>Shopping Cart</h1>
+            <p>Review your gifts before checkout.</p>
+        </header>
+
+        <section class="cart-content">
+
+            <!-- Cart Products -->
+            <div class="cart-items">
+
+                <h2 id="cart-count">Your Items (0)</h2>
+
+                <button type="button" id="restore-products-btn" hidden>
+                    Restore Original Products
+                </button>
+
+                <div class="undo-message" id="cart-undo" hidden>
+                    <span>Product removed from your cart.</span>
+                    <button type="button" id="cart-undo-btn">
+                        Undo
+                    </button>
+                </div>
+
+                <div id="cart-products"></div>
+
+                <!-- Empty Cart -->
+                <div class="empty-cart" id="empty-cart" hidden>
+                    <h3>Your cart is empty!</h3>
+                    <p>Looks like you haven't added any gifts yet.</p>
+                </div>
+
+            </div>
+
+            <!-- Order Summary -->
+            <aside class="order-summary">
+
+                <h2>Order Summary</h2>
+
+                <div class="summary-row">
+                    <span>Subtotal</span>
+                    <span id="cart-subtotal">0.00 JOD</span>
+                </div>
+
+                <div class="summary-row">
+                    <span>Tax</span>
+                    <span>Calculated at checkout</span>
+                </div>
+
+                <hr>
+
+                <!-- Coupon Section -->
+                <div class="coupon-section">
+
+                    <label for="coupon-code">
+                        Promo Code
+                    </label>
+
+                    <div class="coupon-form">
+
+                        <input
+                            type="text"
+                            id="coupon-code"
+                            placeholder="Enter your code"
+                            autocomplete="off"
+                        >
+
+                        <button
+                            type="button"
+                            id="apply-coupon-btn">
+                            Apply
+                        </button>
+
+                    </div>
+
+                    <p id="coupon-message" aria-live="polite"></p>
+
+                </div>
+
+                <!-- Discount -->
+                <div class="summary-row" id="discount-row" hidden>
+                    <span>Discount</span>
+                    <span id="cart-discount">0.00 JOD</span>
+                </div>
+
+                <hr>
+
+                <!-- Total -->
+                <div class="summary-row summary-total">
+                    <span>Subtotal Before Tax</span>
+                    <span id="cart-total">0.00 JOD</span>
+                </div>
+
+                <button type="button" class="checkout-btn">
+                    Proceed to Checkout
+                </button>
+
+                <p class="summary-note">
+                    Final taxes and charges are calculated at checkout.
+                </p>
+
+            </aside>
+
+        </section>
+
+    </main>
+
+    <script src="assets/js/cart.js"></script>
+
+</body>
+
+</html>
