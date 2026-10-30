@@ -6,6 +6,10 @@ php_flag engine off
 
 Options -ExecCGI
 
+# Disable directory listing
+
+Options -Indexes
+
 # Allow only image files to be served
 
 <FilesMatch "\.(?i:jpg|jpeg|png|webp)$">
@@ -14,6 +18,6 @@ Require all granted
 
 # Deny access to other file types
 
-<FilesMatch "^(?!._\.(?i:jpg|jpeg|png|webp)$)._$">
+<FilesMatch "^(?!.\*\.(?i:jpg|jpeg|png|webp)$).+$">
 Require all denied
 </FilesMatch>
