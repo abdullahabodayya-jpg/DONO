@@ -7,7 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Manage Orders | DONO</title>
-    <link rel="stylesheet" href="assets/css/admin-orders.css">
+
+    <link rel="stylesheet" href="assets/css/admin-orders.css?v=4">
 </head>
 
 <body>
@@ -28,12 +29,16 @@
                 placeholder="Search by order number or customer name..."
             >
 
-            <select id="status-filter">
-                <option value="all">All Status</option>
-                <option value="pending">Pending</option>
-                <option value="confirmed">Confirmed</option>
-                <option value="cancelled">Cancelled</option>
-            </select>
+            <div class="filter-box">
+                <label for="status-filter">Status</label>
+
+                <select id="status-filter">
+                    <option value="all">All Statuses</option>
+                    <option value="pending">Pending</option>
+                    <option value="confirmed">Confirmed</option>
+                    <option value="cancelled">Cancelled</option>
+                </select>
+            </div>
 
         </section>
 
@@ -42,14 +47,54 @@
 
             <table class="orders-table">
 
+                <colgroup>
+                    <col class="col-order">
+                    <col class="col-customer">
+                    <col class="col-date">
+                    <col class="col-items">
+                    <col class="col-total">
+                    <col class="col-status">
+                    <col class="col-actions">
+                </colgroup>
+
                 <thead>
                     <tr>
-                        <th><button type="button" class="sort-btn" data-sort="order_number">Order # ↕</button></th>
-                        <th><button type="button" class="sort-btn" data-sort="customer_name">Customer ↕</button></th>
-                        <th><button type="button" class="sort-btn" data-sort="created_at">Date ↕</button></th>
-                        <th><button type="button" class="sort-btn" data-sort="items">Items ↕</button></th>
-                        <th><button type="button" class="sort-btn" data-sort="total_amount">Total ↕</button></th>
-                        <th><button type="button" class="sort-btn" data-sort="status">Status ↕</button></th>
+                        <th>
+                            <button type="button" class="sort-btn" data-sort="order_number">
+                                Order # <span class="sort-icon">⇅</span>
+                            </button>
+                        </th>
+
+                        <th>
+                            <button type="button" class="sort-btn" data-sort="customer_name">
+                                Customer <span class="sort-icon">⇅</span>
+                            </button>
+                        </th>
+
+                        <th>
+                            <button type="button" class="sort-btn" data-sort="created_at">
+                                Date <span class="sort-icon">⇅</span>
+                            </button>
+                        </th>
+
+                        <th>
+                            <button type="button" class="sort-btn" data-sort="items">
+                                Items <span class="sort-icon">⇅</span>
+                            </button>
+                        </th>
+
+                        <th>
+                            <button type="button" class="sort-btn" data-sort="total_amount">
+                                Total <span class="sort-icon">⇅</span>
+                            </button>
+                        </th>
+
+                        <th>
+                            <button type="button" class="sort-btn" data-sort="status">
+                                Status <span class="sort-icon">⇅</span>
+                            </button>
+                        </th>
+
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -90,7 +135,6 @@
         >
 
             <div class="modal-header">
-
                 <h2 id="modal-title">Order Details</h2>
 
                 <button
@@ -101,7 +145,6 @@
                 >
                     &times;
                 </button>
-
             </div>
 
             <div class="modal-content">
@@ -166,7 +209,7 @@
 
     </div>
 
-    <script src="assets/js/admin-orders.js"></script>
+    <script src="assets/js/admin-orders.js?v=4"></script>
 
 </body>
 
