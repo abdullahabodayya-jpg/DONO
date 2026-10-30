@@ -13,10 +13,25 @@
 </head>
 <body>
 
+    <!-- Simple navbar -->
     <header class="topbar">
-    
+        <div class="nav-left">
+            <a class="brand" href="#">DONO</a>
 
+            <nav class="nav-links" aria-label="Main navigation">
+                <a href="#" class="nav-link">Dashboard</a>
+                <a href="#" class="nav-link active" aria-current="page">Categories</a>
+                <a href="#" class="nav-link">Products</a>
+            </nav>
+        </div>
 
+        <div class="admin-box">
+            <div class="admin-text">
+                <strong>Admin</strong>
+                <small>Administrator</small>
+            </div>
+            <div class="admin-avatar" aria-hidden="true">A</div>
+        </div>
     </header>
 
     <main class="page">
@@ -39,6 +54,24 @@
                 <option value="active">Active</option>
                 <option value="inactive">Inactive</option>
             </select>
+
+            <!-- Sort: ascending / descending -->
+            <select id="sortFilter" aria-label="Sort categories">
+                <option value="id:desc">Newest first</option>
+                <option value="id:asc">Oldest first</option>
+                <option value="name:asc">Name (A → Z)</option>
+                <option value="name:desc">Name (Z → A)</option>
+                <option value="products:desc">Products (High → Low)</option>
+                <option value="products:asc">Products (Low → High)</option>
+            </select>
+
+            <!-- Rows per page -->
+            <select id="pageSize" aria-label="Rows per page">
+                <option value="5">5 / page</option>
+                <option value="10" selected>10 / page</option>
+                <option value="20">20 / page</option>
+                <option value="50">50 / page</option>
+            </select>
         </div>
 
         <div class="table-card">
@@ -55,7 +88,11 @@
             </table>
         </div>
 
-        <p id="resultsCount" class="results-count"></p>
+        <!-- Results count + pagination -->
+        <div class="table-footer">
+            <p id="resultsCount" class="results-count"></p>
+            <nav id="pagination" class="pagination" aria-label="Pagination"></nav>
+        </div>
     </main>
 
     <div id="toast" class="toast" role="status" hidden></div>

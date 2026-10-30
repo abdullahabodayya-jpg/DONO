@@ -1,4 +1,3 @@
-
 "use strict";
 
 // =====================================================
@@ -18,6 +17,9 @@ const tableBody = $("categoriesTableBody");
 const resultsCount = $("resultsCount");
 const searchInput = $("searchInput");
 const statusFilter = $("statusFilter");
+const sortFilter = $("sortFilter");
+const pageSizeSelect = $("pageSize");
+const paginationEl = $("pagination");
 const toast = $("toast");
 
 const categoryModal = $("categoryModal");
@@ -42,6 +44,7 @@ const confirmDeleteBtn = $("confirmDeleteBtn");
 let categories = [];
 let categoryToDelete = null;
 let toastTimeout;
+let currentPage = 1;
 
 // =====================================================
 // API REQUEST
@@ -230,12 +233,16 @@ async function loadCategories() {
             resultsCount.textContent = "";
         }
 
+        if (paginationEl) {
+            paginationEl.innerHTML = "";
+        }
+
         showToast(error.message, "error");
     }
 }
 
 // =====================================================
-// SEARCH AND FILTER
+// SEARCH, FILTER AND SORT
 // =====================================================
 
 function getFiltered() {
@@ -259,6 +266,129 @@ function getFiltered() {
 
         return matchesSearch && matchesStatus;
     });
+}
+
+// Sort values look like "name:asc", "id:desc", "products:desc"
+function getSorted(items) {
+    const [key, direction] = (sortFilter?.value ?? "id:desc").split(":");
+    const factor = direction === "asc" ? 1 : -1;
+
+    return [...items].sort((a, b) => {
+        let result = 0;
+
+        if (key === "name") {
+            result = String(a.name ?? "").localeCompare(
+                String(b.name ?? ""),
+                undefined,
+                { numeric: true, sensitivity: "base" }
+            );
+        } else if (key === "products") {
+            result =
+                (Number(a.products_count) || 0) -
+                (Number(b.products_count) || 0);
+        } else {
+            result = (Number(a.id) || 0) - (Number(b.id) || 0);
+        }
+
+        return result * factor;
+    });
+}
+
+// =====================================================
+// PAGINATION
+// =====================================================
+
+function getPageSize() {
+    return Number(pageSizeSelect?.value) || 10;
+}
+
+// Builds a compact list like: 1 … 4 5 6 … 12
+function getPageList(totalPages, current) {
+    if (totalPages <= 7) {
+        return Array.from({ length: totalPages }, (_, i) => i + 1);
+    }
+
+    const pages = new Set([1, totalPages, current - 1, current, current + 1]);
+
+    if (current <= 3) {
+        [2, 3, 4].forEach((p) => pages.add(p));
+    }
+
+    if (current >= totalPages - 2) {
+        [totalPages - 3, totalPages - 2, totalPages - 1].forEach((p) => pages.add(p));
+    }
+
+    const sorted = [...pages]
+        .filter((p) => p >= 1 && p <= totalPages)
+        .sort((a, b) => a - b);
+
+    const list = [];
+
+    sorted.forEach((page, index) => {
+        if (index > 0 && page - sorted[index - 1] > 1) {
+            list.push("gap");
+        }
+
+        list.push(page);
+    });
+
+    return list;
+}
+
+function renderPagination(totalPages) {
+    if (!paginationEl) return;
+
+    // No need for pagination controls when everything fits on one page.
+    if (totalPages <= 1) {
+        paginationEl.innerHTML = "";
+        return;
+    }
+
+    const buttons = [];
+
+    buttons.push(`
+        <button
+            class="page-btn"
+            type="button"
+            data-page="${currentPage - 1}"
+            ${currentPage === 1 ? "disabled" : ""}
+            aria-label="Previous page"
+        >
+            ‹ Prev
+        </button>
+    `);
+
+    getPageList(totalPages, currentPage).forEach((item) => {
+        if (item === "gap") {
+            buttons.push(`<span class="page-gap">…</span>`);
+            return;
+        }
+
+        buttons.push(`
+            <button
+                class="page-btn${item === currentPage ? " active" : ""}"
+                type="button"
+                data-page="${item}"
+                ${item === currentPage ? 'aria-current="page"' : ""}
+            >
+                ${item}
+            </button>
+        `);
+    });
+
+    buttons.push(`
+        <button
+            class="page-btn"
+            type="button"
+            data-page="${currentPage + 1}"
+            ${currentPage === totalPages ? "disabled" : ""}
+            aria-label="Next page"
+        >
+            Next ›
+        </button>
+    `);
+
+    paginationEl.innerHTML = buttons.join("");
 }
 
 // =====================================================
@@ -302,12 +432,25 @@ function getCategoryImage(category) {
 function renderCategories() {
     if (!tableBody) return;
 
-    const items = getFiltered();
+    const filtered = getSorted(getFiltered());
+
+    const pageSize = getPageSize();
+    const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
+
+    // Keep the current page valid (e.g. after deleting the last item on a page).
+    if (currentPage > totalPages) currentPage = totalPages;
+    if (currentPage < 1) currentPage = 1;
+
+    const start = (currentPage - 1) * pageSize;
+    const items = filtered.slice(start, start + pageSize);
 
     if (resultsCount) {
-        resultsCount.textContent =
-            `Showing ${items.length} of ${categories.length} categories`;
+        resultsCount.textContent = filtered.length === 0
+            ? `Showing 0 of ${categories.length} categories`
+            : `Showing ${start + 1}–${start + items.length} of ${filtered.length} categories`;
     }
+
+    renderPagination(totalPages);
 
     if (items.length === 0) {
         tableBody.innerHTML = `
@@ -488,6 +631,11 @@ async function saveCategory(event) {
                 : "Category created successfully.")
         );
 
+        // A new category goes to the first page so the user can see it.
+        if (!isEditing) {
+            currentPage = 1;
+        }
+
         await loadCategories();
 
     } catch (error) {
@@ -631,16 +779,50 @@ confirmDeleteBtn?.addEventListener(
     });
 });
 
-// Search and status filtering.
+// Search, status filter, sort and page size: always go back to page 1.
+function resetToFirstPage() {
+    currentPage = 1;
+    renderCategories();
+}
+
 searchInput?.addEventListener(
     "input",
-    renderCategories
+    resetToFirstPage
 );
 
 statusFilter?.addEventListener(
     "change",
-    renderCategories
+    resetToFirstPage
 );
+
+sortFilter?.addEventListener(
+    "change",
+    resetToFirstPage
+);
+
+pageSizeSelect?.addEventListener(
+    "change",
+    resetToFirstPage
+);
+
+// Pagination buttons (Prev / numbers / Next).
+paginationEl?.addEventListener("click", (event) => {
+    const button = event.target.closest("button[data-page]");
+
+    if (!button || button.disabled) return;
+
+    const page = Number(button.dataset.page);
+
+    if (!Number.isInteger(page) || page < 1) return;
+
+    currentPage = page;
+    renderCategories();
+
+    // Bring the user back to the top of the table.
+    document
+        .querySelector(".table-card")
+        ?.scrollIntoView({ behavior: "smooth", block: "start" });
+});
 
 // =====================================================
 // INITIALIZE

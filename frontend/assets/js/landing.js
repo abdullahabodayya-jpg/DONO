@@ -102,22 +102,17 @@ addEventListener('scroll',req,{passive:true});
 addEventListener('resize',req);
 tick();
 
-/* ===== تحميل الصور: طابور (3 صور بنفس الوقت) + الهيرو أولاً =====
+/* ===== تحميل الصور: طابور (2 صور بنفس الوقت) + الهيرو أولاً =====
    1) الهيرو يتحمّل لحاله أول شي والصفحة تظهر فوراً
    2) كل قسم يتحمّل قبل ما توصله بشوي
    3) بعد ما الهيرو يخلص، الباقي يتحمّل بالخلفية بهدوء */
 const queue=[];let active=0;const MAX_PARALLEL=2;
 
-/* ---- تصغير الصور داخل المتصفح (الصور الأصلية كبيرة جداً وبتبطّئ الصفحة) ----
-   كل صورة بتتصغّر لحجم عرضها الفعلي تقريباً وبتنحفظ بالـ Cache،
-   فأول زيارة بتبني النسخ الصغيرة، وأي زيارة بعدها بتفتح فوراً.
-   لو أي خطوة فشلت (مثلاً فتح الملف file://) بيرجع للتحميل العادي. */
+/* ---- تصغير الصور داخل المتصفح (الصور الأصلية كبيرة جداً وبتبطّئ الصفحة) ---- */
 const THUMB_CACHE='dono-thumbs-v2';
 const origBlobs=new Map();
 
 function targetWidth(im){
-  /* نحسب من الضلع الأطول للإطار (الصورة بتغطي الإطار object-fit:cover،
-     فلو الإطار طويل بتتكبّر حسب الارتفاع) وبهامش 2x عشان تبقى حادة */
   const host=im.closest('.slot,.bub');
   const side=host?Math.max(host.offsetWidth,host.offsetHeight):0;
   const dpr=Math.min(window.devicePixelRatio||1,2);
@@ -166,14 +161,31 @@ function pump(){
   while(active<MAX_PARALLEL&&queue.length){
     const im=queue.shift();active++;
     const slot=im.closest('.slot');
+    const bub=im.closest('.bub');
     const done=()=>{active--;pump()};
     im.onload=()=>{if(slot)slot.classList.add('ok');im.classList.add('in');done()};
     im.onerror=()=>{
       if(!im.dataset.retry&&im.src.startsWith('blob:')){   // النسخة الصغيرة فشلت: جرّب الأصلية
         im.dataset.retry='1';im.src=encodeURI(im.dataset.src);return;
       }
-      im.remove();if(slot)slot.classList.add('bad');
-      console.warn('صورة مش موجودة:',im.dataset.src);done();
+      /* دائرة صورتها ناقصة: جرّب صورة brand ثانية موجودة بدل ما تترك فراغ */
+      if(bub){
+        const tries=+(im.dataset.fb||0);
+        if(tries<14){
+          im.dataset.fb=tries+1;
+          const m=im.dataset.src.match(/brand-(\d+)\.jpg$/);
+          const next=((m?+m[1]:0)%14)+1;
+          console.warn('صورة مش موجودة:',im.dataset.src,'← بديل: brand-'+next+'.jpg');
+          im.dataset.src='assets/img/brand-'+next+'.jpg';
+          delete im.dataset.retry;
+          loadImg(im);
+          return;
+        }
+      }
+      im.remove();
+      if(slot) slot.classList.add('bad');
+      console.warn('صورة مش موجودة:',im.dataset.src);
+      done();
     };
     loadImg(im);
   }
