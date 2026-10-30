@@ -1,154 +1,25 @@
 
-/* =========================
-   My Orders | DONO
-========================= */
+const ordersApi = "/DONO-repo/backend/public/api/orders";
 
 const ordersList = document.getElementById("orders-list");
 const ordersCount = document.getElementById("orders-count");
 const emptyOrders = document.getElementById("empty-orders");
-
-// Demo logged-in customer
-const currentUserId = 1;
-
-// Shared demo orders
-const initialOrders = [
-    {
-        id: 1,
-        user_id: 1,
-        customer_name: "Sara Ahmad",
-        order_number: "DONO-1001",
-        status: "pending",
-        subtotal: 60,
-        discount_amount: 5,
-        shipping_fee: 3,
-        total_amount: 58,
-        created_at: "2026-10-25",
-        items: [
-            {
-                id: 1,
-                order_id: 1,
-                product_id: 1,
-                product_name: "Birthday Gift Box",
-                unit_price: 25,
-                quantity: 1,
-                line_total: 25
-            },
-            {
-                id: 2,
-                order_id: 1,
-                product_id: 2,
-                product_name: "Flowers & Chocolate Box",
-                unit_price: 35,
-                quantity: 1,
-                line_total: 35
-            }
-        ]
-    },
-    {
-        id: 2,
-        user_id: 2,
-        customer_name: "Omar Khalid",
-        order_number: "DONO-1002",
-        status: "confirmed",
-        subtotal: 28,
-        discount_amount: 0,
-        shipping_fee: 3,
-        total_amount: 31,
-        created_at: "2026-10-27",
-        items: [
-            {
-                id: 3,
-                order_id: 2,
-                product_id: 4,
-                product_name: "Coffee Lover Gift Box",
-                unit_price: 28,
-                quantity: 1,
-                line_total: 28
-            }
-        ]
-    },
-    {
-        id: 3,
-        user_id: 3,
-        customer_name: "Lina Haddad",
-        order_number: "DONO-1003",
-        status: "cancelled",
-        subtotal: 32,
-        discount_amount: 0,
-        shipping_fee: 0,
-        total_amount: 32,
-        created_at: "2026-10-28",
-        items: [
-            {
-                id: 4,
-                order_id: 3,
-                product_id: 6,
-                product_name: "Luxury Chocolate Box",
-                unit_price: 32,
-                quantity: 1,
-                line_total: 32
-            }
-        ]
-    }
-];
-
-// Create demo data only once
-if (localStorage.getItem("donoAdminOrders") === null) {
-    localStorage.setItem(
-        "donoAdminOrders",
-        JSON.stringify(initialOrders)
-    );
-}
-
-// Get shared orders
-function getOrders() {
-    return JSON.parse(localStorage.getItem("donoAdminOrders")) || [];
-}
 
 // Format price
 function formatPrice(amount) {
     return Number(amount).toFixed(2) + " JOD";
 }
 
-// Add a summary row
-function addSummaryRow(container, label, amount, isTotal = false) {
-
-    const row = document.createElement("div");
-
-    row.className = isTotal
-        ? "summary-row summary-total"
-        : "summary-row";
-
-    const title = document.createElement("span");
-    title.textContent = label;
-
-    const value = document.createElement("span");
-    value.textContent = formatPrice(amount);
-
-    row.appendChild(title);
-    row.appendChild(value);
-
-    container.appendChild(row);
-}
-
-// Display customer's orders
-function displayOrders() {
+// Display orders
+function displayOrders(orders) {
 
     ordersList.innerHTML = "";
 
-    const orders = getOrders();
+    ordersCount.textContent = "Your Orders (" + orders.length + ")";
 
-    const customerOrders = orders.filter(function(order) {
-        return order.user_id === currentUserId &&
-               order.status !== "cart";
-    });
+    emptyOrders.hidden = orders.length > 0;
 
-    ordersCount.textContent =
-        "Your Orders (" + customerOrders.length + ")";
-
-    emptyOrders.hidden = customerOrders.length !== 0;
-
-    customerOrders.forEach(function(order) {
+    orders.forEach(function(order) {
 
         const card = document.createElement("article");
         card.className = "order-card";
@@ -167,7 +38,17 @@ function displayOrders() {
         date.textContent = "Placed on " + order.created_at;
 
         const status = document.createElement("span");
-        status.className = "order-status status-" + order.status;
+        status.className = "order-status";
+
+        const allowedStatuses = ["pending", "confirmed", "cancelled"];
+        const orderStatus = String(order.status).toLowerCase();
+
+        status.classList.add(
+            allowedStatuses.includes(orderStatus)
+                ? "status-" + orderStatus
+                : "status-pending"
+        );
+
         status.textContent = order.status;
 
         const actions = document.createElement("div");
@@ -182,17 +63,18 @@ function displayOrders() {
         detailsButton.className = "details-btn";
         detailsButton.textContent = "View Details";
 
-        // Details section
+        // Order Details
         const details = document.createElement("div");
         details.className = "order-details";
         details.hidden = true;
 
         const itemsTitle = document.createElement("h4");
         itemsTitle.textContent = "Order Items";
-
         details.appendChild(itemsTitle);
 
-        order.items.forEach(function(product) {
+        const items = Array.isArray(order.items) ? order.items : [];
+
+        items.forEach(function(product) {
 
             const item = document.createElement("div");
             item.className = "order-item";
@@ -222,16 +104,40 @@ function displayOrders() {
             details.appendChild(item);
         });
 
+        // Order Summary
         const summary = document.createElement("div");
         summary.className = "order-summary";
 
-        addSummaryRow(summary, "Subtotal", order.subtotal);
-        addSummaryRow(summary, "Discount", order.discount_amount);
-        addSummaryRow(summary, "Shipping", order.shipping_fee);
-        addSummaryRow(summary, "Total", order.total_amount, true);
+        const summaryValues = [
+            ["Subtotal", order.subtotal],
+            ["Discount", order.discount_amount],
+            ["Shipping", order.shipping_fee],
+            ["Total", order.total_amount]
+        ];
+
+        summaryValues.forEach(function(value, index) {
+
+            const row = document.createElement("div");
+
+            row.className = index === 3
+                ? "summary-row summary-total"
+                : "summary-row";
+
+            const label = document.createElement("span");
+            label.textContent = value[0];
+
+            const amount = document.createElement("span");
+            amount.textContent = formatPrice(value[1]);
+
+            row.appendChild(label);
+            row.appendChild(amount);
+
+            summary.appendChild(row);
+        });
 
         details.appendChild(summary);
 
+        // Show / Hide Details
         detailsButton.addEventListener("click", function() {
 
             details.hidden = !details.hidden;
@@ -258,4 +164,34 @@ function displayOrders() {
     });
 }
 
-displayOrders();
+// Load orders from backend
+async function loadOrders() {
+
+    try {
+        const response = await fetch(ordersApi);
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+            throw new Error(result.message || "Failed to load orders.");
+        }
+
+        const orders = Array.isArray(result.data)
+            ? result.data
+            : result.data?.orders;
+
+        if (!Array.isArray(orders)) {
+            throw new Error("Invalid orders response.");
+        }
+
+        displayOrders(orders);
+
+    } catch (error) {
+        console.error(error);
+
+        ordersList.textContent = error.message;
+        ordersCount.textContent = "Your Orders";
+        emptyOrders.hidden = true;
+    }
+}
+
+loadOrders();
