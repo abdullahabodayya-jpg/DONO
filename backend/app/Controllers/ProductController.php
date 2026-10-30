@@ -123,6 +123,59 @@ class ProductController
         }
     }
 
+    public function publicShow(int $productId): void
+    {
+        try {
+            // Get one active product by ID
+            $product = $this->productRepository->getActiveProductById($productId);
+
+            // Check if the product exists and is active
+            if (!$product) {
+                Response::send(
+                    false,
+                    "Product not found",
+                    null,
+                    404
+                );
+            }
+
+            // Prepare public product details
+            $productData = [
+                "id" => (int) $product["id"],
+                "name" => $product["name"],
+                "description" => $product["description"],
+                "price" => $product["price"],
+                "stock_quantity" => (int) $product["stock_quantity"],
+                "product_type" => $product["product_type"],
+                "image_url" => $product["image_url"],
+                "category" => [
+                    "id" => (int) $product["category_id"],
+                    "name" => $product["category_name"]
+                ],
+                "is_active" => (bool) $product["is_active"]
+            ];
+
+            // Send product details
+            Response::send(
+                true,
+                "Product retrieved successfully",
+                ["product" => $productData],
+                200
+            );
+
+        } catch (Throwable $e) {
+
+            error_log($e->getMessage());
+
+            Response::send(
+                false,
+                "Failed to retrieve product",
+                null,
+                500
+            );
+        }
+    }
+
     public function show(int $productId): void
     {
         // Check if product ID is valid

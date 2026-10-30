@@ -60,6 +60,46 @@ class ProductRepository
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function getActiveProductById(int $productId): ?array
+    {
+        // Get one active product with its category and primary image
+        $sql = "SELECT
+                    p.id,
+                    p.name,
+                    p.description,
+                    p.price,
+                    p.stock_quantity,
+                    p.product_type,
+                    p.is_active,
+                    c.id AS category_id,
+                    c.name AS category_name,
+                    pi.image_url
+                FROM products p
+
+                INNER JOIN categories c
+                    ON p.category_id = c.id
+                    AND c.deleted_at IS NULL
+
+                LEFT JOIN product_images pi
+                    ON pi.product_id = p.id
+                    AND pi.is_primary = 1
+
+                WHERE p.id = :id
+                AND p.is_active = 1
+                AND p.deleted_at IS NULL
+
+                LIMIT 1";
+
+        $stmt = $this->db->prepare($sql);
+
+        $stmt->bindValue(":id", $productId, PDO::PARAM_INT);
+
+        $stmt->execute();
+
+        $product = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $product ?: null;
+    }
 
     public function countActiveProducts(): int
     {
