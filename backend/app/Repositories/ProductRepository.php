@@ -144,6 +144,25 @@ class ProductRepository
         return $stmt->fetch(PDO::FETCH_ASSOC) !== false;
     }
 
+    public function getAvailableCategories(): array
+    {
+        // Get categories that are not deleted
+        $sql = "SELECT
+                    id,
+                    name,
+                    description,
+                    image AS image_url
+                FROM categories
+                WHERE deleted_at IS NULL
+                ORDER BY name ASC";
+
+        $stmt = $this->db->prepare($sql);
+
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function create(
         int $categoryId,
         string $name,

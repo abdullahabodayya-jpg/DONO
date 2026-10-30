@@ -123,6 +123,45 @@ class ProductController
         }
     }
 
+    public function publicCategories(): void
+    {
+        try {
+            // Get available categories from database
+            $categories = $this->productRepository->getAvailableCategories();
+
+            // Prepare categories for API response
+            $items = [];
+
+            foreach ($categories as $category) {
+                $items[] = [
+                    "id" => (int) $category["id"],
+                    "name" => $category["name"],
+                    "description" => $category["description"],
+                    "image_url" => $category["image_url"]
+                ];
+            }
+
+            // Send categories response
+            Response::send(
+                true,
+                "Categories retrieved successfully",
+                ["items" => $items],
+                200
+            );
+
+        } catch (Throwable $e) {
+
+            error_log($e->getMessage());
+
+            Response::send(
+                false,
+                "Failed to retrieve categories",
+                null,
+                500
+            );
+        }
+    }
+
     public function publicShow(int $productId): void
     {
         try {
