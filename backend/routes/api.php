@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/../app/Repositories/CouponRepository.php';
 require_once __DIR__ . '/../app/Controllers/CouponController.php';
-require_once __DIR__ . '/../app/Middleware/AdminMiddleware.php';
-require_once __DIR__ . '/../app/Repositories/CartRepository.php';
-require_once __DIR__ . '/../app/Controllers/CartController.php';
+require_once __DIR__ . '/../app/Controllers/CategoryController.php';
 
-
+// ---------------- Health ----------------
 
 $router->get('/api/health', function () use ($database): void {
     $database->getConnection()->query('SELECT 1');
@@ -19,18 +17,17 @@ $router->get('/api/health', function () use ($database): void {
     );
 });
 
-$couponController = new CouponController($database);
+// ---------------- Coupons ----------------
 
+$couponController = new CouponController($database);
 
 $router->get('/api/coupons', function () use ($couponController): void {
     $couponController->index();
 });
 
-
 $router->get('/api/coupons/{id}', function (string $id) use ($couponController): void {
     $couponController->show($id);
 });
-
 
 $router->post('/api/coupons', function () use ($couponController): void {
     $couponController->store();
@@ -48,27 +45,35 @@ $router->delete('/api/coupons/{id}', function (string $id) use ($couponControlle
     $couponController->destroy($id);
 });
 
-
 $router->post('/api/coupons/validate', function () use ($couponController): void {
     $couponController->validateCoupon();
 });
 
+// ---------------- Categories ----------------
 
+$categoryController = new CategoryController($database);
 
-$cartController = new CartController($database);
-
-$router->get('/api/cart', function () use ($cartController): void {
-    $cartController->index();
+$router->get('/api/categories', function () use ($categoryController): void {
+    $categoryController->index();
 });
 
-$router->post('/api/cart/items', function () use ($cartController): void {
-    $cartController->add();
+$router->get('/api/categories/{id}', function (string $id) use ($categoryController): void {
+    $categoryController->show($id);
 });
 
-$router->put('/api/cart/items/{id}', function (string $id) use ($cartController): void {
-    $cartController->update($id);
+$router->post('/api/categories', function () use ($categoryController): void {
+    $categoryController->store();
 });
 
-$router->delete('/api/cart/items/{id}', function (string $id) use ($cartController): void {
-    $cartController->remove($id);
+$router->put('/api/categories/{id}', function (string $id) use ($categoryController): void {
+    $categoryController->update($id);
 });
+
+$router->patch('/api/categories/{id}', function (string $id) use ($categoryController): void {
+    $categoryController->patch($id);
+});
+
+$router->delete('/api/categories/{id}', function (string $id) use ($categoryController): void {
+    $categoryController->destroy($id);
+});
+

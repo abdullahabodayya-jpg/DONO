@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DONO | Categories</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/admin-categories.css">
+    <script type="module" src="../assets/js/admin-categories.js"></script>
+</head>
+<body>
+
+    <header class="topbar">
+    
+
+
+    </header>
+
+    <main class="page">
+        <div class="page-head">
+            <div>
+                <h1>Categories</h1>
+                <p>Organize your store with product categories.</p>
+            </div>
+            <button id="addCategoryBtn" class="btn btn-primary" type="button">+ Add Category</button>
+        </div>
+
+        <div class="filters">
+            <div class="search-box">
+                <span aria-hidden="true">⌕</span>
+                <input type="search" id="searchInput" placeholder="Search categories…" aria-label="Search categories">
+            </div>
+
+            <select id="statusFilter" aria-label="Filter by status">
+                <option value="all">All status</option>
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+            </select>
+        </div>
+
+        <div class="table-card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Products</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="categoriesTableBody"></tbody>
+            </table>
+        </div>
+
+        <p id="resultsCount" class="results-count"></p>
+    </main>
+
+    <div id="toast" class="toast" role="status" hidden></div>
+
+    <!-- Add / Edit popup -->
+    <dialog id="categoryModal" class="modal">
+        <form id="categoryForm" novalidate>
+            <div class="modal-header">
+                <h2 id="modalTitle">Edit category</h2>
+                <button type="button" class="modal-close" id="closeModalBtn" aria-label="Close">&times;</button>
+            </div>
+
+            <input type="hidden" id="categoryId">
+
+            <div>
+                <label for="name">Name</label>
+                <input type="text" id="name" maxlength="100" required>
+            </div>
+
+            <div>
+                <label for="description">Description</label>
+                <textarea id="description" rows="3"></textarea>
+            </div>
+
+            <div>
+                <label for="image">Image URL</label>
+                <input type="text" id="image" maxlength="255" placeholder="https://…">
+            </div>
+
+            <div>
+                <label for="is_active">Status</label>
+                <select id="is_active">
+                    <option value="1">Active</option>
+                    <option value="0">Inactive</option>
+                </select>
+            </div>
+
+            <p id="formError" class="form-error" role="alert" hidden></p>
+
+            <div class="modal-actions">
+                <button type="button" class="btn btn-light" id="cancelBtn">Cancel</button>
+                <button type="submit" class="btn btn-primary" id="saveBtn">Save changes</button>
+            </div>
+        </form>
+    </dialog>
+
+    <!-- Delete popup -->
+    <dialog id="deleteModal" class="modal modal-sm">
+        <div class="modal-header">
+            <h2>Delete category?</h2>
+        </div>
+        <p id="deleteText" class="delete-text"></p>
+        <div class="modal-actions">
+            <button type="button" class="btn btn-light" id="cancelDeleteBtn">Cancel</button>
+            <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+        </div>
+    </dialog>
+
+</body>
+</html>

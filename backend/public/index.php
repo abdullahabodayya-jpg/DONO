@@ -11,8 +11,7 @@ require_once __DIR__ . '/../app/Core/Database.php';
 require_once __DIR__ . '/../app/Core/Router.php';
 require_once __DIR__ . '/../app/Core/Response.php';
 
-$config  = require __DIR__ . '/../config/config.php';
-
+$config = require __DIR__ . '/../config/config.example.php';
 try {
     $database = new Database($config);
     $router = new Router();
