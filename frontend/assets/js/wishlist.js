@@ -1,18 +1,14 @@
 
- // =========================
-// Wishlist | DONO
-// =========================
-
 const wishlistGrid = document.getElementById("wishlist-grid");
 const wishlistCount = document.getElementById("wishlist-count");
 const emptyWishlist = document.getElementById("empty-wishlist");
 const wishlistMessage = document.getElementById("wishlist-message");
 
-// API endpoints
+
 const wishlistApi = "/DONO-repo/backend/public/api/wishlist";
 const cartApi = "/DONO-repo/backend/public/api/cart";
 
-// Load wishlist from backend
+
 async function loadWishlist() {
     wishlistMessage.textContent = "";
     emptyWishlist.hidden = true;
@@ -35,7 +31,7 @@ async function loadWishlist() {
     }
 }
 
-// Display products
+
 function displayWishlist(products) {
     wishlistGrid.replaceChildren();
 
@@ -58,6 +54,15 @@ function displayWishlist(products) {
             image.alt = "No image available";
         }
 
+        // Open Product Details when clicking the image
+        image.style.cursor = "pointer";
+
+        image.addEventListener("click", function () {
+            window.location.href =
+                "product-details.html?id=" + encodeURIComponent(product.id);
+        });
+
+
         const heartButton = document.createElement("button");
         heartButton.type = "button";
         heartButton.className = "wishlist-heart active";
@@ -75,6 +80,15 @@ function displayWishlist(products) {
 
         const name = document.createElement("h3");
         name.textContent = product.name;
+
+        // Open Product Details when clicking the product name
+        name.style.cursor = "pointer";
+
+        name.addEventListener("click", function () {
+            window.location.href =
+                "product-details.html?id=" + encodeURIComponent(product.id);
+        });
+
 
         const description = document.createElement("p");
         description.textContent = product.description || "";
@@ -98,7 +112,7 @@ function displayWishlist(products) {
     });
 }
 
-// Remove product from wishlist
+
 async function removeWishlistItem(productId) {
     wishlistMessage.textContent = "";
 
@@ -123,7 +137,7 @@ async function removeWishlistItem(productId) {
     }
 }
 
-// Move product to cart
+
 async function moveToCart(productId) {
     wishlistMessage.textContent = "";
 
@@ -145,7 +159,7 @@ async function moveToCart(productId) {
             throw new Error(result.message || "Unable to add product to cart.");
         }
 
-        // Remove only after successfully adding to cart
+
         const removeResponse = await fetch(
             wishlistApi + "/items/" + productId,
             {
@@ -168,5 +182,5 @@ async function moveToCart(productId) {
     }
 }
 
-// Initial load
+
 loadWishlist();
