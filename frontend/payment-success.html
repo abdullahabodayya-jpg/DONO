@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DONO - Payment Status</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background: #f5f3ef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal {
+            width: 100%;
+            max-width: 460px;
+            background: #fff;
+            padding: 45px 35px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 15px 45px rgba(0, 0, 0, .10);
+        }
+
+        .status-icon {
+            width: 85px;
+            height: 85px;
+            margin: 0 auto 25px;
+            border-radius: 50%;
+            background: #e8f5ec;
+            color: #269653;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 45px;
+        }
+
+        .status-icon.pending {
+            background: #fff5df;
+            color: #c58a20;
+        }
+
+        .status-icon.error {
+            background: #fff0ed;
+            color: #dc6255;
+        }
+
+        .brand {
+            color: #6F8FD6;
+            font-size: 15px;
+            font-weight: bold;
+            letter-spacing: 4px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: #263B30;
+            font-size: 27px;
+            margin-bottom: 15px;
+        }
+
+        p {
+            color: #777;
+            font-size: 15px;
+            line-height: 1.7;
+            margin-bottom: 25px;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: #6F8FD6;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            background: #5879c1;
+        }
+
+        .note {
+            display: block;
+            margin-top: 20px;
+            color: #999;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        #order-info {
+            color: #555;
+            font-size: 13px;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+<main class="modal">
+
+    <div class="status-icon pending" id="status-icon">
+        ...
+    </div>
+
+    <div class="brand">DONO</div>
+
+    <h1 id="status-title">Checking your payment...</h1>
+
+    <p id="status-message">
+        Please wait while we confirm your payment.
+    </p>
+
+    <div id="order-info"></div>
+
+    <a href="index.html" class="btn" id="action-button" hidden>
+        Continue Shopping
+    </a>
+
+    <span class="note" id="status-note">
+        Please don't close this page.
+    </span>
+
+</main>
+
+<script>
+    const API_URL = '/DONO/backend/public/api/payments/status';
+
+    const sessionId = new URLSearchParams(
+        window.location.search
+    ).get('session_id');
+
+    const icon = document.getElementById('status-icon');
+    const title = document.getElementById('status-title');
+    const message = document.getElementById('status-message');
+    const orderInfo = document.getElementById('order-info');
+    const actionButton = document.getElementById('action-button');
+    const note = document.getElementById('status-note');
+
+    let attempts = 0;
+    const maxAttempts = 15;
+    const retryDelay = 2000;
+
+    function showError(titleText, messageText) {
+        icon.textContent = '!';
+        icon.className = 'status-icon error';
+
+        title.textContent = titleText;
+        message.textContent = messageText;
+
+        actionButton.hidden = false;
+        note.textContent = '';
+    }
+
+    function showPending() {
+        icon.textContent = '...';
+        icon.className = 'status-icon pending';
+
+        title.textContent = 'Payment Processing';
+
+        message.textContent =
+            'Your payment has not been confirmed yet. Please check your order again shortly.';
+
+        note.textContent =
+            'Do not make another payment while this transaction is being verified.';
+
+        actionButton.hidden = true;
+    }
+
+    async function checkPaymentStatus() {
+
+        if (!sessionId) {
+            showError(
+                'Invalid Payment Session',
+                'We could not find your payment session.'
+            );
+            return;
+        }
+
+        try {
+
+            const response = await fetch(
+                `${API_URL}?session_id=${encodeURIComponent(sessionId)}`
+            );
+
+            const result = await response.json();
+
+            if (!response.ok || !result.success) {
+                showError(
+                    'Unable to Confirm Payment',
+                    result.message || 'Please try again later.'
+                );
+                return;
+            }
+
+            const payment = result.data;
+
+            // Payment confirmed by webhook
+
+            if (
+                payment.payment_status === 'succeeded' &&
+                payment.order_status === 'confirmed'
+            ) {
+
+                icon.textContent = '✓';
+                icon.className = 'status-icon';
+
+                title.textContent = 'Thank You for Your Order!';
+
+                message.textContent =
+                    'Your payment has been confirmed. We hope your gift brings happiness!';
+
+                orderInfo.textContent =
+                    `Order: ${payment.order_number} | Amount: ${Number(payment.amount).toFixed(2)} JOD`;
+
+                actionButton.hidden = false;
+
+                note.textContent =
+                    'Made with care, just for you.';
+
+                return;
+            }
+
+            // Still waiting for webhook
+
+            if (payment.payment_status === 'pending') {
+
+                attempts++;
+
+                showPending();
+
+                if (attempts < maxAttempts) {
+                    setTimeout(checkPaymentStatus, retryDelay);
+                } else {
+                    title.textContent = 'Confirmation Delayed';
+
+                    message.textContent =
+                        'Your payment is still being verified. Please check your order later.';
+
+                    note.textContent =
+                        'Your payment has not been marked as successful yet.';
+                }
+
+                return;
+            }
+
+            // Failed or other status
+
+            showError(
+                'Payment Not Completed',
+                'Your payment has not been confirmed. Please check your order status.'
+            );
+
+        } catch (error) {
+
+            console.error('Payment status error:', error);
+
+            showError(
+                'Connection Error',
+                'We could not connect to the server. Please try again later.'
+            );
+        }
+    }
+
+    checkPaymentStatus();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DONO - Payment Cancelled</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background: #f5f3ef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal {
+            position: relative;
+            width: 100%;
+            max-width: 460px;
+            background: #fff;
+            padding: 55px 35px 45px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 15px 45px rgba(0, 0, 0, .10);
+        }
+
+        .back-link {
+            position: absolute;
+            top: 22px;
+            left: 25px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #777;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .back-link:hover {
+            color: #6F8FD6;
+        }
+
+        .back-link span {
+            font-size: 22px;
+        }
+
+        .status-icon {
+            width: 85px;
+            height: 85px;
+            margin: 0 auto 25px;
+            border-radius: 50%;
+            background: #fff0ed;
+            color: #dc6255;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 45px;
+        }
+
+        .brand {
+            color: #6F8FD6;
+            font-size: 15px;
+            font-weight: bold;
+            letter-spacing: 4px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: #263B30;
+            font-size: 27px;
+            margin-bottom: 15px;
+        }
+
+        p {
+            color: #777;
+            font-size: 15px;
+            line-height: 1.7;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: #6F8FD6;
+            color: #fff;
+            text-decoration: none;
+            border: none;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .btn:hover {
+            background: #5879c1;
+        }
+
+        .btn:disabled {
+            opacity: .6;
+            cursor: not-allowed;
+        }
+
+        .secondary-btn {
+            display: inline-block;
+            margin-top: 20px;
+            color: #777;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .secondary-btn:hover {
+            color: #6F8FD6;
+        }
+
+        #error-message {
+            display: none;
+            color: #dc6255;
+            font-size: 13px;
+            margin-top: 15px;
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+<main class="modal">
+
+    <a href="#" id="back-btn" class="back-link">
+        <span>←</span> Back
+    </a>
+
+    <div class="status-icon">×</div>
+
+    <div class="brand">DONO</div>
+
+    <h1>Payment Cancelled</h1>
+
+    <p>
+        Your payment was not completed.
+        Don't worry, your order hasn't been lost.
+        You can try again whenever you're ready.
+    </p>
+
+    <button type="button" id="try-again-btn" class="btn">
+        Try Again
+    </button>
+
+    <p id="error-message"></p>
+
+    <a href="index.html" class="secondary-btn">
+        Continue Shopping
+    </a>
+
+</main>
+
+<script>
+    const API_URL = '/DONO/backend/public/api/payments/checkout';
+
+
+    const backBtn = document.getElementById('back-btn');
+    const tryAgainBtn = document.getElementById('try-again-btn');
+    const errorMessage = document.getElementById('error-message');
+
+    backBtn.addEventListener('click', function(event) {
+        event.preventDefault();
+        window.location.href = 'my-orders.html';
+    });
+
+    async function retryPayment() {
+
+        try {
+            tryAgainBtn.disabled = true;
+            tryAgainBtn.textContent = 'Redirecting...';
+            errorMessage.style.display = 'none';
+
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'same-origin',
+                body: JSON.stringify({})
+            });
+
+            const result = await response.json();
+
+            if (
+                !response.ok ||
+                !result.success ||
+                !result.data ||
+                !result.data.checkout_url
+            ) {
+                throw new Error(
+                    result.message || 'Unable to restart payment.'
+                );
+            }
+
+            window.location.href = result.data.checkout_url;
+
+        } catch (error) {
+            showError(error.message);
+
+            tryAgainBtn.disabled = false;
+            tryAgainBtn.textContent = 'Try Again';
+        }
+    }
+
+    function showError(message) {
+        errorMessage.textContent = message;
+        errorMessage.style.display = 'block';
+    }
+
+    tryAgainBtn.addEventListener('click', retryPayment);
+</script>
+
+</body>
+</html>
