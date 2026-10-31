@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use app\Core\Response;
+
 class AuthController
 {
     private UserRepository $userRepository;
@@ -238,7 +240,13 @@ class AuthController
 
         if (!empty($tempUser['id'])) {
             $userId = (int) $tempUser['id'];
-            $this->userRepository->updateProfileDetails($userId, $phone, $gender, $address);
+            $this->userRepository->updateProfileDetails(
+                $userId,
+                $tempUser['name'] ?? null,
+                $phone,
+                $gender,
+                $address
+            );
             $role = 'customer';
         } else {
             $randomPassword = password_hash(bin2hex(random_bytes(16)), PASSWORD_DEFAULT);

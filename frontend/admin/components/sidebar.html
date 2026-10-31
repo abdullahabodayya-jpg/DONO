@@ -1,0 +1,171 @@
+<!-- ===================================
+     DONO ADMIN - SHARED SIDEBAR
+     Used across all Admin pages
+=================================== -->
+
+<!-- Sidebar Header -->
+<div class="admin-sidebar-header">
+    <!-- Admin Logo -->
+    <a
+        href="index.html"
+        class="admin-logo"
+        aria-label="DONO Admin Dashboard"
+    >
+        <!-- TODO: REPLACE YOUR LOGO HERE WITH IMG TAG -->
+        <span
+            class="admin-logo-icon"
+            aria-hidden="true"
+        >
+            <i data-lucide="gift"></i>
+        </span>
+
+        <span class="admin-logo-text">
+            <strong>DONO</strong>
+            <small>Admin Workspace</small>
+        </span>
+    </a>
+
+    <!-- Close Drawer Button -->
+    <button
+        type="button"
+        class="admin-drawer-close"
+        id="adminDrawerClose"
+        aria-label="Close navigation menu"
+    >
+        <i
+            data-lucide="x"
+            aria-hidden="true"
+        ></i>
+    </button>
+</div>
+
+<!-- Sidebar Navigation -->
+<nav
+    class="admin-nav"
+    aria-label="Admin navigation"
+>
+    <!-- Overview Group -->
+    <div class="admin-nav-group">
+        <p class="admin-nav-group-title">Overview</p>
+
+        <a
+            href="index.html"
+            class="admin-nav-link"
+            data-admin-page="dashboard"
+        >
+            <i
+                data-lucide="layout-dashboard"
+                aria-hidden="true"
+            ></i>
+            <span>Dashboard</span>
+        </a>
+    </div>
+
+    <!-- Management Group -->
+    <div class="admin-nav-group">
+        <p class="admin-nav-group-title">Management</p>
+
+        <!-- Products Management -->
+        <a
+            href="products.html"
+            class="admin-nav-link"
+            data-admin-page="products"
+        >
+            <i
+                data-lucide="package"
+                aria-hidden="true"
+            ></i>
+            <span>Products</span>
+        </a>
+
+        <!-- Reviews Management -->
+        <a
+            href="reviews.html"
+            class="admin-nav-link"
+            data-admin-page="reviews"
+        >
+            <i
+                data-lucide="star"
+                aria-hidden="true"
+            ></i>
+            <span>Reviews</span>
+        </a>
+
+        <!-- Category Management -->
+        <a
+            href="categories.html"
+            class="admin-nav-link"
+            data-admin-page="categories"
+        >
+            <i
+                data-lucide="list-sort-descending"
+                aria-hidden="true"
+            ></i>
+            <span>Categories</span>
+        </a>
+
+        <!-- Coupons Management -->
+        <a
+            href="coupons.html"
+            class="admin-nav-link"
+            data-admin-page="coupons"
+        >
+            <i
+                data-lucide="ticket-percent"
+                aria-hidden="true"
+            ></i>
+            <span>Coupons</span>
+        </a>
+
+        <!-- Users Management -->
+        <a
+            href="users.html"
+            class="admin-nav-link"
+            data-admin-page="users"
+        >
+            <i
+                data-lucide="users"
+                aria-hidden="true"
+            ></i>
+            <span>Users</span>
+        </a>
+
+        <!-- Payments Management -->
+        <a
+            href="payments.html"
+            class="admin-nav-link"
+            data-admin-page="payments"
+        >
+            <i
+                data-lucide="circle-dollar-sign"
+                aria-hidden="true"
+            ></i>
+            <span>Payments</span>
+        </a>
+        <!-- Orders Management -->
+        <a
+            href="orders.html"
+            class="admin-nav-link"
+            data-admin-page="orders"
+        >
+            <i
+                data-lucide="shopping-bag"
+                aria-hidden="true"
+            ></i>
+            <span>Orders</span>
+        </a>
+    </div>
+</nav>
+<!-- Sidebar Footer -->
+<div class="admin-sidebar-footer">
+    <a
+        href="../index.html"
+        class="admin-nav-link"
+    >
+        <i
+            data-lucide="store"
+            aria-hidden="true"
+        ></i>
+        <span>View Store</span>
+    </a>
+</div>

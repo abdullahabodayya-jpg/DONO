@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+        />
+
+        <title>Products Management | DONO Admin</title>
+
+        <!-- Global CSS -->
+        <link
+            rel="stylesheet"
+            href="../assets/css/global.css"
+        />
+
+        <!-- Shared Admin Layout CSS -->
+        <link
+            rel="stylesheet"
+            href="../assets/css/pages/admin-layout.css"
+        />
+
+        <!-- Admin Products CSS -->
+        <link
+            rel="stylesheet"
+            href="../assets/css/pages/admin-products.css"
+        />
+
+        <!-- Lucide Icons -->
+        <script
+            src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"
+            defer
+        ></script>
+
+        <!-- Shared Admin Layout JavaScript -->
+        <script
+            src="../assets/js/admin/admin-layout.js"
+            defer
+        ></script>
+    </head>
+
+    <body>
+        <!-- Admin Page -->
+        <div class="admin-layout">
+            <!-- Drawer Overlay -->
+            <div
+                class="admin-drawer-overlay"
+                id="adminDrawerOverlay"
+                aria-hidden="true"
+            ></div>
+
+            <!-- Shared Sidebar -->
+            <!-- Loaded from components/sidebar.html -->
+            <aside
+                class="admin-sidebar"
+                id="adminSidebar"
+                aria-label="Admin sidebar"
+            ></aside>
+
+            <!-- Main Content -->
+            <main class="admin-main">
+                <!-- Shared Admin Topbar -->
+                <!-- Loaded from components/topbar.html -->
+                <header
+                    class="admin-topbar"
+                    id="adminTopbar"
+                ></header>
+
+                <!-- Page Content -->
+                <div class="admin-content">
+                    <!-- Page Header -->
+                    <div class="admin-content-header">
+                        <div>
+                            <h2>All Products</h2>
+                            <p class="text-muted">
+                                Manage your store products, inventory and images.
+                            </p>
+                        </div>
+
+                        <button
+                            type="button"
+                            class="btn btn-primary"
+                            id="addProductBtn"
+                        >
+                            + Add Product
+                        </button>
+                    </div>
+
+                    <!-- Products Section -->
+                    <section
+                        class="card admin-products-section"
+                        aria-labelledby="productsTitle"
+                    >
+                        <div class="admin-section-header">
+                            <h3 id="productsTitle">Products List</h3>
+                        </div>
+
+                        <!-- Filters -->
+                        <div class="admin-products-filters">
+                            <!-- Search Products -->
+                            <div class="form-group">
+                                <label
+                                    class="form-label"
+                                    for="productSearch"
+                                >
+                                    Search Products
+                                </label>
+
+                                <input
+                                    type="search"
+                                    class="form-control"
+                                    id="productSearch"
+                                    placeholder="Search by product name"
+                                />
+                            </div>
+
+                            <!-- Product Type Filter -->
+                            <div class="form-group">
+                                <label
+                                    class="form-label"
+                                    for="productTypeFilter"
+                                >
+                                    Product Type
+                                </label>
+
+                                <select
+                                    class="form-control"
+                                    id="productTypeFilter"
+                                >
+                                    <option value="all">All Types</option>
+                                    <option value="normal">Normal</option>
+                                    <option value="package">Package</option>
+                                    <option value="custom_box">Custom Box</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Products Table -->
+                        <div class="admin-table-wrapper">
+                            <table class="admin-products-table">
+                                <caption class="visually-hidden">
+                                    Store products including images, prices, stock levels, status
+                                    and management actions.
+                                </caption>
+
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Image</th>
+                                        <th scope="col">Product</th>
+                                        <th scope="col">Type</th>
+                                        <th scope="col">Price</th>
+                                        <th scope="col">Stock</th>
+                                        <th scope="col">Status</th>
+                                        <th scope="col">Actions</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="productsTableBody">
+                                    <tr>
+                                        <td colspan="7">
+                                            Products will appear here after connecting the API.
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+                </div>
+            </main>
+        </div>
+    </body>
+</html>

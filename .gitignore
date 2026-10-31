@@ -18,3 +18,5 @@
 .idea/
 .DS_Store
 Thumbs.db
+
+/backend/public/uploads/products/
