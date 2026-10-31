@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="assets/css/chatbot.css">
+</head>
+<body>
+    <button id="chatbot-toggle-btn" class="chatbot-float-btn" aria-label="Open Chat">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+    </svg>
+</button>
+
+<div id="chatbot-window" class="chatbot-window hidden">
+    <div class="chatbot-header">
+        <div class="chatbot-title">
+            <span class="chatbot-status-dot"></span>
+            <span>Shopping Assistant</span>
+        </div>
+        <button id="chatbot-close-btn" class="chatbot-close-btn">&times;</button>
+    </div>
+    <div id="chatbot-messages" class="chatbot-messages">
+        <div class="chat-bubble bot">
+            Hello! What kind of products are you looking for today?
+        </div>
+    </div>
+    <form id="chatbot-form" class="chatbot-input-area">
+        <input type="text" id="chatbot-input" placeholder="Type what you want..." autocomplete="off" required>
+        <button type="submit">Send</button>
+    </form>
+</div>
+
+<link rel="stylesheet" href="/dono/frontend/assets/css/chatbot.css">
+<script src="/dono/frontend/assets/js/chatbot.js" defer></script>
+</body>
+</html>
