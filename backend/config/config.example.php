@@ -16,6 +16,8 @@ return [
         'secret_key' => 'sk_test_REPLACE_ME',
         'webhook_secret' => 'whsec_REPLACE_ME',
     ],
+    // Obtain a Gemini API key for the team's shopping assistant. Never commit real keys.
+    'gemini' => ['api_key' => '', 'model' => 'gemini-2.5-flash'],
     'google' => [
         'client_id' => '',
         'client_secret' => '',

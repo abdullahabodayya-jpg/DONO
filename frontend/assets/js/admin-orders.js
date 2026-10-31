@@ -9,7 +9,7 @@ let sortBy = "created_at";
 let direction = -1;
 
 const perPage = 5;
-const price = n => Number(n).toFixed(2) + " JOD";
+const price = n => Number(n).toFixed(2) + " USD";
 
 const safe = value => String(value ?? "").replace(/[&<>"']/g, c => ({
     "&": "&amp;",
@@ -207,6 +207,52 @@ $("orders-table-body").onclick = event => {
         </div>
     `).join("") || "<p>No items in this order.</p>";
 
+    // Show stored custom box choices and personalization to fulfil the order.
+    const boxDetails = document.getElementById('admin-box-details') || document.createElement('section');
+    boxDetails.id = 'admin-box-details'; boxDetails.className='dono-gift-summary'; boxDetails.replaceChildren();
+    for (const item of (o.items || [])) {
+        if (!item.custom_box) continue;
+        const config = item.custom_box.configuration || {};
+        const heading=document.createElement('h4');heading.textContent='Custom Box — '+item.product_name;boxDetails.append(heading);
+        for (const part of (item.custom_box.components || [])) {
+            const row=document.createElement('p');row.textContent=`${part.quantity} × ${part.name} (${price(part.unit_price)} each)`;boxDetails.append(row);
+        }
+        for (const [name,value] of Object.entries({
+            'Initials': config.personalization?.initials,
+            'Ribbon': config.personalization?.ribbon_color,
+            'Font': config.personalization?.font,
+            'Font color': config.personalization?.font_color,
+            'Preferred date': config.personalization?.delivery_date,
+            'Design notes': config.personalization?.notes,
+            'Favorite brand': config.personalization?.favorite_brand,
+            'Photo': config.personalization?.photo_url,
+            'Card occasion': config.card?.occasion,
+            'Card placement': config.card?.placement,
+            'Card message': config.card?.message,
+            'Sender': config.card?.sender_name
+        })) {
+            if (!value) continue;
+            const detail=document.createElement('p'); detail.textContent=name+': '+value;boxDetails.append(detail);
+        }
+    }
+    boxDetails.hidden=!boxDetails.childElementCount;
+    document.getElementById('modal-items').after(boxDetails);
+
+    const giftExtras = document.getElementById('admin-gift-extras') || document.createElement('section');
+    giftExtras.id='admin-gift-extras';giftExtras.className='dono-gift-summary';
+    giftExtras.replaceChildren();
+    if (o.gift) {
+        const label=document.createElement('h4');label.textContent='Gift delivery & wrapping';giftExtras.append(label);
+        for(const [k,v] of [
+            ['Recipient',o.gift.recipient_name || 'For customer'],
+            ['Phone',o.gift.recipient_phone],['Address',o.gift.recipient_address],
+            ['Gift message',o.gift.gift_message],['Wrapping',o.gift.wrapping_type],
+            ['Wrapping fee',price(o.gift.wrapping_fee)]]) {
+            if(!v)continue;const row=document.createElement('p');row.textContent=k+': '+v;giftExtras.append(row);
+        }
+    }
+    giftExtras.hidden = !o.gift;
+    document.getElementById('modal-items').after(giftExtras);
     $("order-modal").hidden = false;
 };
 

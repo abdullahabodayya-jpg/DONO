@@ -199,8 +199,23 @@ export async function mountProductReviews(container, productId) {
         countElement.textContent = total + (total === 1 ? " review" : " reviews");
     }
 
+    let showAllReviews = false;
+    let cachedReviews = [];
+    const reviewsListSection = component.querySelector('.dono-reviews-list-section');
+    const moreButton = createElement('button', 'dono-reviews-expand', 'View All Reviews');
+    moreButton.type = 'button';
+    moreButton.hidden = true;
+    reviewsListSection.appendChild(moreButton);
+    moreButton.addEventListener('click', () => {
+        showAllReviews = !showAllReviews;
+        renderReviews(cachedReviews);
+    });
     // Display customer reviews
     function renderReviews(reviews) {
+        cachedReviews = reviews;
+        moreButton.hidden = reviews.length <= 3;
+        moreButton.textContent = showAllReviews ? 'Show Less' : `View All ${reviews.length} Reviews`;
+        const visibleReviews = showAllReviews ? reviews : reviews.slice(0, 3);
         reviewList.replaceChildren();
 
         if (reviews.length === 0) {
@@ -215,13 +230,13 @@ export async function mountProductReviews(container, productId) {
             return;
         }
 
-        reviews.forEach(function (review) {
+        visibleReviews.forEach(function (review) {
             const reviewItem = createElement("article", "dono-reviews-item");
 
             // Review header
             const header = createElement("div", "dono-reviews-item-header");
 
-            header.appendChild(createElement("strong", "", "Customer Review"));
+            header.appendChild(createElement("strong", "", review.customer_name || "DONO Customer"));
 
             header.appendChild(
                 createElement(
@@ -334,6 +349,7 @@ export async function mountProductReviews(container, productId) {
             updateSelectedStars();
 
             showMessage(formMessage, "Your review was submitted successfully.", "success");
+            window.DonoUI?.toast('Your review was submitted successfully.', 'success');
 
             // Prevent another submission from this form
             ratingInputs.forEach(function (input) {
@@ -348,6 +364,7 @@ export async function mountProductReviews(container, productId) {
             console.error("Submit review error:", error);
 
             showMessage(formMessage, error.message);
+            window.DonoUI?.toast(error.message, 'error');
         } finally {
             submitButton.disabled = submittedSuccessfully;
 

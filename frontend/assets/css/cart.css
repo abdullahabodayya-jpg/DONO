@@ -588,3 +588,5 @@ body {
         animation: none;
     }
 }
+
+.cart-box-breakdown {padding:10px 0;color:#294b3c;font-size:.9rem;} .cart-box-breakdown ul {margin:6px 0 5px;padding-left:20px;} .cart-box-breakdown li {margin:3px 0;}

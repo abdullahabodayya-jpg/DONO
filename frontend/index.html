@@ -1,12 +1,31 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DONO</title></head>
-<body><p>Opening DONO… <a href="landing.html">Visit the welcome page</a></p>
-<script type="module">
-const url = new URL('../backend/public/api/auth/me', document.baseURI);
-try {
- const response = await fetch(url, {credentials:'same-origin', cache:'no-store'});
- const result = response.ok ? await response.json() : null;
- const user = result?.data?.user;
- location.replace(user?.role === 'admin' ? 'admin/index.html' : user ? 'products.html' : 'landing.html');
-} catch { location.replace('landing.html'); }
-</script></body></html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>DONO</title>
+  </head>
+  <body>
+    <p>Opening DONO… <a href="landing.html">Visit the welcome page</a></p>
+    <script type="module">
+      const url = new URL("../backend/public/api/auth/me", document.baseURI);
+      try {
+        const response = await fetch(url, {
+          credentials: "same-origin",
+          cache: "no-store",
+        });
+        const result = response.ok ? await response.json() : null;
+        const user = result?.data?.user;
+        location.replace(
+          user?.role === "admin"
+            ? "admin/index.html"
+            : user
+              ? "products.html"
+              : "landing.html",
+        );
+      } catch {
+        location.replace("landing.html");
+      }
+    </script>
+  </body>
+</html>

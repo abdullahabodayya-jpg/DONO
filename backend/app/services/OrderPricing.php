@@ -2,24 +2,28 @@
 
 declare(strict_types=1);
 
-/** Server-authoritative cart pricing (all monetary calculations in JOD fils / 0.01 JOD increments). */
+/** Server-authoritative cart pricing in USD cents. */
 final class OrderPricing
 {
     public function __construct(private PDO $pdo) {}
 
     public static function toMinor(string|float|int $amount): int
     {
-        // Schema uses DECIMAL(10,2), so 1 JOD = 100 database price units.
+        // Schema uses DECIMAL(10,2); Stripe USD uses 100 cents per dollar.
         return (int) round((float) $amount * 100);
     }
 
     /** Requires caller to hold the order row lock in a transaction. */
     public function recalculate(int $orderId, ?string $couponCode): array
     {
+        $buildSelect = 'cb.id AS custom_build_id, cb.prompt AS configuration_json';
+        $buildJoin = "LEFT JOIN custom_orders cb ON cb.order_item_id = oi.id AND cb.prompt LIKE 'DONO_CUSTOM_BOX_V1:%'";
         $stmt = $this->pdo->prepare(
-            'SELECT oi.id, oi.quantity, p.name, p.price, p.stock_quantity, p.is_active, p.deleted_at
+            "SELECT oi.id, oi.quantity, p.name, p.price, p.stock_quantity, p.is_active, p.deleted_at,
+                    {$buildSelect}
              FROM order_items oi JOIN products p ON p.id = oi.product_id
-             WHERE oi.order_id = :id FOR UPDATE'
+             {$buildJoin}
+             WHERE oi.order_id = :id FOR UPDATE"
         );
         $stmt->execute(['id' => $orderId]);
         $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -39,13 +43,46 @@ final class OrderPricing
                 throw new DomainException('A product in your cart is no longer available in the requested quantity.');
             }
             $unit = self::toMinor($item['price']);
-            if ($unit <= 0) {
-                throw new DomainException('A product has an invalid price.');
+            $name = $item['name'];
+            if ($item['custom_build_id'] !== null) {
+                if ((int)$item['quantity'] !== 1) throw new DomainException('Custom box quantity must be one.');
+                $cfg = json_decode(substr((string)$item['configuration_json'], strlen('DONO_CUSTOM_BOX_V1:')), true);
+                if (!is_array($cfg) || !isset($cfg['items']) || !is_array($cfg['items'])) {
+                    throw new DomainException('Invalid custom box configuration.');
+                }
+                $children = $this->pdo->prepare(
+                    'SELECT g.product_id,g.quantity,p.name,p.price,p.stock_quantity,p.is_active,p.deleted_at
+                     FROM gift_box_items g JOIN products p ON p.id=g.product_id
+                     WHERE g.order_item_id=? FOR UPDATE'
+                );
+                $children->execute([(int)$item['id']]);
+                $parts = $children->fetchAll(PDO::FETCH_ASSOC);
+                if (count($parts) !== count($cfg['items'])) throw new DomainException('Custom box contents changed.');
+                $expectedComponents = [];
+                foreach ($cfg['items'] as $comp) {
+                    $expectedComponents[(int)$comp['product_id']] = (int)$comp['quantity'];
+                }
+                $updateChild = $this->pdo->prepare('UPDATE gift_box_items SET unit_price=? WHERE order_item_id=? AND product_id=?');
+                foreach ($parts as $part) {
+                    $pid = (int)$part['product_id'];
+                    $qty = (int)$part['quantity'];
+                    if (!isset($expectedComponents[$pid]) || $qty !== $expectedComponents[$pid]
+                        || (int)$part['is_active'] !== 1 || $part['deleted_at'] !== null
+                        || $qty < 1 || (int)$part['stock_quantity'] < $qty) {
+                        throw new DomainException('A custom box item is no longer available.');
+                    }
+                    $childCents = self::toMinor((string)$part['price']);
+                    if ($childCents < 0) throw new DomainException('A custom box item has an invalid price.');
+                    $unit += $childCents * $qty;
+                    $updateChild->execute([number_format($childCents / 100,2,'.',''), $item['id'], $pid]);
+                }
+                $name = 'Custom Box — ' . $item['name'];
             }
+            if ($unit <= 0) throw new DomainException('A product has an invalid price.');
             $line = $unit * (int) $item['quantity'];
             $subtotalCents += $line;
             $itemUpdate->execute([
-                'name' => $item['name'], 'price' => number_format($unit / 100, 2, '.', ''),
+                'name' => $name, 'price' => number_format($unit / 100, 2, '.', ''),
                 'total' => number_format($line / 100, 2, '.', ''), 'id' => $item['id'],
             ]);
         }
@@ -74,13 +111,16 @@ final class OrderPricing
             $couponId = (int) $coupon['id'];
         }
 
-        $stmt = $this->pdo->prepare('SELECT shipping_fee FROM orders WHERE id = ?');
+        $stmt = $this->pdo->prepare('SELECT o.shipping_fee, COALESCE(g.wrapping_fee, 0) AS wrapping_fee FROM orders o LEFT JOIN order_gift_details g ON g.order_id = o.id WHERE o.id = ?');
         $stmt->execute([$orderId]);
-        $shippingCents = self::toMinor((string) $stmt->fetchColumn());
+        $feeRow = $stmt->fetch(PDO::FETCH_ASSOC);
+        $shippingCents = self::toMinor((string) ($feeRow['shipping_fee'] ?? 0));
+        $wrappingCents = self::toMinor((string) ($feeRow['wrapping_fee'] ?? 0));
+        if ($wrappingCents < 0) { throw new DomainException('Invalid wrapping fee.'); }
         if ($shippingCents < 0) {
             throw new DomainException('Invalid shipping fee.');
         }
-        $totalCents = $subtotalCents - $discountCents + $shippingCents;
+        $totalCents = $subtotalCents - $discountCents + $shippingCents + $wrappingCents;
         if ($totalCents <= 0) {
             throw new DomainException('Zero-value orders need a separate free-checkout flow.');
         }
@@ -94,6 +134,6 @@ final class OrderPricing
             'discount' => number_format($discountCents / 100, 2, '.', ''),
             'total' => number_format($totalCents / 100, 2, '.', ''), 'id' => $orderId,
         ]);
-        return ['total_minor' => $totalCents * 10, 'amount' => number_format($totalCents / 100, 2, '.', '')];
+        return ['total_minor' => $totalCents, 'amount' => number_format($totalCents / 100, 2, '.', '')];
     }
 }

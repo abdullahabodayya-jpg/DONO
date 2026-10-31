@@ -140,7 +140,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 labels: data.labels,
                 datasets: [
                     {
-                        label: "Net Sales (JOD)",
+                        label: "Net Sales (USD)",
                         data: data.values,
                         borderColor: salesColor,
                         backgroundColor: "rgba(20, 108, 67, 0.08)",
@@ -165,7 +165,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     tooltip: {
                         callbacks: {
                             label: function (context) {
-                                return context.parsed.y.toFixed(2) + " JOD";
+                                return context.parsed.y.toFixed(2) + " USD";
                             },
                         },
                     },
@@ -189,7 +189,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         ticks: {
                             color: labelColor,
                             callback: function (value) {
-                                return value + " JOD";
+                                return value + " USD";
                             },
                         },
                     },
@@ -488,7 +488,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function formatMoney(value) {
         const number = toNumber(value);
 
-        return number === null ? "—" : number.toFixed(2) + " JOD";
+        return number === null ? "—" : number.toFixed(2) + " USD";
     }
 
     function setTableMessage(body, message, colSpan) {

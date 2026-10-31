@@ -305,10 +305,14 @@ private function readJsonBody(): array
         }
 
         $discount = round(min($discount, $subtotal), 2);
-        $shippingQuery = $pdo->prepare('SELECT shipping_fee FROM orders WHERE id = ? AND user_id = ? AND status = \'cart\'');
+        $shippingQuery = $pdo->prepare("SELECT o.shipping_fee, COALESCE(g.wrapping_fee, 0) AS wrapping_fee
+            FROM orders o LEFT JOIN order_gift_details g ON g.order_id = o.id
+            WHERE o.id = ? AND o.user_id = ? AND o.status = 'cart'");
         $shippingQuery->execute([$orderId, (int) $userId]);
-        $shipping = round((float) $shippingQuery->fetchColumn(), 2);
-        $total = round($subtotal - $discount + $shipping, 2);
+        $fees = $shippingQuery->fetch(PDO::FETCH_ASSOC) ?: [];
+        $shipping = round((float) ($fees['shipping_fee'] ?? 0), 2);
+        $wrapping = round((float) ($fees['wrapping_fee'] ?? 0), 2);
+        $total = round($subtotal - $discount + $shipping + $wrapping, 2);
         $update = $pdo->prepare("UPDATE orders SET coupon_id = ?, subtotal = ?, discount_amount = ?, total_amount = ?
             WHERE id = ? AND user_id = ? AND status = 'cart'");
         $update->execute([(int) $coupon['id'], $subtotal, $discount, $total, $orderId, (int) $userId]);
@@ -320,6 +324,7 @@ private function readJsonBody(): array
             'discount_amount' => $discount,
             'subtotal' => $subtotal,
             'shipping_fee' => $shipping,
+            'wrapping_fee' => $wrapping,
             'total_after_discount' => round($subtotal - $discount, 2),
             'final_total' => $total,
         ]);

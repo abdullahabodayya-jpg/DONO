@@ -470,3 +470,7 @@ nav .dono-nav-shop{font-family:'Work Sans',sans-serif;font-size:clamp(12px,1.05v
 
 /* DONO ligature-inspired wordmark */
 .logo.dono-intertwined{display:inline-flex;align-items:center;gap:8px;white-space:nowrap;letter-spacing:-.07em}.logo.dono-intertwined img{width:33px;height:33px}.logo.dono-intertwined span{font-family:'Archivo',sans-serif;font-weight:900;font-style:normal;transition:font-family .2s,transform .2s;font-variant-ligatures:common-ligatures}.logo.dono-intertwined:hover span{font-family:'Playfair Display',Georgia,serif;font-style:italic;transform:skewX(-7deg)}
+
+/* Approved full wordmark: transparent asset, legible on the changing landing themes. */
+nav .logo.dono-intertwined{display:inline-flex;align-items:center;animation:none;scale:1;line-height:1;filter:none;text-shadow:none;background:rgba(251,250,246,.96);padding:5px 11px;border-radius:12px;max-width:42vw;box-shadow:0 2px 12px rgba(0,0,0,.08)}
+nav .logo.dono-intertwined::after{content:none!important}nav .logo.dono-intertwined img{display:block;width:clamp(102px,11vw,150px);height:auto;max-width:100%;object-fit:contain}nav .logo.dono-intertwined:hover{scale:1.02}

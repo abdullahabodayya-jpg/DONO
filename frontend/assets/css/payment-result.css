@@ -1,0 +1,10 @@
+
+:root{--forest:#063c28;--pink:#e92891;--cream:#fbfaf6}
+body.dono-payment-page{background:var(--cream);color:var(--forest);font-family:'DM Sans',Arial,sans-serif;margin:0;min-height:100vh}
+.dono-payment-card{width:min(540px,calc(100% - 32px));padding:clamp(24px,5vw,42px);background:#fff;border-radius:20px;border:1px solid #e1e8de;box-shadow:0 18px 50px rgba(6,60,40,.08);margin:clamp(48px,10vh,110px) auto 34px;box-sizing:border-box;text-align:center}
+.dono-payment-card .symbol{width:70px;height:70px;margin:0 auto 18px;background:#e5f3e9;border-radius:50%;display:grid;place-items:center;font-size:38px}
+.dono-payment-card h1{font-size:clamp(26px,4vw,36px);margin:0 0 14px}.dono-payment-card p{line-height:1.65;margin:0 0 18px;color:#40594b}
+.dono-payment-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:20px}
+.dono-payment-actions a{display:inline-flex;align-items:center;justify-content:center;padding:12px 18px;border:1px solid var(--forest);border-radius:999px;text-decoration:none;color:var(--forest);font-weight:700}
+.dono-payment-actions a:first-child{background:var(--forest);color:#fff}
+#payment-status[data-state=success]{color:#08663b}#payment-status[data-state=error]{color:#a63252}#payment-status[data-state=pending]{color:#745726}

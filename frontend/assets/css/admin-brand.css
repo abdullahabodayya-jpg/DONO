@@ -81,3 +81,12 @@
 .admin-layout .main-content .stat-card{border:2px solid #00341e;border-radius:17px;box-shadow:5px 5px 0 #ffc4f8}
 .admin-layout .main-content .panel{border-radius:18px}
 .admin-layout .main-content .btn-primary{background:#55e06f!important;color:#00341e!important;border:2px solid #00341e!important;font-weight:900}
+
+/* Approved DONO brand assets in admin navigation */
+.admin-logo{display:flex!important;gap:9px;align-items:center}
+.admin-approved-monogram{display:none}
+.admin-approved-wordmark{display:block;max-width:135px}
+@media(max-width:700px){.admin-approved-wordmark{max-width:115px}}
+
+.admin-sidebar .admin-logo{background:#FBFAF6;border-radius:12px;padding:4px 8px;max-width:100%;min-height:64px}
+.admin-sidebar .admin-logo .admin-logo-text small{color:#063C28!important}

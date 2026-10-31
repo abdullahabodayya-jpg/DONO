@@ -31,6 +31,15 @@ require_once __DIR__ . '/../app/Middleware/AdminMiddleware.php';
 $adminMiddleware = new AdminMiddleware();
 
 
+// Custom Box Builder: requires migration_custom_box_builder.sql.
+require_once __DIR__ . '/../app/Controllers/CustomBoxController.php';
+$customBoxController = new CustomBoxController($database->getConnection());
+$router->get('/api/custom-box/catalog', static fn() => $customBoxController->catalog());
+$router->post('/api/custom-box/cart', static fn() => $customBoxController->addToCart());
+$router->post('/api/custom-box/upload', static fn() => $customBoxController->upload());
+$router->get('/api/admin/custom-box/catalog', static fn() => $customBoxController->adminCatalog());
+$router->put('/api/admin/custom-box/catalog', static fn() => $customBoxController->adminAssign());
+
 // ========================================
 // HEALTH CHECK
 // ========================================
@@ -251,6 +260,12 @@ $router->delete('/api/cart/items', function () use ($cartController): void {
     );
 });
 
+
+// Order-level gift and wrapping settings.
+require_once __DIR__ . '/../app/Controllers/GiftController.php';
+$giftController = new GiftController($database->getConnection());
+$router->get('/api/cart/gift', static function () use ($giftController): void { $giftController->show(); });
+$router->put('/api/cart/gift', static function () use ($giftController): void { $giftController->save(); });
 
 // ========================================
 // WISHLIST API
@@ -719,3 +734,4 @@ $router->patch(
 require_once __DIR__ . '/auth-routes.php';
 require_once __DIR__ . '/payment-routes.php';
 require_once __DIR__ . '/category-routes.php';
+require_once __DIR__ . '/chatbot-routes.php';

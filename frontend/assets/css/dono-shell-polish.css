@@ -1,0 +1,75 @@
+/* DONO brand assets and shared customer layout, matching Product Details. */
+:root{--dono-brand-forest:#063C28;--dono-brand-cream:#FBFAF6;--dono-brand-pink:#E92891}
+body.dono-shell-enabled{min-width:0;overflow-x:clip;box-sizing:border-box}
+body.dono-shell-enabled .dono-side{background:#063C28!important;box-shadow:none!important}
+body.dono-shell-enabled .dono-side .dono-side-logo{flex:0 0 50px;width:50px!important;height:54px;max-width:100%;display:flex;align-items:center;justify-content:center;padding:0!important;overflow:visible}
+body.dono-shell-enabled .dono-side .dono-logo-mark{display:block;width:46px;height:48px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 0 transparent)}
+body.dono-shell-enabled .dono-side .dono-logo-word{display:none;height:auto;width:170px;max-width:none;object-fit:contain}
+body.dono-shell-enabled .dono-side:hover .dono-logo-mark,body.dono-shell-enabled .dono-side:focus-within .dono-logo-mark{display:none}
+body.dono-shell-enabled .dono-side:hover .dono-logo-word,body.dono-shell-enabled .dono-side:focus-within .dono-logo-word{display:block}
+body.dono-shell-enabled .dono-side:hover .dono-side-logo,body.dono-shell-enabled .dono-side:focus-within .dono-side-logo{width:185px!important;flex-basis:185px}
+body.dono-shell-enabled .dono-side-brand{margin-bottom:24px;min-height:58px}
+body.dono-shell-enabled .site-footer{clear:both;box-sizing:border-box;margin-top:auto;padding:34px clamp(20px,4vw,54px);background:#f1eef5;border-top:1px solid #dcd5e6;color:#282536;width:100%;min-height:120px}
+body.dono-shell-enabled .site-footer .footer-container{max-width:1200px;margin-inline:auto;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;padding:0}
+body.dono-shell-enabled .site-footer .footer-logo{display:inline-block;line-height:1}
+body.dono-shell-enabled .site-footer .footer-logo img{display:block;width:112px;height:40px;object-fit:contain;object-position:left center}
+body.dono-shell-enabled .site-footer p{margin:4px 0;color:#625d69;font-size:13px}
+body.dono-shell-enabled .page-container,body.dono-shell-enabled .cart-page,body.dono-shell-enabled .orders-page,body.dono-shell-enabled .wishlist-page{box-sizing:border-box;max-width:1200px;width:100%;margin-inline:auto}
+body.dono-shell-enabled .cart-page,body.dono-shell-enabled .orders-page,body.dono-shell-enabled .wishlist-page{min-height:calc(100vh - 160px);padding-bottom:48px!important}
+body.dono-shell-enabled main{min-width:0}
+body.dono-shell-enabled .dono-reviews{scroll-margin-top:24px}
+.dono-review-navigation{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap}
+.dono-review-navigation button{padding:10px 17px;border:1px solid #063C28;background:#fff;border-radius:10px;color:#063C28;cursor:pointer;font-weight:700}
+.dono-review-navigation button:hover{background:#f1eef5}
+.dono-product-reviews{margin-top:30px;background:#fff;border:1px solid #ddd6e4;padding:clamp(16px,3vw,30px);border-radius:14px}
+.dono-reviews-expand,.dono-reviews-write-button{padding:10px 18px;border:1px solid #063C28;border-radius:10px;color:#063C28;background:#fff;cursor:pointer;font-weight:700;margin-top:18px}
+.dono-gift-summary{padding:15px;border:1px solid #dcd5e6;border-radius:10px;background:#fff;margin-bottom:16px;color:#063C28}
+.dono-gift-summary p{margin:5px 0;font-size:14px}
+.dono-gift-summary button{font:inherit;border:1px solid #063C28;background:transparent;padding:7px 12px;border-radius:8px;cursor:pointer;margin-top:8px}
+@media (min-width:900px){body.dono-shell-enabled:not(.dono-customer){padding-left:76px;display:flex;min-height:100vh;flex-direction:column}}
+@media(max-width:899px){body.dono-shell-enabled .dono-side .dono-logo-mark{display:none}body.dono-shell-enabled .dono-side .dono-logo-word{display:block;width:170px}body.dono-shell-enabled .dono-side .dono-side-logo{width:190px!important;flex-basis:190px}}
+
+/* Light branded plaque preserves contrast of supplied green PNGs in dark navigation. */
+body.dono-shell-enabled .dono-side-brand{background:#FBFAF6;border-radius:12px;padding:2px 3px;align-self:stretch;transition:background .2s}
+@media (min-width:900px){
+ body.dono-shell-enabled:not(.dono-customer){transition:padding-left .25s cubic-bezier(.2,.75,.2,1)}
+ body.dono-shell-enabled:not(.dono-customer):has(.dono-side:is(:hover,:focus-within)){padding-left:240px}
+}
+
+/* Round 2: single content/rail width for footer, Explore and every customer page. */
+@media (min-width:900px){
+ body.dono-shell-enabled.dono-customer{padding-left:76px;min-height:100vh;display:flex;flex-direction:column;transition:padding-left .25s}
+ body.dono-shell-enabled.dono-customer:has(.dono-side:is(:hover,:focus-within)){padding-left:240px}
+ body.dono-shell-enabled.dono-customer .explore-content{margin-left:0;flex:1;width:100%;min-width:0}
+ body.dono-shell-enabled .site-footer{flex-shrink:0;align-self:stretch;position:relative;z-index:1}
+}
+body.dono-shell-enabled .page-container{margin-top:clamp(10px,2vw,22px)!important;margin-bottom:26px!important}
+body.dono-shell-enabled .cart-page,body.dono-shell-enabled .wishlist-page,body.dono-shell-enabled .orders-page{padding-top:clamp(16px,2vw,28px)!important;padding-bottom:28px!important;min-height:0!important}
+body.dono-shell-enabled .profile-main{padding-top:16px!important;padding-bottom:32px!important}
+body.dono-shell-enabled .profile-layout{margin-top:16px!important}
+body.dono-shell-enabled .discover-hero{min-height:0!important;padding:clamp(26px,4vw,48px) clamp(18px,4vw,56px) 18px!important}
+body.dono-shell-enabled .discover-hero h1{margin:18px 0 16px!important}
+body.dono-shell-enabled .hero-intro{margin-bottom:20px!important}
+body.dono-shell-enabled .discovery-filters{margin:16px 0 20px!important}
+body.dono-shell-enabled .shop-list{padding:clamp(22px,3vw,40px) clamp(18px,4vw,56px) 42px!important}
+body.dono-shell-enabled .shop-list-heading{margin-bottom:20px!important}
+body.dono-shell-enabled .category-sticky{margin-bottom:18px!important}
+body.dono-shell-enabled .dono-product-reviews{margin-top:18px!important;box-shadow:none}
+body.dono-shell-enabled .product-layout{gap:clamp(22px,3.2vw,42px);align-items:start}
+body.dono-shell-enabled .product-gallery{align-self:start;min-width:0}
+body.dono-shell-enabled .product-gallery .dono-product-reviews{width:100%;padding:clamp(12px,2vw,20px)!important}
+body.dono-shell-enabled .site-footer{padding:22px clamp(16px,3vw,40px)!important;min-height:0!important}
+/* No unrelated navy overrides: brand forest green, cream, and pink. */
+body.dono-shell-enabled .category-sticky button{color:#063c28!important;background:#fbfaf6!important;border:1px solid #063c28!important;border-radius:100px!important}
+body.dono-shell-enabled .category-sticky button.active,body.dono-shell-enabled .category-sticky button:hover{background:#063c28!important;color:#fff!important;border-color:#063c28!important}
+body.dono-shell-enabled .category-sticky button:focus-visible{outline:3px solid #e92891;outline-offset:3px}
+body.dono-shell-enabled .discover-search button,body.dono-shell-enabled .gift-card-actions a,body.dono-shell-enabled .gift-card-actions button:not(:last-child){background:#063c28!important;color:#fff!important}
+body.dono-shell-enabled .discover-search button:hover,body.dono-shell-enabled .gift-card-actions a:hover{background:#e92891!important}
+body.dono-shell-enabled .discover-hero h1 em{color:#e92891!important}
+body.dono-shell-enabled .dono-side-brand{justify-content:center}
+@media(max-width:899px){body.dono-shell-enabled .product-layout{gap:24px}body.dono-shell-enabled .page-container{width:calc(100% - 28px)!important}body.dono-shell-enabled .site-footer{padding:20px 16px!important}}
+
+/* DONO Build a Box: clean icon instead of emoji, using approved brand pink. */
+body.dono-shell-enabled .dono-side .side-icon-build-box{display:inline-flex;align-items:center;justify-content:center;color:#E92891}
+body.dono-shell-enabled .dono-side .side-icon-build-box svg{width:22px;height:22px;stroke:currentColor;flex:none}
+body.dono-shell-enabled .dono-side a:hover .side-icon-build-box,body.dono-shell-enabled .dono-side a[aria-current="page"] .side-icon-build-box{color:#FBFAF6}

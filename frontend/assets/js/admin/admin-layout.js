@@ -57,6 +57,24 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
     });
 
+    // Authenticated full admin name; no placeholder username or truncation.
+    try {
+        const url = new URL('../../backend/public/api/auth/me', document.baseURI).pathname;
+        const response = await fetch(url, { credentials: 'same-origin' });
+        const result = await response.json();
+        if (response.ok && result.data?.user?.role === 'admin') {
+            const name = document.getElementById('adminAccountName');
+            const fullName = String(result.data.user.name || 'Admin').trim() || 'Admin';
+            if (name) name.textContent = fullName;
+            const sidebarName = document.getElementById('adminSidebarName');
+            if (sidebarName) sidebarName.textContent = fullName;
+        }
+        const role = document.getElementById('adminAccountRole');
+        if (role) role.textContent = 'Admin Workshop';
+    } catch (error) {
+        console.warn('Admin account header unavailable:', error);
+    }
+
     // ===================================
     // 3. SET CURRENT PAGE
     // ===================================
@@ -67,6 +85,11 @@ document.addEventListener("DOMContentLoaded", async function () {
             key: "dashboard",
             title: "Dashboard",
             breadcrumb: "Admin / Dashboard",
+        },
+        "custom-box-catalog.html": {
+            key: "builder",
+            title: "Custom Box Catalog",
+            breadcrumb: "Admin / Custom Box Catalog",
         },
         "products.html": {
             key: "products",

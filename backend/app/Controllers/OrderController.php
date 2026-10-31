@@ -43,6 +43,7 @@ class OrderController
         // Get items for each order
         foreach ($orders as &$order) {
 
+            $order['gift'] = $this->orderRepository->getGiftDetails((int) $order['id']) ?: null;
             $order['items'] = $this->orderRepository->getOrderItems(
                 (int) $order['id']
             );

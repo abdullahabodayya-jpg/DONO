@@ -59,13 +59,19 @@
 
                 <div class="summary-row">
                     <span>Subtotal</span>
-                    <span id="cart-subtotal">0.00 JOD</span>
+                    <span id="cart-subtotal">0.00 USD</span>
                 </div>
 
                 <div class="summary-row">
                     <span>Shipping</span>
-                    <span id="cart-shipping">0.00 JOD</span>
+                    <span id="cart-shipping">0.00 USD</span>
                 </div>
+
+                <div class="summary-row" id="wrapping-row" hidden>
+                    <span>Gift Wrapping</span>
+                    <span id="cart-wrapping">0.00 USD</span>
+                </div>
+                <div class="dono-gift-summary" id="cart-gift-summary" hidden aria-live="polite"></div>
 
                 <hr>
 
@@ -100,7 +106,7 @@
                 <!-- Discount -->
                 <div class="summary-row" id="discount-row" hidden>
                     <span>Discount</span>
-                    <span id="cart-discount">0.00 JOD</span>
+                    <span id="cart-discount">0.00 USD</span>
                 </div>
 
                 <hr>
@@ -108,7 +114,7 @@
                 <!-- Total -->
                 <div class="summary-row summary-total">
                     <span>Final Total</span>
-                    <span id="cart-total">0.00 JOD</span>
+                    <span id="cart-total">0.00 USD</span>
                 </div>
 
                 <button type="button" class="checkout-btn">

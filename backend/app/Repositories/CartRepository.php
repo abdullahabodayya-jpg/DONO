@@ -19,7 +19,7 @@ final class CartRepository
         $sql = "SELECT o.*, c.code AS coupon_code FROM orders o
                 LEFT JOIN coupons c ON c.id = o.coupon_id
                 WHERE o.user_id = ?
-                AND o.status = 'cart'";
+                AND o.status = 'cart' ORDER BY o.id DESC LIMIT 1";
 
         $stmt = $this->db->prepare($sql);
         $stmt->execute([$userId]);
@@ -147,6 +147,7 @@ final class CartRepository
     {
         $sql = "SELECT
                     oi.product_id,
+                    oi.id AS order_item_id,
                     oi.product_name,
                     oi.unit_price,
                     oi.quantity,
@@ -173,26 +174,18 @@ final class CartRepository
     // Recalculate the cart subtotal and total
     public function updateCartTotal(int $orderId): bool
     {
-        $sql = "UPDATE orders
-                SET subtotal = (
-                    SELECT COALESCE(SUM(line_total), 0)
-                    FROM order_items
-                    WHERE order_id = ?
-                ),
-                total_amount = (
-                    SELECT COALESCE(SUM(line_total), 0)
-                    FROM order_items
-                    WHERE order_id = ?
-                ) - discount_amount + shipping_fee
-                WHERE id = ?
-                AND status = 'cart'";
-
+        // Prevent stale discounts from producing negative totals after removals.
+        // Wrapping is charged once per order, never once per product.
+        $sql = "UPDATE orders o
+                SET o.subtotal = (SELECT COALESCE(SUM(oi.line_total), 0) FROM order_items oi WHERE oi.order_id = o.id),
+                    o.discount_amount = LEAST(o.discount_amount, (SELECT COALESCE(SUM(oi.line_total), 0) FROM order_items oi WHERE oi.order_id = o.id)),
+                    o.total_amount = GREATEST(0,
+                       (SELECT COALESCE(SUM(oi.line_total), 0) FROM order_items oi WHERE oi.order_id = o.id)
+                       - LEAST(o.discount_amount, (SELECT COALESCE(SUM(oi.line_total), 0) FROM order_items oi WHERE oi.order_id = o.id))
+                       + o.shipping_fee
+                       + COALESCE((SELECT gd.wrapping_fee FROM order_gift_details gd WHERE gd.order_id = o.id), 0))
+                WHERE o.id = ? AND o.status = 'cart'";
         $stmt = $this->db->prepare($sql);
-
-        return $stmt->execute([
-            $orderId,
-            $orderId,
-            $orderId
-        ]);
+        return $stmt->execute([$orderId]);
     }
 }

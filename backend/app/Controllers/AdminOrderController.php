@@ -40,6 +40,7 @@ class AdminOrderController
 
         foreach ($orders as &$order) {
             $order['items'] = $this->orders->getOrderItems((int) $order['id']);
+            $order['gift'] = $this->orders->getGiftDetails((int) $order['id']) ?: null;
         }
         unset($order);
 

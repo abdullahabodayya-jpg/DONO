@@ -12,10 +12,11 @@ class ReviewRepository
     // Get all reviews for a specific product
     public function getByProductId(int $productId): array
     {
-        $sql = "SELECT id, rating, comment, created_at
-                FROM reviews
-                WHERE product_id = ?
-                ORDER BY created_at DESC, id DESC";
+        $sql = "SELECT r.id, r.rating, r.comment, r.created_at, u.name AS customer_name
+                FROM reviews r
+                JOIN users u ON u.id = r.user_id
+                WHERE r.product_id = ?
+                ORDER BY r.created_at DESC, r.id DESC";
 
         $stmt = $this->db->prepare($sql);
         $stmt->execute([$productId]);

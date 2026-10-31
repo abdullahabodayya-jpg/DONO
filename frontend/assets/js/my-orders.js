@@ -7,7 +7,7 @@ const emptyOrders = document.getElementById("empty-orders");
 
 // Format price
 function formatPrice(amount) {
-    return Number(amount).toFixed(2) + " JOD";
+    return Number(amount).toFixed(2) + " USD";
 }
 
 // Display orders
@@ -102,8 +102,28 @@ function displayOrders(orders) {
             item.appendChild(price);
 
             details.appendChild(item);
+            if (product.custom_box) {
+                const breakdown=document.createElement('div');breakdown.className='dono-gift-summary';
+                const heading=document.createElement('strong');heading.textContent='Inside the custom box';breakdown.append(heading);
+                for(const part of (product.custom_box.components || [])){
+                    const row=document.createElement('p');row.textContent=`${part.quantity} × ${part.name}`;breakdown.append(row);
+                }
+                const config=product.custom_box.configuration || {};
+                if(config.card?.message){const row=document.createElement('p');row.textContent='Card: '+config.card.message;breakdown.append(row);}
+                details.append(breakdown);
+            }
         });
 
+        if (order.gift) {
+            const giftInfo = document.createElement('div');
+            giftInfo.className='dono-gift-summary';
+            const title=document.createElement('h4');title.textContent='Gift details';
+            const text=document.createElement('p');
+            text.textContent=(order.gift.recipient_name ? 'Recipient: '+order.gift.recipient_name : 'For myself')
+                +' · '+(order.gift.wrapping_type || 'Basic Wrapping');
+            const msg=document.createElement('p');msg.textContent=order.gift.gift_message || '';
+            giftInfo.append(title,text,msg);details.append(giftInfo);
+        }
         // Order Summary
         const summary = document.createElement("div");
         summary.className = "order-summary";
@@ -112,6 +132,7 @@ function displayOrders(orders) {
             ["Subtotal", order.subtotal],
             ["Discount", order.discount_amount],
             ["Shipping", order.shipping_fee],
+            ["Wrapping", order.gift?.wrapping_fee || 0],
             ["Total", order.total_amount]
         ];
 
@@ -119,7 +140,7 @@ function displayOrders(orders) {
 
             const row = document.createElement("div");
 
-            row.className = index === 3
+            row.className = index === summaryValues.length - 1
                 ? "summary-row summary-total"
                 : "summary-row";
 
@@ -195,3 +216,4 @@ async function loadOrders() {
 }
 
 loadOrders();
+setInterval(() => {if (!document.hidden && document.querySelector('.status-pending')) loadOrders();}, 7000);

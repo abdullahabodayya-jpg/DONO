@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Build Your Own Gift Box | DONO</title>
+<link rel="stylesheet" href="assets/css/customer-shell.css">
+<link rel="stylesheet" href="assets/css/customer-theme.css">
+<link rel="stylesheet" href="assets/css/customer-product-reference.css">
+<link rel="stylesheet" href="assets/css/custom-box-builder.css">
+<script type="module" src="assets/js/components/customer-shell.js"></script>
+<script src="assets/js/components/feedback.js" defer></script>
+<script src="assets/js/custom-box-builder.js" defer></script>
+</head>
+<body>
+<main class="builder-page" id="builder-page">
+ <header class="builder-intro"><span class="eyebrow">THE DONO EXPERIENCE</span><h1>Build a little joy.</h1><p>Curate the box, choose the gifts, and make it yours. Every detail is part of the surprise.</p></header>
+ <div class="builder-stepper" id="builder-stepper" aria-label="Box building steps"></div>
+ <div class="builder-layout">
+  <section class="builder-workspace" aria-live="polite"><div class="builder-step-header"><span id="builder-step-label" class="eyebrow"></span><h2 id="builder-step-title"></h2><p id="builder-step-hint"></p></div>
+   <div id="builder-content"><p>Loading catalog…</p></div>
+   <p class="builder-feedback" id="builder-feedback" role="status" aria-live="polite"></p>
+   <div class="builder-navigation"><button type="button" id="builder-prev" class="builder-outline">← Back</button><button type="button" id="builder-next" class="builder-primary">Continue →</button></div>
+  </section>
+  <aside class="builder-summary" aria-label="Custom box summary"><div class="builder-summary-head"><span class="eyebrow">YOUR CREATION</span><h2>The gift box</h2></div><div id="builder-summary-items"></div><div class="builder-summary-bottom"><div class="builder-summary-total"><span>Estimated total</span><strong id="builder-total">$0.00</strong></div><p>USD · Final amount calculated by DONO at checkout.</p><button type="button" id="builder-clear" class="builder-clear">Clear selections</button></div></aside>
+ </div>
+</main>
+<dialog class="builder-dialog" id="builder-clear-dialog" aria-labelledby="builder-dialog-heading"><h2 id="builder-dialog-heading">Start a new box?</h2><p>This clears the selections saved in this browser.</p><div class="builder-dialog-actions"><button id="builder-clear-cancel" type="button" class="builder-outline">Keep building</button><button id="builder-clear-confirm" type="button" class="builder-primary">Clear box</button></div></dialog>
+</body>
+</html>

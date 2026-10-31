@@ -56,16 +56,23 @@
     const query='?session_id='+encodeURIComponent(session);
     const strip=()=>{params.delete('checkout_session_id');history.replaceState(null,'',location.pathname+(params.size?'?'+params:''));};
     try{
-      const response=await fetch(path+query,{credentials:'same-origin'});
-      const data=await response.json();
-      if(!response.ok||!data.success)throw Error(data.message||'Unable to verify payment.');
-      const pay=data.data||{};
+      let pay = null;
+      // Stripe webhook can arrive after the customer is redirected. Poll for a bounded period.
+      for(let i=0;i<12;i++) {
+        const response=await fetch(path+query,{credentials:'same-origin',cache:'no-store'});
+        const data=await response.json();
+        if(!response.ok||!data.success)throw Error(data.message||'Unable to verify payment.');
+        pay=data.data||{};
+        if(pay.payment_status!=='pending' || pay.order_status==='confirmed')break;
+        if(i<11)await new Promise(resolve=>setTimeout(resolve,2000));
+      }
       if(pay.payment_status==='succeeded'&&pay.order_status==='confirmed'){
         strip();const go=await modal({title:'Payment confirmed ✓',message:`Your payment for ${pay.order_number||'your gift'} was verified.`,confirmText:'View my orders',cancelText:'Keep shopping'});if(go)location.href='my-orders.html';
       }else if(pay.payment_status==='pending'){
-        strip();const go=await modal({title:'Payment verification pending',message:'DONO is waiting for secure confirmation from Stripe. Please check your order before trying to pay again.',confirmText:'View my orders',cancelText:'Keep shopping'});if(go)location.href='my-orders.html';
+        // Leave session id in the URL to permit a later status refresh.
+        const go=await modal({title:'Payment verification pending',message:'Stripe confirmation has not reached DONO yet. Check your orders, or reload this page after configuring your signed webhook.',confirmText:'View my orders',cancelText:'Stay here'});if(go)location.href='my-orders.html';
       }else{
-        strip();await modal({title:'Payment not confirmed',message:'No confirmed payment was found for this checkout. You can review your orders or try again.',confirmText:'OK',canCancel:false});
+        strip();await modal({title:'Payment not confirmed',message:'No confirmed payment was found for this checkout. Check your orders before retrying.',confirmText:'OK',canCancel:false});
       }
     }catch(error){strip();toast(error.message,'error');}
   }

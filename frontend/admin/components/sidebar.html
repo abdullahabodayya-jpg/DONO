@@ -11,18 +11,7 @@
         class="admin-logo"
         aria-label="DONO Admin Dashboard"
     >
-        <!-- TODO: REPLACE YOUR LOGO HERE WITH IMG TAG -->
-        <span
-            class="admin-logo-icon"
-            aria-hidden="true"
-        >
-            <i data-lucide="gift"></i>
-        </span>
-
-        <span class="admin-logo-text">
-            <strong>DONO</strong>
-            <small>Admin Workspace</small>
-        </span>
+        <img class="admin-approved-wordmark" src="../assets/img/dono-wordmark.png" alt="DONO" width="150" height="52">
     </a>
 
     <!-- Close Drawer Button -->
@@ -76,6 +65,11 @@
                 aria-hidden="true"
             ></i>
             <span>Products</span>
+        </a>
+
+        <a href="custom-box-catalog.html" class="admin-nav-link" data-admin-page="builder">
+            <i data-lucide="package-plus" aria-hidden="true"></i>
+            <span>Custom Box Catalog</span>
         </a>
 
         <!-- Reviews Management -->
@@ -158,6 +152,10 @@
 </nav>
 <!-- Sidebar Footer -->
 <div class="admin-sidebar-footer">
+    <div class="admin-sidebar-identity" aria-label="Administrator account">
+        <span class="admin-sidebar-identity-name" id="adminSidebarName">Admin</span>
+        <span class="admin-sidebar-identity-role">Admin Workshop</span>
+    </div>
     <a
         href="../products.html"
         class="admin-nav-link"

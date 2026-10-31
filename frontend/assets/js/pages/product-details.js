@@ -1,5 +1,6 @@
 
 import { getProductById } from "../data/mock-products.js";
+import { mountProductReviews } from "../components/product-reviews.js";
 
 const API_BASE_URL =
     new URL("../../../../backend/public/api", import.meta.url).pathname;
@@ -31,20 +32,12 @@ function resolveProductImage(url) {
 
 
 function formatPrice(value) {
-    return `JOD ${Number(value).toFixed(2)}`;
+    return `USD ${Number(value).toFixed(2)}`;
 }
 
-function showToast(message) {
-    const toast = document.getElementById("toast");
-
-    toast.textContent = message;
-    toast.classList.add("show");
-
-    window.clearTimeout(showToast.timeout);
-
-    showToast.timeout = window.setTimeout(() => {
-        toast.classList.remove("show");
-    }, 2500);
+function showToast(message, type = 'info') {
+    if (window.DonoUI?.toast) return window.DonoUI.toast(message, type);
+    console.info(message);
 }
 
 function escapeHTML(value) {
@@ -128,7 +121,7 @@ async function loadProduct() {
 
             customization_fee: mockProduct?.customization_fee ?? 5,
 
-            wrapping_options: mockProduct?.wrapping_options ?? [
+            wrapping_options: [
                 { name: "Basic Wrapping", price: 0 },
                 { name: "Premium Wrapping", price: 3 }
             ]
@@ -138,6 +131,12 @@ async function loadProduct() {
 
         // Render only after product data is ready
         renderProduct();
+        hydrateGiftSelection().catch(error => console.debug('Gift settings not available:', error));
+        const reviews = document.getElementById('product-reviews');
+        if (reviews) mountProductReviews(reviews, product.id).catch(err => {
+            reviews.textContent = 'Unable to load reviews.';
+            console.error(err);
+        });
 
     } catch (error) {
         console.error("Error loading product:", error);
@@ -155,6 +154,29 @@ async function loadProduct() {
 }
 
 
+async function hydrateGiftSelection() {
+    const response = await fetch(`${API_BASE_URL}/cart/gift`, {credentials:'same-origin'});
+    if (!response.ok) return; // guests or no active cart
+    const body = await response.json();
+    const gift = body.data;
+    if (!gift) return;
+    const sendGift = Boolean(gift.recipient_name);
+    const radio = document.querySelector(`input[name="gift-type"][value="${sendGift ? 'gift' : 'myself'}"]`);
+    if (radio) radio.checked = true;
+    const fields = document.getElementById('recipient-fields');
+    fields.hidden = !sendGift;
+    for(const [id,key] of [['recipient-name','recipient_name'],['recipient-phone','recipient_phone'],
+                           ['recipient-address','recipient_address'],['gift-message','gift_message']]) {
+        const el = document.getElementById(id);if(el)el.value = gift[key] || '';
+    }
+    const hidePrice=document.getElementById('gift-hide-price');
+    if(hidePrice)hidePrice.checked=Number(gift.hide_price)===1;
+    const wrappingRadio=[...document.querySelectorAll('input[name="wrapping"]')]
+        .find(el => el.value===gift.wrapping_type);
+    if(wrappingRadio)wrappingRadio.checked=true;
+    updatePrice();
+}
+
 function getSelectedWrapping() {
     return document.querySelector('input[name="wrapping"]:checked');
 }
@@ -171,9 +193,8 @@ function getCustomizationFee() {
 function calculateTotal() {
     return (
         Number(product.price) +
-        getCustomizationFee() +
-        getWrappingFee()
-    ) * quantity;
+        getCustomizationFee()
+    ) * quantity + getWrappingFee();
 }
 
 function renderProduct() {
@@ -320,6 +341,7 @@ function renderProduct() {
                             id="gift-message"
                             placeholder="Add a personal message (optional)"
                         ></textarea>
+                        <label class="radio-option"><input type="checkbox" id="gift-hide-price" checked> Hide the price from the recipient</label>
                     </div>
                 </div>
 
@@ -526,14 +548,14 @@ function renderProduct() {
                                 <div>
                                     <span>Custom design fee</span>
                                     <strong id="design-extra-price">
-                                        JOD 0.00
+                                        USD 0.00
                                     </strong>
                                 </div>
 
                                 <div>
                                     <span>New estimated total</span>
                                     <strong id="design-new-total">
-                                        JOD 25.00
+                                        USD 25.00
                                     </strong>
                                 </div>
                             </div>
@@ -665,6 +687,9 @@ function renderProduct() {
                 >
                     ♡ Add to Wishlist
                 </button>
+                <div class="dono-review-navigation">
+                    <button type="button" id="go-to-reviews">★ See Reviews / Write a Review</button>
+                </div>
 
             </div>
         </div>
@@ -755,13 +780,13 @@ function getDemoOrderData() {
 // can be sent to the real cart until server-side gift/wrapping pricing is integrated.
 function hasUnconnectedCustomization() {
     const giftType = document.querySelector('input[name="gift-type"]:checked')?.value;
-    return giftType === 'gift' || getWrappingFee() > 0 || Boolean(approvedDesign);
+    return Boolean(approvedDesign);
 }
 
 async function addToCart() {
     if (!validateSelection()) return false;
     if (hasUnconnectedCustomization()) {
-        showToast('Personalized gifts and paid wrapping are not connected to checkout yet. Choose standard options to continue.');
+        showToast('Custom AI/image designs are preview-only; select standard design before checkout.', 'warning');
         return false;
     }
     const btn = document.getElementById('add-to-cart');
@@ -775,10 +800,30 @@ async function addToCart() {
         });
         const data = await response.json();
         if (!response.ok || !data.success) throw new Error(response.status === 401 ? 'Please log in before adding products to your cart.' : data.message || 'Unable to add product.');
-        showToast('Added to your cart!');
+        const giftType = document.querySelector('input[name="gift-type"]:checked')?.value;
+        const wrapping = getSelectedWrapping()?.value || 'Basic Wrapping';
+        if (giftType === 'gift' || wrapping !== 'Basic Wrapping') {
+            const payload = getDemoOrderData();
+            const responseGift = await fetch(`${API_BASE_URL}/cart/gift`, {
+                method: 'PUT', credentials: 'same-origin',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    send_as_gift: giftType === 'gift',
+                    wrapping_type: wrapping,
+                    recipient_name: payload.gift?.recipient_name ?? '',
+                    recipient_phone: payload.gift?.recipient_phone ?? '',
+                    recipient_address: payload.gift?.recipient_address ?? '',
+                    gift_message: payload.gift?.gift_message ?? '',
+                    hide_price: document.getElementById('gift-hide-price')?.checked ?? true
+                })
+            });
+            const saved = await responseGift.json();
+            if (!responseGift.ok || !saved.success) throw new Error(saved.message || 'Product was added but gift settings could not be saved.');
+        }
+        showToast('Added to your cart!', 'success');
         return true;
     } catch (error) {
-        showToast(error.message);
+        showToast(error.message, 'error');
         return false;
     } finally {
         btn.disabled = false;
@@ -803,7 +848,7 @@ async function addToWishlist() {
         if (!response.ok || !data.success) throw new Error(response.status === 401 ? 'Please log in to save favorites.' : data.message || 'Unable to update wishlist.');
         showToast('Added to your wishlist!');
     } catch (error) {
-        showToast(error.message);
+        showToast(error.message, 'error');
     } finally {
         btn.disabled = false;
     }
@@ -1107,6 +1152,9 @@ function bindEvents() {
 
     document.getElementById("wishlist-button")
         .addEventListener("click", addToWishlist);
+    document.getElementById('go-to-reviews')?.addEventListener('click', () => {
+        document.getElementById('product-reviews')?.scrollIntoView({behavior: 'smooth', block: 'start'});
+    });
 
 
 

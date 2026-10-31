@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td style="padding: 14px 18px; color: #203529;">${u.phone ? escapeHtml(u.phone) : '<span style="color:#777;">N/A</span>'}</td>
                     <td style="padding: 14px 18px;">${genderBadge}</td>
                     <td style="padding: 14px 18px; font-weight: 600; color: #1D3024;">${u.total_orders} orders</td>
-                    <td style="padding: 14px 18px; font-weight: 700; color: #416B4C;">${parseFloat(u.total_spent).toFixed(2)} JOD</td>
+                    <td style="padding: 14px 18px; font-weight: 700; color: #416B4C;">${parseFloat(u.total_spent).toFixed(2)} USD</td>
                     <td style="padding: 14px 18px; color: #687469;">${joinedDate}</td>
                 </tr>
             `;

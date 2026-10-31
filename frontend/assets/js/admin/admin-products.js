@@ -202,7 +202,7 @@ function renderProducts() {
             "—",
             product.name,
             product.product_type,
-            Number(product.price).toFixed(2) + " JOD",
+            Number(product.price).toFixed(2) + " USD",
             product.stock_quantity,
             Number(product.is_active) === 1 ? "Active" : "Inactive",
             "—",

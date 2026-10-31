@@ -88,7 +88,7 @@ function displayWishlist(products) {
 
         const price = document.createElement("span");
         price.className = "wishlist-price";
-        price.textContent = Number(product.price).toFixed(2) + " JOD";
+        price.textContent = Number(product.price).toFixed(2) + " USD";
 
         const moveButton = document.createElement("button");
         moveButton.type = "button";
