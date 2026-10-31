@@ -5,9 +5,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Manage Orders | DONO</title>
-
+    <link rel="stylesheet" href="assets/css/global.css">
     <link rel="stylesheet" href="assets/css/admin-orders.css?v=4">
 </head>
 
@@ -16,11 +15,11 @@
     <main class="admin-orders-page">
 
         <header class="page-header">
+            <span class="page-eyebrow">DONO ADMINISTRATION</span>
             <h1>Manage Orders</h1>
-            <p>View, search and manage customer orders.</p>
+            <p>View, search and manage customer orders all in one place.</p>
         </header>
 
-        <!-- Search and Filter -->
         <section class="orders-toolbar">
 
             <input
@@ -33,7 +32,7 @@
                 <label for="status-filter">Status</label>
 
                 <select id="status-filter">
-                    <option value="all">All Statuses</option>
+                    <option value="all">All Status</option>
                     <option value="pending">Pending</option>
                     <option value="confirmed">Confirmed</option>
                     <option value="cancelled">Cancelled</option>
@@ -42,60 +41,49 @@
 
         </section>
 
-        <!-- Orders Table -->
         <section class="orders-table-wrapper">
 
             <table class="orders-table">
 
-                <colgroup>
-                    <col class="col-order">
-                    <col class="col-customer">
-                    <col class="col-date">
-                    <col class="col-items">
-                    <col class="col-total">
-                    <col class="col-status">
-                    <col class="col-actions">
-                </colgroup>
-
                 <thead>
                     <tr>
-                        <th>
+                        <th class="col-order">
                             <button type="button" class="sort-btn" data-sort="order_number">
-                                Order # <span class="sort-icon">⇅</span>
+                                Order # ↕
                             </button>
                         </th>
 
-                        <th>
+                        <th class="col-customer">
                             <button type="button" class="sort-btn" data-sort="customer_name">
-                                Customer <span class="sort-icon">⇅</span>
+                                Customer ↕
                             </button>
                         </th>
 
-                        <th>
+                        <th class="col-date">
                             <button type="button" class="sort-btn" data-sort="created_at">
-                                Date <span class="sort-icon">⇅</span>
+                                Date ↕
                             </button>
                         </th>
 
-                        <th>
+                        <th class="col-items">
                             <button type="button" class="sort-btn" data-sort="items">
-                                Items <span class="sort-icon">⇅</span>
+                                Items ↕
                             </button>
                         </th>
 
-                        <th>
+                        <th class="col-total">
                             <button type="button" class="sort-btn" data-sort="total_amount">
-                                Total <span class="sort-icon">⇅</span>
+                                Total ↕
                             </button>
                         </th>
 
-                        <th>
+                        <th class="col-status">
                             <button type="button" class="sort-btn" data-sort="status">
-                                Status <span class="sort-icon">⇅</span>
+                                Status ↕
                             </button>
                         </th>
 
-                        <th>Actions</th>
+                        <th class="col-actions">Actions</th>
                     </tr>
                 </thead>
 
@@ -109,7 +97,6 @@
 
         </section>
 
-        <!-- Pagination -->
         <div class="pagination-container">
 
             <p id="orders-count" class="orders-count"></p>
@@ -124,27 +111,18 @@
 
     </main>
 
-    <!-- Order Details Modal -->
     <div class="modal-overlay" id="order-modal" hidden>
 
-        <section
-            class="order-modal"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="modal-title"
-        >
+        <section class="order-modal">
 
             <div class="modal-header">
+
                 <h2 id="modal-title">Order Details</h2>
 
-                <button
-                    type="button"
-                    id="close-modal"
-                    class="close-modal"
-                    aria-label="Close order details"
-                >
+                <button type="button" id="close-modal" class="close-modal">
                     &times;
                 </button>
+
             </div>
 
             <div class="modal-content">
@@ -199,7 +177,7 @@
                         Save Changes
                     </button>
 
-                    <p id="status-message" class="status-message" role="status"></p>
+                    <p id="status-message" class="status-message"></p>
 
                 </div>
 
@@ -209,7 +187,7 @@
 
     </div>
 
-    <script src="assets/js/admin-orders.js?v=4"></script>
+    <script src="assets/js/admin-orders.js?v=3"></script>
 
 </body>
 
