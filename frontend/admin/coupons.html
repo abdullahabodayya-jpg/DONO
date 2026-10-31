@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head><link href="../assets/css/pages/admin-dashboard.css" rel="stylesheet"/><link href="../assets/css/pages/admin-layout.css" rel="stylesheet"/><link href="../assets/css/global.css" rel="stylesheet"/>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DONO | Coupon Management</title>
+<link href="../assets/css/admin-coupons.css" rel="stylesheet"/>
+<script defer="" src="../assets/js/admin-coupons.js"></script>
+<script src="../assets/js/admin/admin-guard.js" type="module"></script><script defer="" src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script><script defer="" src="../assets/js/admin/admin-layout.js"></script><link href="../assets/css/admin-overview-unified.css" rel="stylesheet"/><script src="../assets/js/components/feedback.js" defer></script></head>
+<body>
+<div class="admin-layout"><div aria-hidden="true" class="admin-drawer-overlay" id="adminDrawerOverlay"></div><aside aria-label="Admin navigation" class="admin-sidebar" id="adminSidebar"></aside><main class="admin-main"><header class="admin-topbar" id="adminTopbar"></header><div class="admin-content"><section class="dashboard-heading"><div class="dashboard-heading-text"><h2>Coupons</h2><p>Create, edit and manage discount codes.</p></div><button id="addCouponBtn" class="btn btn-primary" type="button">+ Create Coupon</button></section>
+
+<section class="welcome-section">
+<div>
+<h2>Discounts &amp; Coupons</h2>
+<p>Manage promotional codes and discounts for your customers.</p>
+</div>
+</section>
+<section class="stats-grid">
+<article class="stat-card">
+<span class="stat-label">Total Coupons</span>
+<strong id="totalCoupons">0</strong>
+<small>All created coupons</small>
+</article>
+<article class="stat-card">
+<span class="stat-label">Active Coupons</span>
+<strong id="activeCoupons">0</strong>
+<small>Enabled coupons</small>
+</article>
+<article class="stat-card">
+<span class="stat-label">Inactive Coupons</span>
+<strong id="inactiveCoupons">0</strong>
+<small>Disabled coupons</small>
+</article>
+</section>
+<section class="panel">
+<div class="panel-header">
+<div>
+<h2>All Coupons</h2>
+<p>View and manage your promotional codes.</p>
+</div>
+<div class="toolbar">
+<input aria-label="Search coupon code" id="searchInput" placeholder="Search coupon code..." type="search"/>
+<select aria-label="Filter by status" id="statusFilter">
+<option value="all">All statuses</option>
+<option value="active">Active</option>
+<option value="inactive">Inactive</option>
+</select>
+<button class="btn btn-secondary" id="refreshBtn" type="button">
+                            Refresh
+                        </button>
+</div>
+</div>
+<div class="notification" hidden="" id="notification" role="status"></div>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr>
+<th>
+<button class="sort-button" data-sort="code" type="button">
+                                        Coupon
+                                        <span aria-hidden="true" class="sort-icon">↕</span>
+</button>
+</th>
+<th>
+<button class="sort-button" data-sort="discount_value" type="button">
+                                        Discount
+                                        <span aria-hidden="true" class="sort-icon">↕</span>
+</button>
+</th>
+<th>
+<button class="sort-button" data-sort="min_order_amount" type="button">
+                                        Minimum Order
+                                        <span aria-hidden="true" class="sort-icon">↕</span>
+</button>
+</th>
+<th>
+<button class="sort-button" data-sort="start_date" type="button">
+                                        Start Date
+                                        <span aria-hidden="true" class="sort-icon">↕</span>
+</button>
+</th>
+<th>
+<button class="sort-button" data-sort="end_date" type="button">
+                                        End Date
+                                        <span aria-hidden="true" class="sort-icon">↕</span>
+</button>
+</th>
+<th>
+<button class="sort-button" data-sort="status" type="button">
+                                        Status
+                                        <span aria-hidden="true" class="sort-icon">↕</span>
+</button>
+</th>
+<th>Actions</th>
+</tr>
+</thead>
+<tbody id="couponsTableBody">
+<tr>
+<td class="table-message" colspan="7">
+                                    Loading coupons...
+                                </td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="table-footer">
+<div class="pagination-info">
+<label for="pageSize">Rows per page</label>
+<select aria-label="Rows per page" id="pageSize">
+<option value="5">5</option>
+<option selected="" value="10">10</option>
+<option value="25">25</option>
+<option value="50">50</option>
+</select>
+<span id="resultsCount">
+                            Showing 0–0 of 0 coupons
+                        </span>
+</div>
+<div aria-label="Coupon table pagination" class="pagination-controls" id="paginationControls"></div>
+</div>
+</section>
+</div></main></div>
+<!-- Create / Edit Coupon Modal -->
+<div class="modal" hidden="" id="couponModal">
+<div class="modal-backdrop" data-close-modal=""></div>
+<section aria-labelledby="modalTitle" aria-modal="true" class="modal-content" role="dialog">
+<div class="modal-header">
+<div>
+<p class="breadcrumb">COUPON DETAILS</p>
+<h2 id="modalTitle">Create Coupon</h2>
+</div>
+<button aria-label="Close modal" class="icon-btn" id="closeModalBtn" type="button">×</button>
+</div>
+<form id="couponForm">
+<input id="couponId" type="hidden"/>
+<div class="form-group">
+<label for="code">Coupon Code</label>
+<input id="code" maxlength="50" name="code" placeholder="e.g. DONO20" required="" type="text"/>
+<small>Maximum 50 characters.</small>
+</div>
+<div class="form-row">
+<div class="form-group">
+<label for="discount_type">Discount Type</label>
+<select id="discount_type" name="discount_type" required="">
+<option value="percentage">Percentage (%)</option>
+<option value="fixed">Fixed amount</option>
+</select>
+</div>
+<div class="form-group">
+<label for="discount_value">Discount Value</label>
+<input id="discount_value" min="0.01" name="discount_value" required="" step="0.01" type="number"/>
+<small id="discountHint">Maximum 100%.</small>
+</div>
+</div>
+<div class="form-group">
+<label for="min_order_amount">Minimum Order Amount</label>
+<input id="min_order_amount" min="0" name="min_order_amount" required="" step="0.01" type="number" value="0"/>
+</div>
+<div class="form-row">
+<div class="form-group">
+<label for="start_date">Start Date</label>
+<input id="start_date" name="start_date" required="" type="datetime-local"/>
+</div>
+<div class="form-group">
+<label for="end_date">End Date</label>
+<input id="end_date" name="end_date" required="" type="datetime-local"/>
+</div>
+</div>
+<div class="form-group">
+<label for="is_active">Status</label>
+<select id="is_active" name="is_active" required="">
+<option value="1">Active</option>
+<option value="0">Inactive</option>
+</select>
+</div>
+<div class="form-error" hidden="" id="formError" role="alert"></div>
+<div class="modal-actions">
+<button class="btn btn-secondary" id="cancelBtn" type="button">
+                        Cancel
+                    </button>
+<button class="btn btn-primary" id="saveCouponBtn" type="submit">
+                        Save Coupon
+                    </button>
+</div>
+</form>
+</section>
+</div>
+</body>
+</html>

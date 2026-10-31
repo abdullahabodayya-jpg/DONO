@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+        />
+
+        <title>Reviews Management | DONO Admin</title>
+
+        <!-- Global CSS -->
+        <link
+            rel="stylesheet"
+            href="../assets/css/global.css"
+        />
+
+        <!-- Shared Admin Layout CSS -->
+        <link
+            rel="stylesheet"
+            href="../assets/css/pages/admin-layout.css"
+        />
+
+        <!-- Admin Reviews CSS -->
+        <link
+            rel="stylesheet"
+            href="../assets/css/pages/admin-reviews.css"
+        />
+
+        <!-- Lucide Icons -->
+        <script
+            src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"
+            defer
+        ></script>
+
+        <!-- Shared Admin Layout JavaScript -->
+        <script
+            src="../assets/js/admin/admin-layout.js"
+            defer
+        ></script>
+
+        <!-- Admin Reviews JavaScript -->
+        <script
+            type="module"
+            src="../assets/js/admin/admin-reviews.js"
+        ></script>
+<script type="module" src="../assets/js/admin/admin-guard.js"></script><link rel="stylesheet" href="../assets/css/admin-overview-unified.css"><script src="../assets/js/components/feedback.js" defer></script></head>
+
+    <body>
+        <!-- Admin Page -->
+        <div class="admin-layout">
+            <!-- Drawer Overlay -->
+            <div
+                class="admin-drawer-overlay"
+                id="adminDrawerOverlay"
+                aria-hidden="true"
+            ></div>
+
+            <!-- Shared Sidebar -->
+            <!-- Loaded from components/sidebar.html -->
+            <aside
+                class="admin-sidebar"
+                id="adminSidebar"
+                aria-label="Admin sidebar"
+            ></aside>
+
+            <!-- Main Content -->
+            <main class="admin-main">
+                <!-- Shared Admin Topbar -->
+                <!-- Loaded from components/topbar.html -->
+                <header
+                    class="admin-topbar"
+                    id="adminTopbar"
+                ></header>
+
+                <!-- Page Content -->
+                <div class="admin-content">
+                    <!-- Page Header -->
+                    <div class="admin-content-header">
+                        <div>
+                            <h2>Product Reviews</h2>
+                            <p class="text-muted">
+                                Monitor customer feedback and manage product reviews.
+                            </p>
+                        </div>
+
+                        <button
+                            type="button"
+                            class="btn btn-outline"
+                            id="refreshReviewsBtn"
+                        >
+                            Refresh Reviews
+                        </button>
+                    </div>
+
+                    <!-- Reviews Summary -->
+                    <section
+                        class="admin-reviews-summary"
+                        aria-label="Reviews overview"
+                    >
+                        <div class="card admin-review-stat-card">
+                            <p class="admin-review-stat-label">Total Reviews</p>
+                            <strong
+                                class="admin-review-stat-value"
+                                id="totalReviews"
+                            >
+                                —
+                            </strong>
+                            <p class="admin-review-stat-description">Customer reviews received</p>
+                        </div>
+
+                        <div class="card admin-review-stat-card">
+                            <p class="admin-review-stat-label">Average Rating</p>
+                            <strong
+                                class="admin-review-stat-value"
+                                id="averageRating"
+                            >
+                                —
+                            </strong>
+                            <p class="admin-review-stat-description">Out of 5 stars</p>
+                        </div>
+
+                        <div class="card admin-review-stat-card">
+                            <p class="admin-review-stat-label">5-Star Reviews</p>
+                            <strong
+                                class="admin-review-stat-value"
+                                id="fiveStarReviews"
+                            >
+                                —
+                            </strong>
+                            <p class="admin-review-stat-description">Highest-rated feedback</p>
+                        </div>
+                    </section>
+
+                    <!-- Reviews Section -->
+                    <section
+                        class="card admin-reviews-section"
+                        aria-labelledby="reviewsTitle"
+                    >
+                        <div class="admin-reviews-section-header">
+                            <div>
+                                <h3 id="reviewsTitle">Customer Reviews</h3>
+                                <p
+                                    class="text-muted"
+                                    id="reviewsCountText"
+                                >
+                                    Browse and manage all reviews.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Filters -->
+                        <div class="admin-reviews-filters">
+                            <!-- Search Reviews -->
+                            <div class="form-group">
+                                <label
+                                    class="form-label"
+                                    for="reviewSearch"
+                                >
+                                    Search Reviews
+                                </label>
+
+                                <input
+                                    type="search"
+                                    class="form-control"
+                                    id="reviewSearch"
+                                    placeholder="Search product, user ID or comment"
+                                />
+                            </div>
+
+                            <!-- Rating Filter -->
+                            <div class="form-group">
+                                <label
+                                    class="form-label"
+                                    for="reviewRatingFilter"
+                                >
+                                    Rating
+                                </label>
+
+                                <select
+                                    class="form-control"
+                                    id="reviewRatingFilter"
+                                >
+                                    <option value="all">All Ratings</option>
+                                    <option value="5">5 Stars</option>
+                                    <option value="4">4 Stars</option>
+                                    <option value="3">3 Stars</option>
+                                    <option value="2">2 Stars</option>
+                                    <option value="1">1 Star</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Feedback Message -->
+                        <p
+                            class="admin-reviews-page-message"
+                            id="reviewsPageMessage"
+                            role="status"
+                            aria-live="polite"
+                            hidden
+                        ></p>
+
+                        <!-- Reviews Table -->
+                        <div class="admin-reviews-table-wrapper">
+                            <table class="admin-reviews-table">
+                                <caption class="visually-hidden">
+                                    Product reviews including product, user, rating, comment, date
+                                    and actions.
+                                </caption>
+
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Product</th>
+                                        <th scope="col">Customer</th>
+                                        <th scope="col">Rating</th>
+                                        <th scope="col">Comment</th>
+                                        <th scope="col">Date</th>
+                                        <th scope="col">Actions</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="reviewsTableBody">
+                                    <tr>
+                                        <td colspan="6">Loading reviews...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+                </div>
+            </main>
+        </div>
+
+        <!-- Delete Review Confirmation Modal -->
+        <dialog
+            class="admin-review-dialog"
+            id="deleteReviewDialog"
+            aria-labelledby="deleteReviewDialogTitle"
+            aria-describedby="deleteReviewDialogDescription"
+        >
+            <div class="admin-review-dialog-shell">
+                <div class="admin-review-modal-header">
+                    <div>
+                        <h2 id="deleteReviewDialogTitle">Delete Review</h2>
+
+                        <p
+                            class="admin-review-modal-subtitle"
+                            id="deleteReviewDialogDescription"
+                        >
+                            Are you sure you want to delete this review?
+                        </p>
+                    </div>
+
+                    <button
+                        type="button"
+                        class="admin-review-modal-close"
+                        id="closeDeleteReviewDialog"
+                        aria-label="Close dialog"
+                    >
+                        &times;
+                    </button>
+                </div>
+
+                <!-- Selected Review Details -->
+                <div class="admin-review-delete-details">
+                    <p>
+                        <strong>Product:</strong>
+                        <span id="deleteReviewProduct">—</span>
+                    </p>
+
+                    <p>
+                        <strong>Customer:</strong>
+                        <span id="deleteReviewCustomer">—</span>
+                    </p>
+
+                    <p>
+                        <strong>Rating:</strong>
+                        <span id="deleteReviewRating">—</span>
+                    </p>
+
+                    <p
+                        class="admin-review-delete-comment"
+                        id="deleteReviewComment"
+                    ></p>
+                </div>
+
+                <p class="admin-review-delete-warning">
+                    This action permanently deletes the review and cannot be undone.
+                </p>
+
+                <p
+                    class="admin-review-delete-error"
+                    id="deleteReviewMessage"
+                    role="alert"
+                    hidden
+                ></p>
+
+                <div class="admin-review-modal-actions">
+                    <button
+                        type="button"
+                        class="btn btn-outline"
+                        id="cancelDeleteReview"
+                    >
+                        Cancel
+                    </button>
+
+                    <button
+                        type="button"
+                        class="btn btn-primary admin-review-confirm-delete"
+                        id="confirmDeleteReviewBtn"
+                    >
+                        Delete Review
+                    </button>
+                </div>
+            </div>
+        </dialog>
+    </body>
+</html>

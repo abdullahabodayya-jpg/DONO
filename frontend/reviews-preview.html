@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+        />
+
+        <title>DONO | Product Reviews Preview</title>
+
+        <link
+            rel="stylesheet"
+            href="assets/css/global.css"
+        />
+
+        <link
+            rel="stylesheet"
+            href="assets/css/pages/product-reviews.css"
+        />
+
+        <style>
+            body {
+                margin: 0;
+                padding: 40px 20px;
+                background: #f8f9f6;
+            }
+
+            .reviews-preview-container {
+                max-width: 980px;
+                margin: auto;
+                padding: 36px;
+                border: 1px solid #e4e8e2;
+                border-radius: 20px;
+                background: #ffffff;
+            }
+
+            @media (max-width: 600px) {
+                body {
+                    padding: 12px;
+                }
+
+                .reviews-preview-container {
+                    padding: 20px;
+                }
+            }
+        </style>
+    <link rel="stylesheet" href="assets/css/customer-shell.css">
+<link rel="stylesheet" href="assets/css/customer-theme.css">
+<script type="module" src="assets/js/components/customer-shell.js"></script>
+<script src="assets/js/components/feedback.js" defer></script><link rel="stylesheet" href="assets/css/customer-product-reference.css"></head>
+
+    <body>
+        <main class="reviews-preview-container">
+            <div id="productReviewsMount"></div>
+        </main>
+
+        <script type="module">
+            import { mountProductReviews } from "./assets/js/components/product-reviews.js";
+
+            // Test reviews for active product ID 1
+            mountProductReviews(document.getElementById("productReviewsMount"), 1);
+        </script>
+    </body>
+</html>

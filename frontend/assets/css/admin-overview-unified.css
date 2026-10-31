@@ -1,0 +1,40 @@
+/* DONO admin management screens share Overview/Dashboard UI tokens. */
+.admin-layout {background:#fcfaf4; color:#212121; font-family:Geist,Arial,sans-serif}
+.admin-layout .admin-content {padding:clamp(20px,3vw,40px)!important;max-width:1480px;margin-inline:auto}
+.admin-layout .admin-integrated-header{margin-bottom:24px}
+.admin-layout .admin-integrated-header h2{font-family:inherit;font-size:1.65rem;font-weight:700;line-height:1.3;letter-spacing:-.035em;color:var(--color-text);margin:0 0 6px}
+.admin-layout .admin-integrated-eyebrow{color:#64748b;font-size:11px;letter-spacing:.08em;font-weight:600;margin-bottom:9px}
+.admin-layout .admin-integrated-header p{color:#64748b;font-size:14px}
+.admin-layout .admin-integrated-panel,.admin-layout .panel,.admin-layout .stat-card,.admin-layout .orders-table-wrapper {background:#fff;border:1px solid #e7e9e5;border-radius:12px;box-shadow:none;padding:clamp(17px,2.4vw,25px)}
+.admin-layout .admin-integrated-action,.admin-layout .btn-primary,.admin-layout .save-btn{background:#00341e!important;color:#fff!important;border:1px solid #00341e!important;border-radius:10px!important;padding:10px 16px!important;box-shadow:none!important;font-size:13px;font-weight:600}
+.admin-layout .admin-integrated-action:hover,.admin-layout .btn-primary:hover{transform:none;filter:brightness(1.14)}
+.admin-layout .admin-integrated-table th,.admin-layout .orders-table th,.admin-layout .panel table th{background:#fafaf9;color:#475569;font-size:12px;font-weight:650;letter-spacing:0;text-transform:none}
+.admin-layout .admin-integrated-table td,.admin-layout .orders-table td,.admin-layout .panel table td{border-bottom:1px solid #e9ede9;color:#303c37;font-size:13px}
+.admin-layout .admin-integrated-table button,.admin-layout .panel button{box-shadow:none}
+.admin-layout .admin-integrated-toolbar label{font-size:12px;font-weight:600}
+.admin-layout .admin-integrated-toolbar input,.admin-layout .admin-integrated-toolbar select,.admin-layout .admin-integrated-form input,.admin-layout .admin-integrated-form textarea,.admin-layout .orders-toolbar input,.admin-layout .orders-toolbar select{border:1px solid #cfd8d3;background:white;border-radius:9px;font-size:14px}
+.admin-layout .admin-integrated-form{background:#fafbf9;border:1px solid #e7e9e5;border-radius:12px}
+.admin-layout .admin-integrated-form label{font-weight:600}
+.admin-layout .admin-form-actions button{border:1px solid #cfd8d3;border-radius:9px;background:#e8f2eb;color:#00341e;font-weight:600}
+.admin-layout .admin-integrated-note{font-weight:500}
+.admin-layout .dashboard-heading{margin-bottom:26px}
+.admin-layout .dashboard-heading h2{font-size:1.65rem;font-weight:700;letter-spacing:-.035em}
+.admin-layout .dashboard-heading p{font-size:14px;color:#64748b}
+.admin-layout .stats-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-bottom:24px}
+.admin-layout .stat-card{min-width:0}
+.admin-layout .stat-card strong{font-size:25px}
+.admin-layout .panel{margin-top:16px}
+.admin-layout .panel-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:15px;margin-bottom:18px}
+.admin-layout .panel-header h2{font-size:1rem;font-weight:650}
+.admin-layout .main-content{min-width:0;width:100%;max-width:none;padding:0;overflow:visible;background:transparent}
+.admin-layout .orders-toolbar{margin-bottom:20px}
+.admin-layout .orders-table-wrapper{overflow:auto}
+.admin-layout .admin-orders-page{padding:0;max-width:100%}
+.admin-layout .admin-orders-page .page-header{margin-bottom:24px}
+.admin-layout .admin-orders-page .page-header h1{font-size:1.65rem;letter-spacing:-.035em;color:#212121}
+.admin-layout .admin-orders-page .page-header p{font-size:14px;color:#64748b}
+.admin-layout .modal{z-index:2000}
+@media(max-width:760px){.admin-layout .stats-grid{grid-template-columns:1fr}.admin-layout .admin-content{padding:20px!important}.admin-layout .panel-header{align-items:stretch}}
+
+.admin-sidebar-footer #adminLogoutBtn{display:flex;align-items:center;gap:12px;width:100%;border:0;background:transparent;text-align:left;cursor:pointer;font:inherit;color:inherit;padding:12px 14px;border-radius:9px}
+.admin-sidebar-footer #adminLogoutBtn:hover{background:#e8f2eb}

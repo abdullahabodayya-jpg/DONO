@@ -1,0 +1,83 @@
+/* DONO — Maximalist / Gen Z brand layer. Scoped to admin surfaces; original scripts and IDs unchanged. */
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@700;800;900&family=Work+Sans:wght@400;500;600;700;800&display=swap');
+.admin-layout,.admin-orders-page{--color-primary:#00341e;--color-primary-hover:#095d38;--color-background:#fcfaf4;--color-surface:#fff;--color-text:#00341e;--color-text-muted:#536d5e;--color-border:#d4e1c8;--color-accent:#55e06f;--color-highlight:#fff8b6;--font-body:'Work Sans',sans-serif;--font-heading:'Archivo',sans-serif;font-family:'Work Sans',sans-serif;color:#00341e}
+.admin-layout{--admin-sidebar-bg:#00341e;--admin-nav-text:#d4f5cb;--admin-nav-hover:#185638;--admin-nav-active:#55e06f;--admin-avatar-bg:#ffc4f8;background:#fcfaf4}
+.admin-layout .admin-sidebar{border-right:3px solid #55e06f;background:#00341e;color:#d4f5cb}
+.admin-layout .admin-sidebar-header{padding:8px 0 23px;border-bottom:1px solid #39694d}
+.admin-layout .admin-logo{color:#55e06f}
+.admin-layout .admin-logo-icon{background:#ff8af1;color:#00341e;border:2px solid #fff;border-radius:13px;transform:rotate(-8deg);box-shadow:4px 4px 0 #55e06f}
+.admin-layout .admin-logo-text strong{font-family:'Archivo',sans-serif;font-weight:900;font-size:1.8rem;letter-spacing:-.07em}
+.admin-layout .admin-logo-text small,.admin-layout .admin-nav-group-title{color:#9dceb1}
+.admin-layout .admin-nav-link{color:#c9e6cf;border:1px solid transparent;border-radius:13px;font-weight:700;transition:background .2s,transform .2s,color .2s}
+.admin-layout .admin-nav-link:hover{background:#13502e;color:#fff8b6;transform:translateX(3px)}
+.admin-layout .admin-nav-link.active,.admin-layout .admin-nav-link[aria-current=page]{background:#55e06f;color:#00341e;border-color:#00341e;box-shadow:3px 3px 0 #ffc4f8;font-weight:900}
+.admin-layout .admin-sidebar-footer{border-top:1px solid #39694d}
+.admin-layout .admin-topbar{background:#fff8b6;border-bottom:2px solid #00341e;box-shadow:0 5px 0 #d4f5cb}
+.admin-layout .admin-topbar-title{font-family:'Archivo',sans-serif;font-weight:900;letter-spacing:-.04em;color:#00341e}
+.admin-layout .admin-breadcrumb{color:#296b44;font-weight:700}
+.admin-layout .admin-account-avatar{background:#ffc4f8;color:#00341e;border:2px solid #00341e;border-radius:50%}
+.admin-layout .admin-content{background:radial-gradient(circle at 97% 3%,#e2f9ce 0%,transparent 27%),#fcfaf4}
+.admin-layout .dashboard-heading-text h2,.admin-layout .dashboard-section-heading h3{font-family:'Archivo',sans-serif;letter-spacing:-.04em;color:#00341e}
+.admin-layout .dashboard-heading-text h2{font-size:clamp(27px,3vw,42px);font-weight:900}
+.admin-layout .dashboard-kpi-card,.admin-layout .dashboard-chart-card,.admin-layout .dashboard-table-card,.admin-layout .dashboard-card,.admin-layout .admin-card,.admin-layout .card{border:2px solid #00341e;border-radius:20px;background:#fff;box-shadow:5px 5px 0 #cce1ff;transition:transform .2s,box-shadow .2s}
+.admin-layout .dashboard-kpi-card:nth-child(4n+1){background:#d4f5cb;box-shadow:5px 5px 0 #00341e}
+.admin-layout .dashboard-kpi-card:nth-child(4n+2){background:#ffc4f8;box-shadow:5px 5px 0 #00341e}
+.admin-layout .dashboard-kpi-card:nth-child(4n+3){background:#fff8b6;box-shadow:5px 5px 0 #00341e}
+.admin-layout .dashboard-kpi-card:nth-child(4n+4){background:#cce1ff;box-shadow:5px 5px 0 #00341e}
+.admin-layout .dashboard-kpi-card:hover{transform:translate(-2px,-2px);box-shadow:7px 7px 0 #00341e}
+.admin-layout .dashboard-kpi-value,.admin-layout .dashboard-kpi-card strong{font-family:'Archivo',sans-serif;font-weight:900;color:#00341e}
+.admin-layout button:not(.admin-menu-button):not(.admin-drawer-close),.admin-layout .btn,.admin-layout input[type=submit]{transition:transform .2s,filter .2s;}
+.admin-layout button:not(.admin-menu-button):not(.admin-drawer-close):hover,.admin-layout .btn:hover{filter:brightness(.97)}
+.admin-layout input,.admin-layout select,.admin-layout textarea{border-radius:10px}
+.admin-layout table{border-collapse:separate;border-spacing:0}
+.admin-layout th{color:#00341e;font-weight:900;background:#d4f5cb}
+.admin-layout td{border-bottom:1px solid #e4ebe1}
+.admin-layout .badge,.admin-layout .status-badge{font-weight:900;border-radius:99px}
+.admin-layout :focus-visible{outline:3px solid #d61f8c;outline-offset:3px}
+.admin-orders-page{max-width:1500px;margin:0 auto}
+.admin-orders-page .page-header h1{font-family:'Archivo',sans-serif;font-weight:900;color:#00341e;letter-spacing:-.04em}
+.admin-orders-page .orders-table-wrapper{border:2px solid #00341e;border-radius:18px;box-shadow:6px 6px 0 #ffc4f8}
+.admin-orders-page .orders-toolbar{background:#d4f5cb;border-radius:16px}
+/* Newly created integrated admin pages */
+.admin-integrated-header{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:32px}
+.admin-integrated-header h2{font:900 clamp(27px,3.8vw,46px)/1 'Archivo',sans-serif;letter-spacing:-.06em;margin:6px 0 8px}
+.admin-integrated-header p{margin:0;color:#4b6657;line-height:1.6}
+.admin-integrated-eyebrow{font-size:12px;font-weight:900;color:#d61f8c;letter-spacing:.15em;text-transform:uppercase}
+.admin-integrated-action{background:#55e06f!important;color:#00341e!important;border:2px solid #00341e!important;border-radius:12px!important;padding:13px 20px!important;font-weight:900!important;box-shadow:4px 4px 0 #00341e;cursor:pointer}
+.admin-integrated-action:hover{transform:translate(-2px,-2px)}
+.admin-integrated-panel{border:2px solid #00341e;background:#fff;border-radius:20px;padding:clamp(16px,2.7vw,30px);box-shadow:6px 6px 0 #cce1ff}
+.admin-integrated-toolbar{display:flex;gap:16px;flex-wrap:wrap;align-items:end;margin-bottom:22px}
+.admin-integrated-toolbar label{font-weight:800;font-size:12px;display:flex;flex-direction:column;gap:8px;flex:1;min-width:165px}
+.admin-integrated-toolbar input,.admin-integrated-toolbar select,.admin-integrated-form input,.admin-integrated-form textarea{border:2px solid #00341e;border-radius:10px;background:#fff;min-height:44px;padding:9px 12px;color:#00341e;width:100%}
+.admin-integrated-table-wrap{overflow:auto}
+.admin-integrated-table{width:100%;text-align:left;min-width:680px;border-collapse:collapse!important}
+.admin-integrated-table th,.admin-integrated-table td{padding:15px 16px;text-align:left;font-size:13px}
+.admin-integrated-table th{background:#d4f5cb;color:#00341e;text-transform:uppercase;font-size:11px;letter-spacing:.065em}
+.admin-integrated-table tr:hover td{background:#f8fff5}
+.admin-integrated-table td{border-bottom:1px solid #e6eee7;overflow-wrap:anywhere}
+.admin-integrated-table button{border:2px solid #00341e;border-radius:9px;background:#fff8b6;color:#00341e;padding:8px 12px;cursor:pointer;font-weight:800}
+.admin-integrated-table button:disabled{opacity:.5;cursor:not-allowed}
+.admin-integrated-form{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:25px;padding:20px;background:#fff8b6;border:2px dashed #00341e;border-radius:16px}
+.admin-integrated-form label{display:flex;flex-direction:column;gap:6px;font-weight:800;font-size:13px}
+.admin-integrated-form label:nth-child(3),.admin-integrated-form .admin-form-actions{grid-column:1/-1}
+.admin-form-actions{display:flex;align-items:center;gap:10px}
+.admin-form-actions button{padding:11px 18px;border:2px solid #00341e;border-radius:12px;font-weight:900;background:#55e06f;cursor:pointer}
+.admin-form-actions button[type=button]{background:#fff}
+.admin-integrated-note{margin:10px 0 20px;font-size:13px;font-weight:700;min-height:20px;line-height:1.5}
+.admin-integrated-note.error{color:#a21f32}
+.admin-integrated-note.success{color:#095d38}
+@media(max-width:680px){.admin-integrated-form{grid-template-columns:1fr}.admin-integrated-header{align-items:flex-start}.admin-integrated-toolbar{display:block}.admin-integrated-toolbar label{margin-bottom:12px}}
+@media(prefers-reduced-motion:reduce){.admin-layout *, .admin-layout *:before,.admin-layout *:after{transition:none!important;animation:none!important}}
+
+/* Existing standalone Coupon page has its own sidebar class; scope this brand treatment locally. */
+.admin-layout .sidebar{background:#00341e!important;border-right:3px solid #55e06f!important;color:#d4f5cb!important}
+.admin-layout .sidebar .brand{color:#55e06f!important;font:900 30px 'Archivo',sans-serif;letter-spacing:-.05em}
+.admin-layout .sidebar .sidebar-label,.admin-layout .sidebar .sidebar-footer{color:#c9e6cf!important}
+.admin-layout .sidebar .nav-link{border-radius:12px!important;color:#d4f5cb!important;font-weight:800!important}
+.admin-layout .sidebar .nav-link:hover{background:#145b37!important;color:#fff8b6!important}
+.admin-layout .sidebar .nav-link.active{background:#55e06f!important;color:#00341e!important}
+.admin-layout .main-content{background:#fcfaf4}
+.admin-layout .main-content .topbar h1{font:900 clamp(25px,3vw,42px) 'Archivo',sans-serif;letter-spacing:-.04em;color:#00341e}
+.admin-layout .main-content .stat-card{border:2px solid #00341e;border-radius:17px;box-shadow:5px 5px 0 #ffc4f8}
+.admin-layout .main-content .panel{border-radius:18px}
+.admin-layout .main-content .btn-primary{background:#55e06f!important;color:#00341e!important;border:2px solid #00341e!important;font-weight:900}

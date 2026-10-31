@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><title>Orders | DONO Admin</title>
+<link href="../assets/css/global.css" rel="stylesheet"/><link href="../assets/css/pages/admin-layout.css" rel="stylesheet"/><link href="../assets/css/pages/admin-dashboard.css" rel="stylesheet"/><link href="../assets/css/admin-orders.css" rel="stylesheet"/><link href="../assets/css/admin-overview-unified.css" rel="stylesheet"/>
+<script defer="" src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script><script defer="" src="../assets/js/admin/admin-layout.js"></script><script src="../assets/js/admin/admin-guard.js" type="module"></script><script defer="" src="../assets/js/admin-orders.js"></script><script defer="" src="../assets/js/components/feedback.js"></script></head><body><div class="admin-layout"><div aria-hidden="true" class="admin-drawer-overlay" id="adminDrawerOverlay"></div><aside aria-label="Admin navigation" class="admin-sidebar" id="adminSidebar"></aside><main class="admin-main"><header class="admin-topbar" id="adminTopbar"></header><div class="admin-content" id="adminOrdersContents"><main class="admin-orders-page">
+<header class="page-header">
+<h1>Manage Orders</h1>
+<p>View, search and manage customer orders.</p>
+</header>
+<!-- Search and Filter -->
+<section class="orders-toolbar">
+<input id="order-search" placeholder="Search by order number or customer name..." type="search"/>
+<div class="filter-box">
+<label for="status-filter">Status</label>
+<select id="status-filter">
+<option value="all">All Statuses</option>
+<option value="pending">Pending</option>
+<option value="confirmed">Confirmed</option>
+<option value="cancelled">Cancelled</option>
+</select>
+</div>
+</section>
+<!-- Orders Table -->
+<section class="orders-table-wrapper">
+<table class="orders-table">
+<colgroup>
+<col class="col-order"/>
+<col class="col-customer"/>
+<col class="col-date"/>
+<col class="col-items"/>
+<col class="col-total"/>
+<col class="col-status"/>
+<col class="col-actions"/>
+</colgroup>
+<thead>
+<tr>
+<th>
+<button class="sort-btn" data-sort="order_number" type="button">
+                                Order # <span class="sort-icon">⇅</span>
+</button>
+</th>
+<th>
+<button class="sort-btn" data-sort="customer_name" type="button">
+                                Customer <span class="sort-icon">⇅</span>
+</button>
+</th>
+<th>
+<button class="sort-btn" data-sort="created_at" type="button">
+                                Date <span class="sort-icon">⇅</span>
+</button>
+</th>
+<th>
+<button class="sort-btn" data-sort="items" type="button">
+                                Items <span class="sort-icon">⇅</span>
+</button>
+</th>
+<th>
+<button class="sort-btn" data-sort="total_amount" type="button">
+                                Total <span class="sort-icon">⇅</span>
+</button>
+</th>
+<th>
+<button class="sort-btn" data-sort="status" type="button">
+                                Status <span class="sort-icon">⇅</span>
+</button>
+</th>
+<th>Actions</th>
+</tr>
+</thead>
+<tbody id="orders-table-body"></tbody>
+</table>
+<p class="no-orders" hidden="" id="no-orders">
+                No orders found.
+            </p>
+</section>
+<!-- Pagination -->
+<div class="pagination-container">
+<p class="orders-count" id="orders-count"></p>
+<div class="pagination">
+<button id="prev-page" type="button">Previous</button>
+<span id="page-info">Page 1 of 1</span>
+<button id="next-page" type="button">Next</button>
+</div>
+</div>
+</main></div></main></div><div class="modal-overlay" hidden="" id="order-modal">
+<section aria-labelledby="modal-title" aria-modal="true" class="order-modal" role="dialog">
+<div class="modal-header">
+<h2 id="modal-title">Order Details</h2>
+<button aria-label="Close order details" class="close-modal" id="close-modal" type="button">
+                    ×
+                </button>
+</div>
+<div class="modal-content">
+<div class="details-column">
+<h3>Customer Information</h3>
+<p id="modal-customer"></p>
+<h3>Order Information</h3>
+<p id="modal-number"></p>
+<p id="modal-date"></p>
+<h3>Order Items</h3>
+<div id="modal-items"></div>
+</div>
+<div class="details-column">
+<h3>Order Summary</h3>
+<div class="summary-row">
+<span>Subtotal</span>
+<span id="modal-subtotal"></span>
+</div>
+<div class="summary-row">
+<span>Discount</span>
+<span id="modal-discount"></span>
+</div>
+<div class="summary-row">
+<span>Shipping</span>
+<span id="modal-shipping"></span>
+</div>
+<div class="summary-row summary-total">
+<span>Total</span>
+<span id="modal-total"></span>
+</div>
+<h3 class="update-heading">Update Order Status</h3>
+<select id="modal-status">
+<option value="pending">Pending</option>
+<option value="confirmed">Confirmed</option>
+<option value="cancelled">Cancelled</option>
+</select>
+<button class="save-btn" id="save-status" type="button">
+                        Save Changes
+                    </button>
+<p class="status-message" id="status-message" role="status"></p>
+</div>
+</div>
+</section>
+</div></body></html>

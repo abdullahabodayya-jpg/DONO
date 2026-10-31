@@ -1,0 +1,23 @@
+# Disable PHP execution in uploads
+
+php_flag engine off
+
+# Disable CGI execution
+
+Options -ExecCGI
+
+# Disable directory listing
+
+Options -Indexes
+
+# Allow only image files to be served
+
+<FilesMatch "\.(?i:jpg|jpeg|png|webp)$">
+Require all granted
+</FilesMatch>
+
+# Deny access to other file types
+
+<FilesMatch "^(?!.\*\.(?i:jpg|jpeg|png|webp)$).+$">
+Require all denied
+</FilesMatch>

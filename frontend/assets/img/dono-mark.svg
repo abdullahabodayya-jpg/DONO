@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="DONO gift ribbon logo">
+ <rect x="2" y="2" width="96" height="96" rx="28" fill="#063d2c"/>
+ <path d="M19 43h62v37H19z" fill="#fff0a8" stroke="#063d2c" stroke-width="3"/>
+ <path d="M15 33h70v17H15z" fill="#f6b4da" stroke="#063d2c" stroke-width="3"/>
+ <path d="M47 34c-19-4-25-15-18-22 9-9 24 8 21 22 5-19 19-26 25-17 6 10-10 20-25 17" fill="none" stroke="#c8f0a4" stroke-linecap="round" stroke-linejoin="round" stroke-width="8"/>
+ <path d="M50 34v46" stroke="#e92891" stroke-width="9"/>
+ <path d="M19 43h62" stroke="#063d2c" stroke-width="3"/>
+</svg>

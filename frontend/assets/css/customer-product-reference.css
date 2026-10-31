@@ -1,0 +1,75 @@
+/* DONO CUSTOMER: Product Details is the only design reference, except Landing. */
+:root{--dono-ink:#282536;--dono-primary:#6f8fd6;--dono-muted:#777481;--dono-background:#faf9fc;--dono-surface:#fff;--dono-border:#e9e6ee;--dono-lavender:#e6e0f0}
+body.dono-shell-enabled{--forest:var(--dono-ink);--ink:var(--dono-ink);--hot:var(--dono-primary);--pink:var(--dono-lavender);--lime:#e5e4e2;--sun:#f2eff8;--cream:var(--dono-background);--stroke:1px solid var(--dono-border);--dono-green:var(--dono-ink);--dono-pink:var(--dono-lavender);--dono-lime:#e5e4e2;--dono-cream:var(--dono-background);--dono-sun:#f2eff8;font-family:'DM Sans',Arial,sans-serif;color:var(--dono-ink);background:var(--dono-background)}
+body.dono-shell-enabled .dono-side{--dn:#282536;background:#282536;color:#fff}
+body.dono-shell-enabled .dono-side a:hover,body.dono-shell-enabled .dono-side button:hover,body.dono-shell-enabled .dono-side [aria-current=page]{background:#ffffff18;color:#e6e0f0}
+body.dono-shell-enabled .dono-side-wordmark{color:#e6e0f0}
+body.dono-shell-enabled .dono-side-user>span:first-child{background:#e6e0f0;color:#282536;border:1px solid #d1c9e2}
+body.dono-shell-enabled .dono-mobile-menu{background:#e6e0f0;color:#282536;border:1px solid #d1c9e2;box-shadow:none}
+body.dono-shell-enabled .cart-page,body.dono-shell-enabled .wishlist-page,body.dono-shell-enabled .orders-page{background:var(--dono-background)!important;color:var(--dono-ink)!important;padding:clamp(24px,4vw,52px) clamp(20px,4vw,54px)!important}
+body.dono-shell-enabled .cart-header,body.dono-shell-enabled .wishlist-header,body.dono-shell-enabled .orders-header{background:transparent!important;border:0!important;box-shadow:none!important;padding:0 0 20px!important;margin:0 0 28px!important;border-radius:0!important}
+body.dono-shell-enabled .cart-header h1,body.dono-shell-enabled .wishlist-header h1,body.dono-shell-enabled .orders-header h1{font-family:'Playfair Display',Georgia,serif!important;font-size:clamp(30px,3.6vw,46px)!important;font-weight:700!important;letter-spacing:-.035em!important;color:var(--dono-ink)!important}
+body.dono-shell-enabled .cart-header p,body.dono-shell-enabled .wishlist-header p,body.dono-shell-enabled .orders-header p{color:var(--dono-muted)!important;font-weight:400!important;margin-top:8px!important}
+body.dono-shell-enabled .cart-item,body.dono-shell-enabled .wishlist-card,body.dono-shell-enabled .order-card,body.dono-shell-enabled .order-summary{background:#fff!important;border:1px solid var(--dono-border)!important;border-radius:14px!important;box-shadow:0 8px 24px #2825360c!important}
+body.dono-shell-enabled .checkout-btn{background:var(--dono-primary)!important;color:white!important;border:1px solid var(--dono-primary)!important;font-weight:700!important;box-shadow:none!important}
+body.dono-shell-enabled .cart-page button,body.dono-shell-enabled .wishlist-page button,body.dono-shell-enabled .orders-page button{box-shadow:none!important;border-radius:10px!important}
+body.dono-shell-enabled .wishlist-card:hover,body.dono-shell-enabled .order-card:hover{transform:translateY(-2px);box-shadow:0 14px 28px #28253618!important}
+body.dono-shell-enabled .page-container{max-width:1200px}
+body.dono-shell-enabled .site-header{display:none!important}
+body.dono-shell-enabled .site-footer{background:transparent;border-top:1px solid var(--dono-border)}
+/* Explore retains search-first flow and functional flip cards but drops excessive decoration. */
+body.dono-shell-enabled .discover-hero{min-height:520px;background:#f2eff8;border:0;padding:clamp(56px,7vw,90px) clamp(23px,5vw,70px) 22px;color:var(--dono-ink)}
+body.dono-shell-enabled .discover-hero:before,body.dono-shell-enabled .discover-hero:after,body.dono-shell-enabled .hero-art{display:none}
+body.dono-shell-enabled .discover-hero h1{font-family:'Playfair Display',Georgia,serif;font-size:clamp(45px,6vw,78px);font-weight:700;letter-spacing:-.055em;line-height:1.1;color:var(--dono-ink)}
+body.dono-shell-enabled .discover-hero h1 em{color:#6f8fd6}
+body.dono-shell-enabled .hero-kicker,body.dono-shell-enabled .hero-intro,body.dono-shell-enabled .discover-hero-foot{color:#777481}
+body.dono-shell-enabled .discover-search{border:1px solid #d9d2e4;background:white;box-shadow:0 8px 24px #28253614;border-radius:16px}
+body.dono-shell-enabled .discover-search button{border-radius:11px;background:#6f8fd6;border:0;color:white;font-weight:700}
+body.dono-shell-enabled .discovery-filters select{background:#fff;border:1px solid #e9e6ee;color:#282536;border-radius:10px}
+body.dono-shell-enabled .discovery-filters label{color:#777481}
+body.dono-shell-enabled .shop-list{background:#faf9fc}
+body.dono-shell-enabled .shop-list-heading h2{font-family:'Playfair Display',Georgia,serif;font-weight:700;color:#282536;letter-spacing:-.045em}
+body.dono-shell-enabled .category-sticky{background:#faf9fcee;border-bottom:1px solid #e9e6ee;backdrop-filter:blur(12px)}
+body.dono-shell-enabled .category-sticky button{color:#777481}
+body.dono-shell-enabled .category-sticky button.active,body.dono-shell-enabled .category-sticky button:hover{color:#282536;border-color:#6f8fd6}
+body.dono-shell-enabled .gift-card{box-shadow:0 10px 26px #28253613;border:1px solid #e9e6ee;border-radius:16px;overflow:hidden}
+body.dono-shell-enabled .gift-card-back{background:#f2eff8;color:#282536}
+body.dono-shell-enabled .gift-card-back h3{font-family:'Playfair Display',Georgia,serif;letter-spacing:-.035em;font-size:clamp(24px,2.8vw,34px)}
+body.dono-shell-enabled .gift-flip-button,body.dono-shell-enabled .gift-close-button{background:#fff;border:1px solid #e9e6ee;color:#282536}
+body.dono-shell-enabled .gift-card-actions a,body.dono-shell-enabled .gift-card-actions button{background:#6f8fd6;color:#fff;border:0;font-weight:700}
+body.dono-shell-enabled .gift-card-actions button:last-child{background:white;color:#282536;border:1px solid #d1c9e2}
+body.dono-shell-enabled .shop-pages button{background:white;border:1px solid #e9e6ee;color:#282536;box-shadow:none}
+body.dono-shell-enabled .explore-footer{background:#282536;color:#fff}
+body.dono-shell-enabled .explore-footer strong span{color:#e6e0f0}
+body.dono-shell-enabled .auth-card{border:1px solid #e9e6ee;box-shadow:0 8px 24px #28253614!important}
+body.dono-shell-enabled .auth-container{background:#faf9fc!important}
+body.dono-shell-enabled .auth-header h1{color:#282536!important}
+body.dono-shell-enabled .modal{border:1px solid #e9e6ee;box-shadow:0 16px 35px #28253624}
+@media(prefers-reduced-motion:reduce){body.dono-shell-enabled .wishlist-card:hover,body.dono-shell-enabled .order-card:hover{transform:none}}
+/* Profile shares the understated Product Details surface language. */
+body.dono-shell-enabled .profile-main{max-width:1200px;padding:25px clamp(18px,4vw,56px) 80px;color:#282536}
+body.dono-shell-enabled .profile-hero{background:#f2eff8;border:1px solid #e9e6ee;border-radius:16px;padding:30px clamp(22px,4vw,52px);box-shadow:none}
+body.dono-shell-enabled .profile-hero>span{font:600 11px 'DM Sans',sans-serif;letter-spacing:.09em;color:#777481}
+body.dono-shell-enabled .profile-heading h1{font:700 clamp(36px,5vw,58px)/1.12 'Playfair Display',serif;letter-spacing:-.035em;margin:16px 0;color:#282536}
+body.dono-shell-enabled .profile-heading h1 i{color:#6f8fd6}
+body.dono-shell-enabled .profile-hero p{font-size:15px;font-weight:400;color:#777481}
+body.dono-shell-enabled .profile-avatar{border:1px solid #d1c9e2;background:#e6e0f0;color:#282536;box-shadow:none}
+body.dono-shell-enabled .profile-layout{margin-top:25px}
+body.dono-shell-enabled .profile-panel{background:#fff;border:1px solid #e9e6ee;border-radius:14px;padding:28px;box-shadow:0 8px 24px #2825360b}
+body.dono-shell-enabled .profile-panel h2{font:700 23px 'Playfair Display',Georgia,serif;letter-spacing:-.025em}
+body.dono-shell-enabled .profile-panel h2 span{border:1px solid #e9e6ee;background:#f2eff8;color:#777481;font:600 12px 'DM Sans',sans-serif}
+body.dono-shell-enabled .profile-panel p{color:#777481}
+body.dono-shell-enabled .profile-panel label{font-size:13px;font-weight:600;color:#282536}
+body.dono-shell-enabled .profile-panel input,body.dono-shell-enabled .profile-panel textarea{border:1px solid #d9d2e4;border-radius:10px;color:#282536;font-family:'DM Sans',sans-serif}
+body.dono-shell-enabled .profile-panel input:focus,body.dono-shell-enabled .profile-panel textarea:focus{box-shadow:0 0 0 3px #6f8fd635}
+body.dono-shell-enabled .profile-panel button{background:#6f8fd6;color:#fff;border:1px solid #6f8fd6;box-shadow:none;border-radius:10px;font-weight:700}
+body.dono-shell-enabled .profile-shortcuts a{background:#f2eff8;border:1px solid #e9e6ee;border-radius:10px;color:#282536;font-weight:600}
+body.dono-shell-enabled .profile-shortcuts a:hover{background:#e6e0f0}
+body:has(.auth-container){background:#faf9fc;font-family:'DM Sans',Arial,sans-serif}
+body:has(.auth-container) .auth-card{border:1px solid #e9e6ee;box-shadow:0 8px 24px #28253614;border-radius:16px}
+body:has(.auth-container) .auth-header h1{font-family:'Playfair Display',Georgia,serif;font-weight:700;color:#282536;font-size:32px}
+body:has(.auth-container) .auth-header p{color:#777481}
+body:has(.auth-container) .auth-card .btn-primary{background:#6f8fd6;color:#fff;border-color:#6f8fd6;border-radius:10px}
+body:has(.auth-container) .form-control{border:1px solid #e9e6ee;border-radius:10px;background:#fff}
+body:has(.auth-container) .form-control:focus{border-color:#6f8fd6;box-shadow:0 0 0 3px #6f8fd635}
+@media(max-width:650px){body.dono-shell-enabled .profile-panel{padding:20px}}

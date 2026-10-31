@@ -1,0 +1,15 @@
+/* Shared user feedback, uses Product Details design tones. */
+#dono-feedback-toast{position:fixed;z-index:5000;bottom:25px;right:25px;max-width:min(420px,calc(100vw - 30px));padding:15px 20px;border-radius:12px;color:#282536;background:#fff;border:1px solid #e9e6ee;box-shadow:0 14px 35px #28253627;font:600 14px/1.5 'DM Sans',Arial,sans-serif;opacity:0;transform:translateY(14px);pointer-events:none;transition:opacity .2s,transform .2s}
+#dono-feedback-toast.show{opacity:1;transform:none}
+#dono-feedback-toast[data-kind=success]{border-left:4px solid #3b8664}
+#dono-feedback-toast[data-kind=error]{border-left:4px solid #b23e51}
+.dono-feedback-backdrop{position:fixed;inset:0;z-index:6000;display:flex;align-items:center;justify-content:center;padding:20px;background:#24223480;backdrop-filter:blur(3px)}
+.dono-feedback-dialog{width:min(430px,100%);padding:30px;border:1px solid #e9e6ee;border-radius:18px;background:#fff;color:#282536;box-shadow:0 24px 70px #28253640;font-family:'DM Sans',Arial,sans-serif}
+.dono-feedback-dialog h2{font-size:22px;line-height:1.3;letter-spacing:-.025em;margin:0 0 12px;color:#282536}
+.dono-feedback-dialog p{font-size:14px;line-height:1.65;color:#777481;margin:0 0 26px;overflow-wrap:anywhere}
+.dono-feedback-actions{display:flex;justify-content:flex-end;gap:12px;flex-wrap:wrap}
+.dono-feedback-actions button{border:1px solid #d7d1df;border-radius:10px;padding:11px 17px;font:700 13px 'DM Sans',Arial,sans-serif;cursor:pointer}
+.dono-feedback-primary{background:#6f8fd6;color:white;border-color:#6f8fd6!important}
+.dono-feedback-primary[data-danger=true]{background:#963e4a;border-color:#963e4a!important}
+.dono-feedback-secondary{background:#fff;color:#282536}
+@media(prefers-reduced-motion:reduce){#dono-feedback-toast{transition:none}.dono-feedback-backdrop{backdrop-filter:none}}

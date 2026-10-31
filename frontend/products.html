@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Explore gifts | DONO</title>
+<meta name="description" content="Explore distinctive gifts for every person and occasion at DONO.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/pages/products.css">
+<link rel="stylesheet" href="assets/css/customer-shell.css">
+<script type="module" src="assets/js/components/customer-shell.js"></script>
+<script type="module" src="assets/js/pages/products.js"></script>
+<script src="assets/js/components/feedback.js" defer></script><link rel="stylesheet" href="assets/css/customer-product-reference.css"></head>
+<body class="dono-customer">
+<main class="explore-content" id="main-content">
+<section class="discover-hero" aria-labelledby="hero-heading">
+<div class="hero-art hero-art-left" aria-hidden="true">✳</div><div class="hero-art hero-art-right" aria-hidden="true">✿</div>
+<div class="hero-kicker"><span class="kicker-dot"></span> THE DONO GIFT DISCOVERY CLUB <span class="kicker-dot"></span></div>
+<h1 id="hero-heading">Good gifts.<br><em>Great stories.</em></h1>
+<p class="hero-intro">Something for your bestie, your crush, your mom, your whole world. Find their kind of magic.</p>
+<form id="discovery-form" class="discover-search" role="search">
+<label for="shop-search" class="visually-hidden">Search across all gifts</label>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="10.7" cy="10.7" r="6.7"/><path d="m16 16 5 5"/></svg>
+<input id="shop-search" type="search" placeholder="Who are we making smile today?" autocomplete="off">
+<button type="submit">Find my gift <span aria-hidden="true">↗</span></button>
+</form>
+<div class="discovery-filters" aria-label="Gift filters">
+<label><span>GIFT CATEGORY</span><select id="shop-category"><option value="">Every category</option></select></label>
+<label><span>RECIPIENT AGE</span><select id="shop-age"><option value="">All ages</option><option value="5">Kids · around 5</option><option value="12">Tweens · around 12</option><option value="16">Teens · around 16</option><option value="21">Young adults · around 21</option><option value="30">Adults · around 30</option><option value="45">Adults · around 45</option><option value="65">Seniors · around 65</option></select></label>
+<label><span>GIFT FORMAT</span><select id="shop-type"><option value="">Everything</option><option value="normal">One little surprise</option><option value="package">Ready-to-gift sets</option><option value="custom_box">Your own gift box</option></select></label>
+<button id="shop-reset" type="button" class="reset-filters">Clear filters ↻</button>
+</div>
+<div class="discover-hero-foot"><span>HANDPICKED FOR YOUR PEOPLE</span><a href="#shop-products">SCROLL TO DISCOVER <span aria-hidden="true">↓</span></a><span>AMMAN · MADE WITH LOVE</span></div>
+</section>
+<section id="shop-products" class="shop-list" aria-labelledby="shop-title">
+<div class="shop-list-heading"><div><span class="eyebrow">THE GIFT DROP / 001</span><h2 id="shop-title">Pick your <i>favorite.</i></h2></div><span id="shop-count" aria-live="polite">Loading gifts…</span></div>
+<div class="category-sticky" id="category-sticky"><nav id="category-tabs" aria-label="Browse product categories"><button type="button" data-category="" class="active" aria-current="true">All gifts ✳</button></nav></div>
+<p id="shop-message" class="shop-message" role="status" aria-live="polite"></p>
+<div id="shop-grid" class="shop-grid" aria-live="polite"></div>
+<div class="shop-pages"><button id="shop-prev" type="button" disabled>← Previous</button><span id="shop-page-label">1 / 1</span><button id="shop-next" type="button" disabled>Next →</button></div>
+</section>
+<footer class="explore-footer"><strong>DONO<span>✳</span></strong><p>Give a little. Mean a lot.</p><a href="cart.html">YOUR GIFT BAG ↗</a></footer>
+</main>
+</body></html>

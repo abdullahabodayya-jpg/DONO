@@ -1,0 +1,47 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Orders | DONO</title>
+
+    <link rel="stylesheet" href="assets/css/my-orders.css">
+<link rel="stylesheet" href="assets/css/customer-shell.css">
+<link rel="stylesheet" href="assets/css/customer-theme.css">
+<script type="module" src="assets/js/components/customer-shell.js"></script>
+<script src="assets/js/components/feedback.js" defer></script><link rel="stylesheet" href="assets/css/customer-product-reference.css"></head>
+
+<body>
+
+    <main class="orders-page">
+
+        <header class="orders-header">
+            <h1>My Orders</h1>
+            <p>View and track all your gift orders in one place.</p>
+        </header>
+
+        <section class="orders-section">
+
+            <h2 id="orders-count">Your Orders (0)</h2>
+
+            <!-- Orders inserted by JavaScript -->
+            <div id="orders-list"></div>
+
+            <!-- Empty State -->
+            <div class="empty-orders" id="empty-orders" hidden>
+                <h3>No orders yet!</h3>
+                <p>Your orders will appear here after checkout.</p>
+            </div>
+
+        </section>
+
+    </main>
+
+    <script src="assets/js/my-orders.js"></script>
+
+</body>
+
+</html>

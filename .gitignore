@@ -1,0 +1,22 @@
+# Local configuration and secrets
+/backend/config/config.php
+
+# Logs
+/backend/storage/logs/*
+!/backend/storage/logs/.gitkeep
+
+# Environment variables
+.env
+.env.*
+
+# Dependencies
+/vendor/
+/node_modules/
+
+# IDE and operating system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+/backend/public/uploads/products//backend/vendor/

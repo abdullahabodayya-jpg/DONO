@@ -1,0 +1,472 @@
+/* =========================================================
+   DONO landing.css  —  ملف كامل ومرتّب (يستبدل القديم بالكامل)
+   + Full responsive (لابتوب / تابلت / موبايل / موبايل صغير / لاندسكيب)
+   ========================================================= */
+
+:root{
+  --g8:#00341e;--g4:#55e06f;--g1:#d4f5cb;
+  --b1:#cce1ff;--b5:#629cf4;--b8:#060f3b;
+  --p1:#ffc4f8;--p2:#ff8af1;
+  --y1:#fff8b6;--y3:#ffec46;
+  --cream:#fcfaf4;--sand:#eeeadf;--ink:#212121;
+  --mx:0;--my:0;
+
+  /* قص الفريم من صور الموبايل/التابلت: كبّر الرقم لو الإطار الأسود لسا ظاهر */
+  --zoom-phone:1.12;
+  --zoom-tablet:1.08;
+  --phone-w:clamp(210px,min(25vw,46vh),340px);   /* حجم تلفون القسم الثاني */
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-snap-type:y proximity;scrollbar-width:thin;scrollbar-color:var(--g4) var(--g8);-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{font-family:'Work Sans',sans-serif;background:var(--g8);color:var(--ink);overflow-x:clip;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+h1,h2,.big{font-family:'Archivo',sans-serif;font-weight:900;letter-spacing:-.035em;line-height:.9}
+.hw{font-family:'Caveat',cursive;font-weight:700;letter-spacing:0;line-height:1}
+::selection{background:var(--g4);color:var(--g8)}
+:focus-visible{outline:3px solid var(--p2);outline-offset:3px}
+
+/* ---------- ألوان حسب السيكشن الحالي ---------- */
+body{--fg:var(--ink);--bt:var(--ink);--bf:#fff;--lg:#d61f8c;--lbg:#fff;--lfg:#111;--sbg:#d61f8c;--sfg:#fff}
+body[data-theme=dark]{--fg:var(--g4);--bt:var(--g4);--bf:var(--g8);--lg:#ff8af1;--sbg:#ffec46;--sfg:#00341e}
+body[data-theme=mint]{--fg:var(--g8);--bt:var(--g8);--bf:var(--g4);--lg:#d61f8c;--sbg:#00341e;--sfg:#ffec46}
+body[data-theme=cream]{--fg:var(--ink);--bt:var(--ink);--bf:#fff;--lg:#d61f8c;--sbg:#d61f8c;--sfg:#fff}
+body[data-theme=blue]{--fg:var(--b8);--bt:var(--b8);--bf:var(--b1);--lg:#d61f8c;--sbg:#060f3b;--sfg:#ffec46}
+body[data-theme=navy]{--fg:#fff;--bt:#fff;--bf:var(--b8);--lg:#ff8af1;--sbg:#ffec46;--sfg:#060f3b}
+
+/* ---------- شريط التقدم + النف بار (ثابت يتحرك معك) ---------- */
+#bar{position:fixed;top:0;left:0;height:4px;width:100%;background:linear-gradient(90deg,var(--g4),var(--p2),var(--y3));transform-origin:0 50%;transform:scaleX(0);z-index:99}
+
+nav{
+  position:fixed;inset:0 0 auto;z-index:50;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding:14px 2.2vw;color:var(--fg);transition:color .5s;
+}
+nav .logo{
+  font-family:'Playfair Display',serif;font-style:italic;font-weight:900;
+  font-size:clamp(20px,1.8vw,28px);line-height:1;letter-spacing:.5px;
+  color:var(--lg);white-space:nowrap;position:relative;display:inline-block;
+  text-shadow:0 2px 0 rgba(0,0,0,.14);
+  transition:color .5s,scale .4s cubic-bezier(.34,1.56,.64,1);
+  animation:logoWiggle 5s ease-in-out infinite;
+}
+nav .logo::after{
+  content:'\2726';position:absolute;top:-.3em;right:-.8em;font-size:.5em;color:var(--lg);
+  animation:twinkle 2.2s ease-in-out infinite;
+}
+nav .logo:hover{scale:1.12}
+@keyframes logoWiggle{
+  0%,68%,100%{transform:rotate(0) scale(1)}
+  72%{transform:rotate(-6deg) scale(1.08)}
+  76%{transform:rotate(5deg) scale(1.1)}
+  80%{transform:rotate(-3deg) scale(1.05)}
+  84%{transform:rotate(0) scale(1)}
+}
+@keyframes twinkle{
+  0%,100%{opacity:.2;transform:scale(.5) rotate(0)}
+  50%{opacity:1;transform:scale(1.15) rotate(90deg)}
+}
+
+.acts{display:flex;gap:10px}
+.btn{
+  position:relative;overflow:hidden;
+  display:inline-flex;align-items:center;justify-content:center;
+  height:40px;padding:0 22px;border-radius:99px;
+  font:800 15px 'Work Sans',sans-serif;cursor:pointer;
+  background:var(--lbg);color:var(--lfg);border:2px solid var(--lfg);
+  box-shadow:0 4px 14px rgba(0,0,0,.18);
+  transition:transform .3s cubic-bezier(.34,1.56,.64,1),background .3s,color .3s,border-color .3s;
+}
+.btn.fill{background:var(--sbg);color:var(--sfg);border-color:var(--sbg)}
+.btn:hover{transform:translateY(-2px) scale(1.06)}
+.btn:not(.fill):hover{background:var(--lfg);color:#fff}
+.btn.fill:hover{background:var(--lbg);color:var(--sbg)}
+.btn:active{transform:scale(.97)}
+.btn::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.55) 50%,transparent 70%);
+  translate:-120% 0;transition:translate .65s ease;
+}
+.btn:hover::before{translate:120% 0}
+
+/* ---------- السيكشنات ---------- */
+.scene{
+  position:relative;height:100vh;height:100svh;min-height:680px;overflow:hidden;isolation:isolate;
+  scroll-snap-align:start;
+}
+.scene>*{position:relative;z-index:1;max-width:100%}
+.s1,.s9{background:var(--g8);color:var(--g4)}
+.s2,.s5,.s8{background:var(--g1);color:var(--g8)}
+.s3,.s6{background:var(--cream);color:var(--ink)}
+.s4{background:var(--b1);color:var(--b8)}
+.s7{background:var(--b8);color:var(--b5)}
+
+/* نجوم صغيرة بالسيكشنات الغامقة */
+.s1::after,.s4::after,.s7::after,.s9::after{
+  content:'';position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.3;
+  background:
+    radial-gradient(circle at 12% 22%,currentColor 0 2px,transparent 3px),
+    radial-gradient(circle at 86% 18%,currentColor 0 3px,transparent 4px),
+    radial-gradient(circle at 28% 80%,currentColor 0 2px,transparent 3px),
+    radial-gradient(circle at 74% 72%,currentColor 0 2px,transparent 3px),
+    radial-gradient(circle at 50% 8%,currentColor 0 2px,transparent 3px),
+    radial-gradient(circle at 94% 55%,currentColor 0 3px,transparent 4px),
+    radial-gradient(circle at 6% 55%,currentColor 0 3px,transparent 4px);
+  animation:twinkleBg 3.4s ease-in-out infinite;
+}
+@keyframes twinkleBg{0%,100%{opacity:.12}50%{opacity:.55}}
+
+/* ---------- أنيميشن الدخول ---------- */
+.rise{opacity:0}
+.on .rise{animation:up .95s cubic-bezier(.2,.9,.2,1) calc(var(--d,0)*.12s) both}
+@keyframes up{from{opacity:0;translate:var(--x,0) var(--y,60%)}to{opacity:1;translate:0 0}}
+
+/* ---------- الصور (slots) ---------- */
+.slot{
+  position:absolute;display:block;min-width:0;min-height:0;
+  width:var(--w,10vw);aspect-ratio:var(--ar,1);
+  left:var(--l);top:var(--t);rotate:var(--r,0deg);
+  opacity:0;scale:.2;
+  translate:calc(var(--mx)*var(--k,0)*1px) calc(var(--my)*var(--k,0)*1px + var(--out,0)*var(--sp,0)*1px);
+}
+.on .slot{animation:pop .9s cubic-bezier(.34,1.56,.64,1) calc(var(--d,0)*.13s + .2s) both}
+@keyframes pop{from{opacity:0;scale:.2;rotate:calc(var(--r,0deg) - 40deg)}to{opacity:1;scale:1}}
+
+.slot .fl{
+  position:absolute;inset:0;display:block;overflow:hidden;border-radius:14px;
+  animation:bob 5.5s ease-in-out calc(var(--d,0)*-.8s) infinite;
+}
+@keyframes bob{50%{transform:translateY(-12px) rotate(2deg)}}
+.slot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;display:block}
+/* الصور تظهر بنعومة لما تخلص تحميل */
+.slot img,.bub img{opacity:0;transition:opacity .6s ease}
+.slot img.in,.bub img.in{opacity:1}
+.slot.circ .fl{border-radius:50%;background:var(--bg,#ddd)}
+.ph{position:absolute;inset:0;display:grid;place-items:center;border:2px dashed currentColor;border-radius:inherit;font:600 clamp(8px,.8vw,12px)/1.1 'Work Sans';text-align:center;opacity:.5;padding:4px;word-break:break-all}
+.slot:not(.bad) .ph{display:none}
+
+/* صور داخل الكروت المتحركة */
+.slot.flow{position:relative;left:auto;top:auto;opacity:1;scale:1;animation:none!important}
+.slot.flow .fl{animation:none;border-radius:12px}
+
+.chip{position:absolute;background:#fff;color:var(--ink);font:600 clamp(13px,1.3vw,20px) 'Work Sans';padding:.6em 1.1em;border-radius:99px;box-shadow:0 8px 20px rgba(0,0,0,.18);rotate:var(--r,-8deg);white-space:nowrap}
+
+.pillbtn{
+  position:relative;display:inline-flex;align-items:center;justify-content:center;
+  height:clamp(52px,5vw,76px);padding:0 clamp(28px,3vw,52px);border-radius:99px;
+  font:800 clamp(18px,1.6vw,26px) 'Work Sans';background:var(--g4);color:var(--g8);
+  transition:.35s cubic-bezier(.34,1.56,.64,1);
+}
+.pillbtn:hover{scale:1.08;rotate:-2deg}
+.pillbtn::after{
+  content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  box-shadow:0 0 0 0 color-mix(in srgb,var(--g4) 65%,transparent);
+  animation:ring 2.4s ease-out infinite;
+}
+@keyframes ring{to{box-shadow:0 0 0 24px transparent}}
+
+/* ---------- S1 ---------- */
+.mega{position:absolute;left:0;right:0;top:50%;translate:0 -52%;display:flex;justify-content:center;gap:8vw;font-size:min(15vw,28vh);white-space:nowrap}
+.mega span{white-space:nowrap}
+.mega .hw{position:absolute;left:50%;top:50%;translate:-50% -42%;rotate:-13deg;font-size:.42em;color:var(--p2);white-space:nowrap;z-index:3}
+.mega .hw::after{content:'';display:inline-block;width:.06em;height:.6em;background:var(--p2);margin-left:.06em;vertical-align:-.05em;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.s1 .tag{position:absolute;left:2.4vw;bottom:5vh;font:500 clamp(18px,2.1vw,34px)/1.15 'Work Sans';max-width:20ch;color:#3fae59}
+
+/* زر Get Started: بالنص بالـ margin (مش translate) عشان أنيميشن .rise ما يخرّبه */
+.s1 .cta{
+  position:absolute;left:0;right:0;bottom:5vh;margin:0 auto;
+  width:max-content;translate:none;z-index:6;
+}
+
+/* ---------- S2 ---------- */
+.s2 .row{position:absolute;inset:0;top:-2vh;display:flex;align-items:center;justify-content:space-between;flex-wrap:nowrap;padding:0 3vw;font-size:min(17vw,31vh)}
+.s2 .row span{white-space:nowrap}
+
+/* ---------- الموبايل والتابلت: بدون فريم ----------
+   الإطار الأسود مرسوم داخل الصورة، فنكبّر الصورة (zoom) داخل حاوية
+   overflow:hidden بزوايا دائرية فيتقص الإطار. */
+.phone,.dev{position:absolute;background:none;border:0;box-shadow:none;padding:0}
+.phone .scr,.dev .scr{
+  position:relative;width:100%;height:100%;background:none;overflow:hidden;
+  transform-origin:50% 80%;
+}
+.phone .scr .slot,.dev .scr .slot{
+  position:absolute;inset:0;left:0;top:0;width:100%;height:100%;aspect-ratio:auto;
+  opacity:1;scale:1;rotate:0deg;translate:none;animation:none;
+}
+.phone .scr .slot .fl,.dev .scr .slot .fl{border-radius:0;animation:none;overflow:hidden}
+.phone .scr .slot img,.dev .scr .slot img{object-fit:cover;object-position:center}
+
+.phone{
+  left:50%;top:50%;z-index:4;
+  width:var(--phone-w);
+  translate:-50% calc(-50% + (1 - var(--in,0))*80vh);
+  transition:scale .5s cubic-bezier(.34,1.56,.64,1);
+}
+.phone:hover{scale:1.04}
+.phone .scr{border-radius:11% / 5.2%;animation:devBobC 5.5s ease-in-out infinite}
+.phone .scr .slot img{transform:scale(var(--zoom-phone))}
+
+/* التلفون (S2 و S4): الحجم من الصورة نفسها بدون قص زيادة */
+.phone .scr,.d2 .scr{height:auto}
+.phone .scr .slot,.d2 .scr .slot{position:relative;inset:auto;height:auto;width:100%}
+.phone .scr .slot .fl,.d2 .scr .slot .fl{position:relative;inset:auto;display:block}
+.phone .scr .slot img,.d2 .scr .slot img{position:relative;inset:auto;width:100%;height:auto;object-fit:contain;transform:scale(var(--zoom-phone))}
+
+@keyframes devBobA{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-24px) rotate(1.8deg)}}
+@keyframes devBobB{0%,100%{transform:translateY(-8px) rotate(0)}50%{transform:translateY(-28px) rotate(-1.8deg)}}
+@keyframes devBobC{0%,100%{transform:translateY(0) rotate(-.6deg)}50%{transform:translateY(-20px) rotate(.8deg)}}
+
+/* دوائر الصور تحت (S2): تطلع من تحت وبعدين تتحرك */
+.s2 .brands{position:absolute;inset:0;z-index:2;pointer-events:none;overflow:hidden}
+.bub{
+  position:absolute;left:var(--l);top:var(--t);width:var(--w);aspect-ratio:1;
+  border-radius:50%;overflow:hidden;background:var(--g4);
+  opacity:0;translate:0 70vh;
+}
+.bub img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.on .bub{
+  animation:
+    bubIn 1.1s cubic-bezier(.34,1.56,.64,1) calc(var(--d)*.09s + .3s) both,
+    bubFloat 5s ease-in-out calc(var(--d)*-.7s) infinite;
+}
+@keyframes bubIn{from{opacity:0;translate:0 70vh}to{opacity:1;translate:0 0}}
+@keyframes bubFloat{
+  0%,100%{transform:translateY(0) rotate(0deg)}
+  50%{transform:translateY(-16px) rotate(4deg)}
+}
+
+/* ---------- S3 ---------- */
+.url{position:absolute;left:50%;top:41%;translate:-50% 0;width:min(52vw,700px);height:clamp(56px,6.4vw,104px);background:var(--sand);border-radius:99px;display:flex;align-items:center;padding:0 3vw;font:400 clamp(16px,2.3vw,38px) 'Work Sans';color:#333}
+.url i{display:inline-block;width:2px;height:1.1em;background:#333;margin-left:2px;animation:blink 1s steps(1) infinite}
+.s3 h2{position:absolute;left:0;right:0;top:63%;text-align:center;font-size:clamp(30px,min(6.2vw,11vh),110px);line-height:.95;color:var(--ink);padding:0 4vw;white-space:nowrap}
+.s3 h2 span{display:inline-block}
+
+/* ---------- S4 ---------- */
+.s4 h2{position:absolute;left:0;right:0;top:8vh;text-align:center;font-size:clamp(32px,min(6vw,10vh),108px);line-height:.92;padding:0 4vw;z-index:3;text-wrap:balance}
+
+.dev{bottom:3vh;z-index:2;cursor:pointer;transition:scale .5s cubic-bezier(.34,1.56,.64,1),rotate .5s cubic-bezier(.34,1.56,.64,1)}
+.dev:hover{scale:1.06;rotate:0deg;z-index:5}
+.dev:active{scale:1.02}
+.d1,.d3{height:min(56vh,520px);aspect-ratio:1343/976}
+.d1{left:-1vw;rotate:-3deg;translate:0 calc((1 - var(--in,0))*30vh)}
+.d3{right:-1vw;rotate:3deg;translate:0 calc((1 - var(--in,0))*30vh)}
+.d2{left:50%;width:min(15vw,26vh);translate:-50% calc((1 - var(--in,0))*45vh);z-index:3}
+
+.d1 .scr,.d3 .scr{border-radius:0;overflow:visible}
+.d1 .scr .slot .fl,.d3 .scr .slot .fl{overflow:visible}
+.d1 .scr .slot img,.d3 .scr .slot img{transform:none;object-fit:contain}
+.d2 .scr{border-radius:11% / 5.2%}
+.d2 .scr .slot img{transform:scale(var(--zoom-phone))}
+
+.d1 .scr{animation:devBobB 6.5s ease-in-out infinite}
+.d2 .scr{animation:devBobC 5s ease-in-out -1.5s infinite}
+.d3 .scr{animation:devBobA 7s ease-in-out -3s infinite}
+
+/* ---------- S5 ---------- */
+.s5 h2{position:absolute;left:7vw;top:15vh;font-size:clamp(32px,min(5.8vw,10.5vh),104px);line-height:.94;max-width:48vw;z-index:3}
+.s5 .sub{position:absolute;left:7vw;top:50vh;width:min(40vw,520px);font:500 clamp(14px,min(1.6vw,2.8vh),26px)/1.3 'Work Sans';transition:opacity .4s}
+.tabs{position:absolute;left:7vw;bottom:9vh;display:flex;gap:1vw;flex-wrap:wrap}
+.tabs button{border:0;cursor:pointer;height:clamp(44px,4.2vw,64px);padding:0 clamp(22px,2.4vw,40px);border-radius:99px;font:700 clamp(15px,1.5vw,24px) 'Work Sans';background:var(--g4);color:var(--g8);transition:.4s cubic-bezier(.34,1.56,.64,1)}
+.tabs button.act{background:var(--g8);color:var(--g4)}
+.tabs button:hover{scale:1.06}
+.collage{position:absolute;right:4vw;top:18vh;width:40vw;height:56vh;rotate:calc(-12deg + var(--in,0)*12deg);scale:calc(.6 + var(--in,0)*.4)}
+.collage .blob{position:absolute;inset:0;overflow:hidden;background:var(--g4);clip-path:polygon(8% 18%,98% 2%,100% 82%,18% 100%);animation:morph 7s ease-in-out infinite}
+.collage .blob .slot{inset:0;width:100%;height:100%;left:0;top:0;aspect-ratio:auto;opacity:1;scale:1;animation:none}
+.collage .blob .slot .fl{border-radius:0;animation:none}
+@keyframes morph{50%{clip-path:polygon(4% 8%,96% 14%,92% 96%,10% 88%)}}
+
+/* ---------- S6 ---------- */
+.s6 h2{position:absolute;left:0;right:0;top:10vh;text-align:center;font-size:clamp(32px,min(6vw,10.5vh),108px);line-height:.95;padding:0 4vw;white-space:nowrap}
+.pills{position:absolute;left:50%;top:40vh;translate:-50% 0;display:flex;flex-direction:column;align-items:center;max-width:94vw}
+.pill{padding:.28em 1em;border-radius:99px;font:900 clamp(20px,min(3.5vw,5.6vh),60px) 'Archivo';letter-spacing:-.03em;rotate:var(--r);margin-top:-.5vw;box-shadow:0 10px 24px rgba(0,0,0,.08);transition:.4s cubic-bezier(.34,1.56,.64,1);cursor:default;white-space:nowrap;max-width:94vw}
+.pill:hover{scale:1.1;rotate:0deg}
+.paper{position:absolute;left:-6vw;top:12vh;width:30vw;height:46vh;background:#efede8;rotate:14deg;border-radius:6px;background-image:repeating-linear-gradient(transparent 0 38px,#dcd9d2 38px 39px);box-shadow:0 10px 30px rgba(0,0,0,.08)}
+.paper::before{content:'';position:absolute;left:0;right:0;top:-4px;height:18px;background:radial-gradient(circle at 10px 8px,#fcfaf4 5px,transparent 6px) 0 0/26px 18px repeat-x}
+.cats{position:absolute;left:4vw;top:63vh;display:flex;gap:6px;background:#fff;border-radius:99px;padding:8px;box-shadow:0 12px 28px rgba(0,0,0,.1);rotate:-6deg;font:500 clamp(12px,1.2vw,18px) 'Work Sans'}
+.cats span{padding:.5em 1.2em;border-radius:99px}
+.cats span:first-child{background:#111;color:#fff}
+.s6 .ph1{position:absolute;right:-4vw;top:34vh;rotate:12deg;width:24vw;aspect-ratio:9/16;background:#111;border-radius:3vw;padding:.5vw;box-shadow:0 20px 50px rgba(0,0,0,.25)}
+.emo{position:absolute;display:grid;place-items:center;background:#fff;border-radius:50%;box-shadow:0 10px 24px rgba(0,0,0,.14);width:var(--w);aspect-ratio:1;font-size:calc(var(--w)*.5);animation:bob 4s ease-in-out infinite}
+
+/* ---------- S7 ---------- */
+.s7 .big{position:absolute;top:42vh;font-size:21vw;line-height:.8;white-space:nowrap}
+.col{position:absolute;left:50%;top:0;bottom:0;width:clamp(150px,14vw,260px);translate:-50% 0;overflow:hidden;z-index:2;mask-image:linear-gradient(transparent,#000 10%,#000 90%,transparent)}
+.track{display:flex;flex-direction:column;gap:2vh;animation:scY 22s linear infinite}
+@keyframes scY{to{translate:0 -50%}}
+.pc{background:#fff;border-radius:14px;padding:1.2vw 1.2vw 1vw;color:var(--ink);font:700 clamp(12px,1.2vw,18px) 'Work Sans'}
+.pc span{display:block;font-weight:500;margin-bottom:.6vw;white-space:nowrap}
+.pc .slot{width:80%;aspect-ratio:1;margin:8px auto}
+.pc em{display:block;font:italic 700 1.3em 'Playfair Display',serif;text-align:right;margin-top:.4vw}
+.s7 .al{position:absolute;right:6vw;top:32vh;font-size:clamp(50px,7vw,120px);color:var(--y3);rotate:-14deg;z-index:3}
+.s7 .txt{position:absolute;left:3vw;bottom:5vh;width:min(30vw,420px);font:500 clamp(16px,1.9vw,30px)/1.2 'Work Sans';color:var(--b1);z-index:4}
+
+/* ---------- S8 ---------- */
+.s8 h2{position:absolute;left:6vw;top:12vh;font-size:clamp(32px,min(6.6vw,11vh),116px);line-height:.94;max-width:70vw}
+.s8 .btn{position:absolute;right:5vw;top:16vh;height:clamp(40px,4vw,64px);padding:0 2vw;font-size:clamp(14px,1.5vw,24px)}
+.notes{position:absolute;left:0;right:0;bottom:11vh;display:flex;justify-content:space-around;padding:0 6vw;gap:3vw}
+.note{width:22.5vw;cursor:pointer;transition:.5s cubic-bezier(.34,1.56,.64,1)}
+.note h3{background:var(--g4);color:var(--g8);padding:1.6vw;font:800 clamp(14px,min(1.8vw,3.2vh),28px)/1.08 'Archivo';letter-spacing:-.02em;height:7.4vw}
+.note p{background:#fff;color:#222;margin:-1.4vw 0 0 -1.2vw;padding:1.8vw 1.6vw;font:500 clamp(12px,min(1.25vw,2.3vh),19px)/1.28 'Work Sans';rotate:var(--r);box-shadow:0 6px 18px rgba(0,0,0,.08);transition:.5s cubic-bezier(.34,1.56,.64,1)}
+.note:hover p{rotate:0deg;translate:0 -10px}
+.note:hover{scale:1.04}
+
+/* ---------- S9 ---------- */
+.s9 .big{position:absolute;left:0;right:0;top:20vh;text-align:center;font-size:clamp(40px,min(10vw,16vh),180px);padding:0 4vw}
+.s9 form{position:absolute;left:50%;top:60vh;translate:-50% 0;display:flex;gap:10px;width:min(90vw,620px)}
+.s9 input{flex:1;height:clamp(50px,4.6vw,70px);border-radius:99px;border:0;padding:0 28px;font:500 18px 'Work Sans';background:rgba(255,255,255,.12);color:#fff;outline:0}
+.s9 input::placeholder{color:#fff;opacity:.55}
+.s9 .pillbtn{border:0;cursor:pointer}
+.foot{position:absolute;left:3vw;right:3vw;bottom:4vh;display:flex;justify-content:space-between;font:500 15px 'Work Sans';opacity:.8;gap:20px;flex-wrap:wrap}
+.foot a:hover{text-decoration:underline}
+
+/* ---------- أداء: وقّف الأنيميشن للسيكشنات الغير ظاهرة ---------- */
+.scene:not(.on) *,.scene:not(.on) *::before,.scene:not(.on) *::after{animation-play-state:paused!important}
+
+
+/* =========================================================
+   RESPONSIVE
+   الترتيب: من الأكبر للأصغر (آخر قاعدة تغلب)
+   ========================================================= */
+
+/* ---------- لابتوب صغير / تابلت أفقي (حتى 1100px) ---------- */
+@media(max-width:1100px){
+  .s1 .tag{max-width:16ch}
+
+  .d1,.d3{height:min(44vh,400px)}
+  .d2{width:min(18vw,26vh)}
+
+  .s5 h2{max-width:52vw}
+  .s5 .sub{width:min(42vw,460px)}
+  .collage{width:42vw}
+
+  .paper{width:34vw}
+  .cats{left:2vw}
+  .s6 .ph1{width:28vw;right:-6vw}
+
+  .s7 .txt{width:min(34vw,420px)}
+
+  .s8 h2{max-width:80vw}
+  .notes{padding:0 4vw;gap:2vw}
+  .note{width:24vw}
+  .note h3{padding:2vw 1.8vw;height:10vw}
+  .note p{padding:2.2vw 1.8vw}
+}
+
+/* ---------- موبايل + تابلت عمودي (حتى 800px) ---------- */
+@media(max-width:800px){
+  nav{padding:12px 4vw;padding-top:max(12px,env(safe-area-inset-top))}
+  .acts{gap:6px}
+  .btn{padding:0 14px;font-size:13px;height:36px}
+  .dsk{display:none!important}
+  .paper,.cats,.s6 .ph1{display:none!important}
+
+  /* --- S1 --- */
+  .mega{flex-direction:column;align-items:center;gap:4vh;font-size:26vw}
+  .mega .hw{font-size:.36em}
+  .s1 .slot{width:calc(var(--w)*2.4)}
+  .s1 .chip{font-size:13px}
+  .s1 .chip:nth-of-type(2){left:auto!important;right:4vw}
+
+  /* --- S2: Your فوق Shop والتلفون تحتهم --- */
+  .s2 .row{
+    top:0;flex-direction:column;justify-content:flex-start;align-items:center;
+    gap:0;padding:11vh 4vw 0;font-size:21vw;
+  }
+  .phone{width:min(54vw,34vh);top:58%}
+  .bub{width:calc(var(--w)*1.6)}
+
+  /* --- S3 --- */
+  .s3>div:nth-of-type(1){left:6vw!important;top:9vh!important;width:36vw!important}
+  .s3>div:nth-of-type(2){left:54vw!important;top:13vh!important;width:30vw!important}
+  .url{width:86vw;top:38%;padding:0 5vw;overflow:hidden;white-space:nowrap}
+  .s3 h2{font-size:12vw;top:54%;white-space:normal}
+  .s3 h2 span{display:block}
+  .s3 h2 br{display:none}
+
+  /* --- S4 --- */
+  .d1,.d3{display:none}
+  .d2{width:min(54vw,36vh)}
+  .s4 h2{font-size:11vw}
+
+  /* --- S5 --- */
+  .s5 h2{font-size:10.5vw;max-width:90vw;left:5vw}
+  .s5 .sub{top:36vh;width:90vw;left:5vw}
+  .collage{width:84vw;height:30vh;right:8vw;top:56vh}
+  .tabs{left:5vw;right:5vw;bottom:4vh;gap:2vw;flex-wrap:nowrap}
+  .tabs button{flex:1;height:42px;padding:0 2vw;font-size:14px}
+
+  /* --- S6 --- */
+  .s6 h2{font-size:10.5vw;top:12vh}
+  .pills{top:32vh}
+  .pill{font-size:clamp(18px,6.2vw,34px)}
+
+  /* --- S7: Best / Price فوق، والكروت تحتهم --- */
+  .s7 .big{font-size:20vw}
+  .s7 .big:nth-of-type(1){top:12vh;left:4vw!important}
+  .s7 .big:nth-of-type(2){top:calc(12vh + 16vw);right:4vw!important;left:auto!important}
+  .s7 .al{top:13vh;right:3vw;font-size:11vw}
+  .col{top:calc(12vh + 36vw);bottom:20vh;width:clamp(150px,44vw,230px)}
+  .pc{padding:3vw 3vw 2.4vw;font-size:13px}
+  .pc span{margin-bottom:1.6vw}
+  .s7 .txt{width:88vw;left:6vw;font-size:17px;bottom:3vh}
+
+  /* --- S8 --- */
+  .s8 h2{font-size:10.5vw;max-width:90vw;left:5vw;top:10vh}
+  .notes{flex-direction:column;align-items:center;bottom:5vh;gap:2.2vh;padding:0 4vw}
+  .note{width:84vw}
+  .note h3{height:auto;padding:3vw 4vw;font-size:15px}
+  .note p{padding:3vw 4vw;font-size:13px}
+
+  /* --- S9 --- */
+  .s9 .big{font-size:11.5vw;top:18vh}
+  .s9 form{top:52vh}
+  .foot{font-size:13px}
+}
+
+/* ---------- موبايل صغير (حتى 480px) ---------- */
+@media(max-width:480px){
+  nav .logo{font-size:20px}
+  .btn{height:34px;padding:0 12px;font-size:12.5px}
+  .pillbtn{height:50px;font-size:17px;padding:0 26px}
+
+  .tabs button{font-size:13px;padding:0 1vw}
+  .note h3{font-size:14px}
+
+  .s9 form{flex-direction:column;top:46vh;gap:12px}
+  .s9 input{flex:none;width:100%;height:50px}
+  .s9 .pillbtn{width:100%}
+}
+
+/* ---------- موبايل صغير جداً (حتى 360px) ---------- */
+@media(max-width:360px){
+  .acts .btn:not(.fill){display:none}
+  .tabs button{font-size:12px}
+  .note p{font-size:12px}
+  .s7 .txt{font-size:15px}
+}
+
+/* ---------- شاشات قصيرة (لاندسكيب موبايل) ---------- */
+@media(max-height:560px) and (orientation:landscape){
+  .scene{min-height:0}
+  nav{padding-block:8px}
+  .btn{height:32px;font-size:13px}
+  .pillbtn{height:44px;font-size:16px}
+  .s1 .tag{display:none}
+}
+
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .rise,.slot{opacity:1;scale:1}
+  #heroRain{display:none}
+}
+/* DONO integration: navigation links, scoped to designer landing. */
+nav .dono-nav-shop{font-family:'Work Sans',sans-serif;font-size:clamp(12px,1.05vw,15px);font-weight:800;letter-spacing:.045em;text-transform:uppercase;border-bottom:2px solid currentColor;padding:4px 0;margin-left:auto;margin-right:clamp(4px,2vw,30px)}
+.dono-shop-link{position:relative;text-align:center;z-index:2;margin-top:16px;font:700 16px 'Work Sans',sans-serif;color:var(--g4)}
+.dono-shop-link a{text-decoration:underline;text-underline-offset:5px}
+@media(max-width:560px){nav .dono-nav-shop{font-size:11px;margin-right:5px}nav .acts{gap:5px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}nav .logo{animation:none!important} .scene .rise{transition:none!important}}
+
+/* DONO ligature-inspired wordmark */
+.logo.dono-intertwined{display:inline-flex;align-items:center;gap:8px;white-space:nowrap;letter-spacing:-.07em}.logo.dono-intertwined img{width:33px;height:33px}.logo.dono-intertwined span{font-family:'Archivo',sans-serif;font-weight:900;font-style:normal;transition:font-family .2s,transform .2s;font-variant-ligatures:common-ligatures}.logo.dono-intertwined:hover span{font-family:'Playfair Display',Georgia,serif;font-style:italic;transform:skewX(-7deg)}

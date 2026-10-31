@@ -1,0 +1,9 @@
+When overlaying the CODE-ONLY ZIP over an existing DONO v2 folder, delete these retired OPTIONAL Admin Activity Logs files from the old folder:
+
+frontend/admin/logs.html
+frontend/assets/js/admin/admin-logs.js
+backend/app/Controllers/AdminLogController.php
+backend/app/services/AdminLogger.php
+backend/database/migration_admin_logs.sql
+
+DO NOT delete any actual MySQL database table. No Admin Logs migration is needed in DONO v3.

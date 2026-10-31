@@ -1,0 +1,31 @@
+/* New admin pages only; visual language matches dono-product-details reference. */
+.admin-integrated-header{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:32px}
+.admin-integrated-header h2{font:900 clamp(27px,3.8vw,46px)/1 'Archivo',sans-serif;letter-spacing:-.06em;margin:6px 0 8px}
+.admin-integrated-header p{margin:0;color:#4b6657;line-height:1.6}
+.admin-integrated-eyebrow{font-size:12px;font-weight:900;color:#416B4C;letter-spacing:.15em;text-transform:uppercase}
+.admin-integrated-action{background:#AEDCB3!important;color:#1D3024!important;border:2px solid #1D3024!important;border-radius:12px!important;padding:13px 20px!important;font-weight:900!important;box-shadow:4px 4px 0 #1D3024;cursor:pointer}
+.admin-integrated-action:hover{transform:translate(-2px,-2px)}
+.admin-integrated-panel{border:2px solid #1D3024;background:#fff;border-radius:20px;padding:clamp(16px,2.7vw,30px);box-shadow:6px 6px 0 #DFE8DC}
+.admin-integrated-toolbar{display:flex;gap:16px;flex-wrap:wrap;align-items:end;margin-bottom:22px}
+.admin-integrated-toolbar label{font-weight:800;font-size:12px;display:flex;flex-direction:column;gap:8px;flex:1;min-width:165px}
+.admin-integrated-toolbar input,.admin-integrated-toolbar select,.admin-integrated-form input,.admin-integrated-form textarea{border:2px solid #1D3024;border-radius:10px;background:#fff;min-height:44px;padding:9px 12px;color:#1D3024;width:100%}
+.admin-integrated-table-wrap{overflow:auto}
+.admin-integrated-table{width:100%;text-align:left;min-width:680px;border-collapse:collapse!important}
+.admin-integrated-table th,.admin-integrated-table td{padding:15px 16px;text-align:left;font-size:13px}
+.admin-integrated-table th{background:#EAF3E8;color:#1D3024;text-transform:uppercase;font-size:11px;letter-spacing:.065em}
+.admin-integrated-table tr:hover td{background:#f8fff5}
+.admin-integrated-table td{border-bottom:1px solid #e6eee7;overflow-wrap:anywhere}
+.admin-integrated-table button{border:2px solid #1D3024;border-radius:9px;background:#F9FBF9;color:#1D3024;padding:8px 12px;cursor:pointer;font-weight:800}
+.admin-integrated-table button:disabled{opacity:.5;cursor:not-allowed}
+.admin-integrated-form{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:25px;padding:20px;background:#F9FBF9;border:2px dashed #1D3024;border-radius:16px}
+.admin-integrated-form label{display:flex;flex-direction:column;gap:6px;font-weight:800;font-size:13px}
+.admin-integrated-form label:nth-child(3),.admin-integrated-form .admin-form-actions{grid-column:1/-1}
+.admin-form-actions{display:flex;align-items:center;gap:10px}
+.admin-form-actions button{padding:11px 18px;border:2px solid #1D3024;border-radius:12px;font-weight:900;background:#AEDCB3;cursor:pointer}
+.admin-form-actions button[type=button]{background:#fff}
+.admin-integrated-note{margin:10px 0 20px;font-size:13px;font-weight:700;min-height:20px;line-height:1.5}
+.admin-integrated-note.error{color:#a21f32}
+.admin-integrated-note.success{color:#30553A}
+@media(max-width:680px){.admin-integrated-form{grid-template-columns:1fr}.admin-integrated-header{align-items:flex-start}.admin-integrated-toolbar{display:block}.admin-integrated-toolbar label{margin-bottom:12px}}
+@media(prefers-reduced-motion:reduce){.admin-layout *, .admin-layout *:before,.admin-layout *:after{transition:none!important;animation:none!important}}
+
