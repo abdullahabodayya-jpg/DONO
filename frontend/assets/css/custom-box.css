@@ -1,0 +1,565 @@
+
+
+:root {
+    --primary: #416B4C;
+    --primary-hover: #34563D;
+
+    --dark-title: #1D3024;
+    --dark-text: #203529;
+
+    --light-bg: #EAF3E8;
+    --border-color: #DFE8DC;
+
+    --body-bg: #FFFFFF;
+    --card-bg: #FFFFFF;
+
+    --text-muted: #777777;
+    --text-desc: #687469;
+}
+
+/* ==============================
+   Reset
+============================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background: var(--body-bg);
+    color: var(--dark-text);
+    padding-bottom: 110px;
+}
+
+/* ==============================
+   Main Container
+============================== */
+
+.container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+/* ==============================
+   Stepper
+============================== */
+
+.stepper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+
+    max-width: 700px;
+    margin: 0 auto 40px;
+}
+
+.stepper::before {
+    content: '';
+    position: absolute;
+
+    top: 20px;
+    left: 0;
+    right: 0;
+
+    height: 2px;
+    background: var(--border-color);
+    z-index: 1;
+}
+
+.step {
+    position: relative;
+    z-index: 2;
+
+    background: var(--body-bg);
+    padding: 0 15px;
+    text-align: center;
+}
+
+.step-circle {
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin: 0 auto 8px;
+
+    border: 2px solid var(--border-color);
+    border-radius: 50%;
+
+    background: var(--card-bg);
+    color: var(--text-desc);
+
+    font-size: 15px;
+    font-weight: 600;
+
+    transition: 0.3s ease;
+}
+
+.step.active .step-circle {
+    border-color: var(--primary);
+    background: var(--light-bg);
+    color: var(--primary);
+}
+
+.step.completed .step-circle {
+    border-color: var(--primary);
+    background: var(--primary);
+    color: #FFFFFF;
+}
+
+.step-label {
+    font-size: 14px;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.step.active .step-label,
+.step.completed .step-label {
+    color: var(--dark-title);
+    font-weight: 600;
+}
+
+/* ==============================
+   Step Description
+============================== */
+
+.step-hint {
+    text-align: center;
+    margin-bottom: 25px;
+
+    color: var(--text-desc);
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.badge-counter {
+    display: inline-block;
+
+    background: var(--light-bg);
+    color: var(--primary);
+
+    padding: 5px 12px;
+    margin-left: 8px;
+
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* ==============================
+   Category Filters
+============================== */
+
+.category-filters {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+
+    margin-bottom: 30px;
+}
+
+.filter-btn {
+    padding: 9px 20px;
+
+    border: 1px solid var(--border-color);
+    border-radius: 25px;
+
+    background: var(--card-bg);
+    color: var(--dark-text);
+
+    font-size: 14px;
+    font-weight: 500;
+
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.filter-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.filter-btn.active {
+    background: var(--primary);
+    color: #FFFFFF;
+    border-color: var(--primary);
+}
+
+/* ==============================
+   Products Grid
+============================== */
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 24px;
+}
+
+/* ==============================
+   Product Cards
+============================== */
+
+.card {
+    position: relative;
+
+    padding: 16px;
+
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+
+    background: var(--card-bg);
+    text-align: center;
+
+    cursor: pointer;
+    transition: 0.25s ease;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    border-color: var(--primary);
+
+    box-shadow: 0 5px 18px rgba(65, 107, 76, 0.10);
+}
+
+.card.selected {
+    border: 2px solid var(--primary);
+    background: var(--light-bg);
+}
+
+/* Product Images */
+
+.card-img-wrapper {
+    height: 190px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+
+    margin-bottom: 14px;
+
+    background: #F7F9F6;
+    border-radius: 10px;
+}
+
+.card-img-wrapper img {
+    max-width: 85%;
+    max-height: 85%;
+    object-fit: contain;
+}
+
+/* Product Information */
+
+.card-title {
+    margin-bottom: 6px;
+
+    color: var(--dark-title);
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.card-price {
+    margin-bottom: 8px;
+
+    color: var(--primary);
+    font-size: 14px;
+    font-weight: 700;
+}
+
+/* ==============================
+   Quantity Controls
+============================== */
+
+.qty-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+
+    margin-top: 12px;
+}
+
+.qty-btn {
+    width: 32px;
+    height: 32px;
+
+    border: 1px solid var(--primary);
+    border-radius: 50%;
+
+    background: #FFFFFF;
+    color: var(--primary);
+
+    font-size: 17px;
+    font-weight: bold;
+
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.qty-btn:hover {
+    background: var(--primary);
+    color: #FFFFFF;
+}
+
+.qty-val {
+    min-width: 20px;
+
+    color: var(--dark-title);
+    font-size: 15px;
+    font-weight: 600;
+}
+
+/* ==============================
+   Gift Message
+============================== */
+
+.message-section {
+    max-width: 600px;
+    margin: 35px auto 0;
+    padding: 22px;
+
+    background: #F9FBF9;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+}
+
+.message-section label {
+    display: block;
+    margin-bottom: 10px;
+
+    color: var(--dark-title);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.message-section textarea {
+    width: 100%;
+    height: 110px;
+
+    padding: 13px;
+
+    border: 1px solid var(--border-color);
+    border-radius: 9px;
+
+    background: #FFFFFF;
+    color: var(--dark-text);
+
+    font-size: 14px;
+    outline: none;
+    resize: vertical;
+
+    transition: 0.2s ease;
+}
+
+.message-section textarea:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(65, 107, 76, 0.12);
+}
+
+/* ==============================
+   Bottom Summary Bar
+============================== */
+
+.bottom-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    z-index: 100;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+
+    padding: 16px 40px;
+
+    background: var(--card-bg);
+    border-top: 1px solid var(--border-color);
+
+    box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.04);
+}
+
+.bar-info {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 25px;
+
+    color: var(--dark-text);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* Clear Button */
+
+.clear-btn {
+    border: none;
+    background: transparent;
+
+    color: var(--text-muted);
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.clear-btn:hover {
+    color: #B23D3D;
+}
+
+/* Bottom Actions */
+
+.bar-actions {
+    display: flex;
+    gap: 12px;
+}
+
+/* Secondary Button */
+
+.btn-secondary {
+    padding: 12px 28px;
+
+    border: 1px solid var(--primary);
+    border-radius: 30px;
+
+    background: #FFFFFF;
+    color: var(--primary);
+
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.btn-secondary:hover {
+    background: var(--light-bg);
+}
+
+/* Primary Button */
+
+.btn-primary {
+    padding: 12px 35px;
+
+    border: none;
+    border-radius: 30px;
+
+    background: var(--primary);
+    color: #FFFFFF;
+
+    font-size: 15px;
+    font-weight: 600;
+
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.btn-primary:hover {
+    background: var(--primary-hover);
+}
+
+/* ==============================
+   Utilities
+============================== */
+
+.hidden {
+    display: none !important;
+}
+
+/* ==============================
+   Responsive
+============================== */
+
+@media (max-width: 700px) {
+
+    .container {
+        margin: 25px auto;
+        padding: 0 15px;
+    }
+
+    .stepper {
+        gap: 5px;
+    }
+
+    .step {
+        padding: 0 8px;
+    }
+
+    .step-label {
+        font-size: 12px;
+    }
+
+    .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+    }
+
+    .card {
+        padding: 10px;
+    }
+
+    .card-img-wrapper {
+        height: 145px;
+    }
+
+    .bottom-bar {
+        padding: 14px 16px;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .bar-info {
+        width: 100%;
+        justify-content: space-between;
+        gap: 10px;
+        font-size: 12px;
+    }
+
+    .bar-actions {
+        width: 100%;
+    }
+
+    .bar-actions button {
+        flex: 1;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+        padding: 11px 20px;
+    }
+
+    body {
+        padding-bottom: 145px;
+    }
+}
+
+@media (max-width: 380px) {
+
+    .step-label {
+        font-size: 11px;
+    }
+
+    .step {
+        padding: 0 4px;
+    }
+
+    .card-img-wrapper {
+        height: 120px;
+    }
+
+    .bar-info {
+        font-size: 11px;
+    }
+}
