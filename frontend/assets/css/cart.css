@@ -577,6 +577,6 @@ body {
 
 /* Allow scrolling on the Cart page */
 body {
-    overflow-x: hidden;
-    overflow-y: auto;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
 }

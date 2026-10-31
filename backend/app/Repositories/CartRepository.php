@@ -7,13 +7,11 @@ final class CartRepository
 {
     private PDO $db;
 
-    // Store the database connection
     public function __construct(PDO $db)
     {
         $this->db = $db;
     }
 
-    // Get the user's active cart
     public function getCartByUserId(int $userId): array|false
     {
         $sql = "SELECT * FROM orders
@@ -26,7 +24,6 @@ final class CartRepository
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    // Create a new cart for the user
     public function createCart(int $userId): int
     {
         $orderNumber = 'DONO-' . bin2hex(random_bytes(12));
@@ -45,7 +42,6 @@ final class CartRepository
         return (int) $this->db->lastInsertId();
     }
 
-    // Add a new product to the cart
     public function addCartItem(
         int $orderId,
         int $productId,
@@ -62,21 +58,25 @@ final class CartRepository
         $sql = "INSERT INTO order_items
                 (order_id, product_id, product_name,
                  unit_price, quantity, line_total)
-                VALUES (?, ?, ?, ?, ?, ?)";
+                SELECT id, ?, ?, ?, ?, ?
+                FROM orders
+                WHERE id = ?
+                AND status = 'cart'";
 
         $stmt = $this->db->prepare($sql);
 
-        return $stmt->execute([
-            $orderId,
+        $stmt->execute([
             $productId,
             $productName,
             $unitPrice,
             $quantity,
-            $lineTotal
+            $lineTotal,
+            $orderId
         ]);
+
+        return $stmt->rowCount() > 0;
     }
 
-    // Get a specific product from the cart
     public function getCartItem(int $orderId, int $productId): array|false
     {
         $sql = "SELECT * FROM order_items
@@ -93,7 +93,6 @@ final class CartRepository
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    // Update the quantity and price of a cart item
     public function updateCartItem(
         int $orderId,
         int $productId,
@@ -111,25 +110,36 @@ final class CartRepository
                     unit_price = ?,
                     line_total = ?
                 WHERE order_id = ?
-                AND product_id = ?";
+                AND product_id = ?
+                AND EXISTS (
+                    SELECT 1 FROM orders
+                    WHERE orders.id = order_items.order_id
+                    AND orders.status = 'cart'
+                )";
 
         $stmt = $this->db->prepare($sql);
 
-        return $stmt->execute([
+        $stmt->execute([
             $quantity,
             $unitPrice,
             $lineTotal,
             $orderId,
             $productId
         ]);
+
+        return $stmt->rowCount() > 0;
     }
 
-    // Remove a product from the cart
     public function removeCartItem(int $orderId, int $productId): bool
     {
         $sql = "DELETE FROM order_items
                 WHERE order_id = ?
-                AND product_id = ?";
+                AND product_id = ?
+                AND EXISTS (
+                    SELECT 1 FROM orders
+                    WHERE orders.id = order_items.order_id
+                    AND orders.status = 'cart'
+                )";
 
         $stmt = $this->db->prepare($sql);
 
@@ -141,7 +151,6 @@ final class CartRepository
         return $stmt->rowCount() > 0;
     }
 
-    // Get all cart items with product details
     public function getCartItems(int $orderId): array
     {
         $sql = "SELECT
@@ -169,7 +178,6 @@ final class CartRepository
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // Recalculate the cart subtotal and total
     public function updateCartTotal(int $orderId): bool
     {
         $sql = "UPDATE orders
@@ -188,10 +196,12 @@ final class CartRepository
 
         $stmt = $this->db->prepare($sql);
 
-        return $stmt->execute([
+        $stmt->execute([
             $orderId,
             $orderId,
             $orderId
         ]);
+
+        return $stmt->rowCount() > 0;
     }
 }
