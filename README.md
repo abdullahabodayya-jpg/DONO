@@ -140,11 +140,14 @@ The SQL files are located in `backend/database/`:
 - `schema.sql` — database schema
 - `seeders.sql` — seed data
 - `migration_stripe_refunds.sql` — Stripe refund-related migration
+## Team Members
 
-## Team Project
-
-DONO is a collaborative e-commerce project developed using Git and GitHub, with work organized across customer-facing and administrative features.
-
----
+| Name | Role |
+|---|---|
+| Tamara qweder | Product Owner |
+| Abdullah Abu Dayyeh | Scrum Master |
+| Mousa Joudeh | Developer |
+| Anas Abu Alsoud | Developer |
+| Leen Al-Khateeb | Developer |
 
 **DONO — Make gifting easier.**
