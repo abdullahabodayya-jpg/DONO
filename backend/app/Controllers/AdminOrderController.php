@@ -11,23 +11,25 @@ class AdminOrderController
         $this->orders = new AdminOrderRepository($pdo);
     }
 
-    // Check admin permission
-    private function checkAdmin(): bool
-    {
-        if (
-            !isset($_SESSION['user']) ||
-            $_SESSION['user']['role'] !== 'admin'
-        ) {
-            http_response_code(403);
-            echo json_encode([
-                'success' => false,
-                'message' => 'Access denied'
-            ]);
-            return false;
-        }
 
-        return true;
+private function checkAdmin(): bool
+{
+    if (
+        !isset($_SESSION['user']) ||
+        ($_SESSION['user']['role'] ?? null) !== 'admin'
+    ) {
+        http_response_code(403);
+
+        echo json_encode([
+            'success' => false,
+            'message' => 'Access denied'
+        ]);
+
+        return false;
     }
+
+    return true;
+}
 
     // Get all orders
     public function getAllOrders(): void

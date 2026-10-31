@@ -260,3 +260,8 @@ body {
         transition: none;
     }
 }
+/* Allow scrolling on the Wishlist page */
+body {
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+}

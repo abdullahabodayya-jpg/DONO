@@ -1,11 +1,7 @@
-
-/* DONO | Shopping Cart */
-
-// API URLs
 const cartApi = "/DONO-repo/backend/public/api/cart";
 const couponApi = "/DONO-repo/backend/public/api/coupons/validate";
 
-// Page Elements
+
 const productsBox = document.getElementById("cart-products");
 const subtotalBox = document.getElementById("cart-subtotal");
 const totalBox = document.getElementById("cart-total");
@@ -19,7 +15,7 @@ const couponMessage = document.getElementById("coupon-message");
 const discountRow = document.getElementById("discount-row");
 const discountBox = document.getElementById("cart-discount");
 
-// Hide old demo controls
+
 const restoreBtn = document.getElementById("restore-products-btn");
 const undoBox = document.getElementById("cart-undo");
 
@@ -35,7 +31,7 @@ let cartSubtotal = 0;
 let couponCode = "";
 let requestVersion = 0;
 
-// Send request to backend
+
 async function apiRequest(url, method = "GET", body = null) {
     const options = {
         method,
@@ -60,13 +56,13 @@ async function apiRequest(url, method = "GET", body = null) {
     return result;
 }
 
-// Show coupon message
+
 function showCouponMessage(message, type = "") {
     couponMessage.textContent = message;
     couponMessage.className = type;
 }
 
-// Validate coupon using backend
+
 async function validateCoupon(code) {
     const version = ++requestVersion;
 
@@ -115,7 +111,7 @@ async function validateCoupon(code) {
     }
 }
 
-// Load cart from backend
+
 async function loadCart() {
     try {
         const result = await apiRequest(cartApi);
@@ -145,7 +141,7 @@ async function loadCart() {
             const item = document.createElement("article");
             item.className = "cart-item";
 
-            // Product image
+
             const image = document.createElement("img");
 
             image.src =
@@ -153,7 +149,7 @@ async function loadCart() {
 
             image.alt = product.product_name;
 
-            // Product details
+
             const details = document.createElement("div");
             details.className = "cart-item-details";
 
@@ -168,32 +164,28 @@ async function loadCart() {
 
             price.textContent =
                 Number(product.unit_price).toFixed(2) + " JOD";
-
-            // Product actions
+  
             const actions = document.createElement("div");
             actions.className = "cart-item-actions";
 
             const quantity = document.createElement("div");
             quantity.className = "quantity-control";
-
-            // Decrease quantity
+ 
             const minus = document.createElement("button");
             minus.type = "button";
             minus.className = "quantity-btn";
             minus.textContent = "−";
-
-            // Current quantity
+ 
             const number = document.createElement("span");
             number.className = "quantity-number";
             number.textContent = product.quantity;
-
-            // Increase quantity
+ 
             const plus = document.createElement("button");
             plus.type = "button";
             plus.className = "quantity-btn";
             plus.textContent = "+";
 
-            // Remove product
+         
             const remove = document.createElement("button");
             remove.type = "button";
             remove.className = "remove-btn";
@@ -232,8 +224,7 @@ async function loadCart() {
             item.append(image, details);
             productsBox.appendChild(item);
         });
-
-        // Revalidate coupon after cart changes
+ 
         if (couponCode && cartSubtotal > 0) {
             await validateCoupon(couponCode);
 
@@ -255,7 +246,6 @@ async function loadCart() {
     }
 }
 
-// Update product quantity
 async function changeQuantity(productId, quantity) {
     try {
         await apiRequest(cartApi + "/items", "PUT", {
@@ -270,7 +260,6 @@ async function changeQuantity(productId, quantity) {
     }
 }
 
-// Remove product from cart
 async function removeProduct(productId) {
     try {
         await apiRequest(cartApi + "/items", "DELETE", {
@@ -284,7 +273,7 @@ async function removeProduct(productId) {
     }
 }
 
-// Apply coupon
+
 couponBtn.onclick = function() {
     const code = couponInput.value.trim();
 
@@ -303,5 +292,5 @@ couponBtn.onclick = function() {
     validateCoupon(code);
 };
 
-// Load cart when page opens
+
 loadCart();

@@ -1,7 +1,4 @@
 
-/* =====================================
-   DONO | Shopping Cart
-===================================== */
 
 * {
     margin: 0;
@@ -15,7 +12,7 @@ body {
     color: #253329;
 }
 
-/* Main Container */
+
 
 .cart-page {
     max-width: 1200px;
@@ -23,7 +20,7 @@ body {
     padding: 60px 30px;
 }
 
-/* Header */
+
 
 .cart-header {
     margin-bottom: 45px;
@@ -41,7 +38,7 @@ body {
     line-height: 1.6;
 }
 
-/* Cart Layout */
+
 
 .cart-content {
     display: grid;
@@ -50,7 +47,6 @@ body {
     align-items: start;
 }
 
-/* Cart Items */
 
 .cart-items {
     min-width: 0;
@@ -62,7 +58,7 @@ body {
     margin-bottom: 20px;
 }
 
-/* Restore Button */
+
 
 #restore-products-btn {
     display: inline-block;
@@ -198,7 +194,6 @@ body {
     color: #263b2b;
 }
 
-/* Remove Button */
 
 .remove-btn {
     background: transparent;
@@ -213,7 +208,7 @@ body {
     color: #a94242;
 }
 
-/* Hidden Elements */
+
 
 .undo-message[hidden],
 .empty-cart[hidden],
@@ -221,7 +216,7 @@ body {
     display: none;
 }
 
-/* Undo Message */
+
 
 .undo-message {
     display: flex;
@@ -247,7 +242,6 @@ body {
     cursor: pointer;
 }
 
-/* Order Summary */
 
 .order-summary {
     background-color: #f8faf7;
@@ -266,7 +260,7 @@ body {
     margin-bottom: 28px;
 }
 
-/* Summary Rows */
+
 
 .summary-row {
     display: flex;
@@ -290,9 +284,7 @@ body {
     margin: 25px 0;
 }
 
-/* =====================================
-   Promo Code Section
-===================================== */
+
 
 .order-summary .coupon-section {
     width: 100%;
@@ -307,7 +299,7 @@ body {
     font-weight: 700;
 }
 
-/* Input and Apply Button Together */
+
 
 .order-summary .coupon-form {
     display: flex;
@@ -325,7 +317,6 @@ body {
     border-color: #416b4c;
 }
 
-/* Promo Input */
 
 .order-summary .coupon-form input {
     display: block;
@@ -350,7 +341,7 @@ body {
     color: #929b92;
 }
 
-/* Apply Button */
+
 
 .order-summary #apply-coupon-btn {
     display: flex;
@@ -384,7 +375,7 @@ body {
     cursor: not-allowed;
 }
 
-/* Coupon Message */
+
 
 #coupon-message {
     margin-top: 10px;
@@ -404,13 +395,13 @@ body {
     color: #c76b6b;
 }
 
-/* Discount */
+
 
 #cart-discount {
     color: #416b4c;
 }
 
-/* Total */
+
 
 .summary-total {
     margin-bottom: 25px;
@@ -427,7 +418,6 @@ body {
     color: #416b4c;
 }
 
-/* Checkout Button */
 
 .checkout-btn {
     width: 100%;
@@ -456,7 +446,7 @@ body {
     opacity: 0.7;
 }
 
-/* Summary Note */
+
 
 .summary-note {
     font-size: 12px;
@@ -466,7 +456,6 @@ body {
     margin-top: 15px;
 }
 
-/* Empty Cart */
 
 .empty-cart {
     padding: 55px 20px;
@@ -488,7 +477,6 @@ body {
     line-height: 1.6;
 }
 
-/* Animation */
 
 @keyframes fadeUp {
     from {
@@ -502,7 +490,6 @@ body {
     }
 }
 
-/* Tablet */
 
 @media (max-width: 950px) {
     .cart-content {
@@ -515,7 +502,7 @@ body {
     }
 }
 
-/* Mobile */
+
 
 @media (max-width: 600px) {
     .cart-page {
@@ -575,7 +562,6 @@ body {
     }
 }
 
-/* Reduced Motion */
 
 @media (prefers-reduced-motion: reduce) {
     .cart-item,
@@ -587,4 +573,10 @@ body {
     .order-summary {
         animation: none;
     }
+}
+
+/* Allow scrolling on the Cart page */
+body {
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
 }

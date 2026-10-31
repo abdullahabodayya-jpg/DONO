@@ -1,106 +1,111 @@
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
 body {
-    font-family: Arial, sans-serif;
-    background: #ffffff;
-    color: #253329;
-}
-
-button,
-input,
-select {
-    font: inherit;
+    background: var(--color-background);
+    color: var(--color-text);
+    font-family: var(--font-body);
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 .admin-orders-page {
+    width: 100%;
     max-width: 1600px;
     margin: 0 auto;
-    padding: 60px 40px;
+    padding: 64px 40px 90px;
 }
 
-/* Header */
-
 .page-header {
-    margin-bottom: 35px;
+    margin-bottom: 36px;
+    animation: fadeUp 0.6s ease both;
+}
+
+.page-eyebrow {
+    display: inline-block;
+    margin-bottom: 14px;
+    color: var(--color-success);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.8px;
 }
 
 .page-header h1 {
-    font-size: 42px;
-    color: #1d3024;
     margin-bottom: 12px;
+    color: var(--color-primary);
+    font-size: clamp(34px, 4vw, 48px);
+    letter-spacing: -1.5px;
 }
 
 .page-header p {
-    color: #777;
-    line-height: 1.6;
+    margin-bottom: 0;
+    color: var(--color-text-muted);
+    font-size: 15px;
 }
-
-/* Search and Filter */
 
 .orders-toolbar {
     display: flex;
-    gap: 20px;
     align-items: stretch;
+    gap: 18px;
     margin-bottom: 25px;
+    animation: fadeUp 0.65s ease both;
 }
 
 .orders-toolbar input {
     flex: 1;
     min-width: 0;
     padding: 14px 18px;
-    border: 1px solid #dfe8dc;
-    border-radius: 12px;
-    background: #ffffff;
-    color: #253329;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    color: var(--color-text);
+    font-size: 14px;
     outline: none;
+    transition: border-color var(--transition-fast);
 }
 
-.orders-toolbar input:focus {
-    border-color: #416b4c;
+.orders-toolbar input::placeholder {
+    color: var(--color-text-muted);
+}
+
+.orders-toolbar input:focus,
+.filter-box:focus-within {
+    border-color: var(--color-primary);
 }
 
 .filter-box {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 0 14px;
-    border: 1px solid #dfe8dc;
-    border-radius: 12px;
-    background: #ffffff;
+    padding: 0 16px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    transition: border-color var(--transition-fast);
 }
 
 .filter-box label {
+    color: var(--color-primary);
     font-size: 13px;
-    font-weight: bold;
-    color: #416b4c;
+    font-weight: 700;
 }
 
 .filter-box select {
     min-width: 145px;
-    padding: 14px 22px 14px 4px;
+    padding: 14px 24px 14px 4px;
     border: none;
     outline: none;
     background: transparent;
-    color: #253329;
+    color: var(--color-text);
+    font-size: 14px;
     cursor: pointer;
 }
 
-.filter-box:focus-within {
-    border-color: #416b4c;
-}
-
-/* Table */
-
 .orders-table-wrapper {
     overflow-x: auto;
-    border: 1px solid #edf0eb;
-    border-radius: 18px;
-    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.04);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    animation: fadeUp 0.7s ease both;
 }
 
 .orders-table {
@@ -140,32 +145,38 @@ select {
 }
 
 .orders-table thead {
-    background: #eaf3e8;
+    background: #edf5ed;
 }
 
 .orders-table th {
     padding: 20px 16px;
-    color: #263b2b;
-    font-size: 14px;
+    color: var(--color-primary);
+    font-size: 13px;
+    font-weight: 700;
     white-space: nowrap;
 }
 
 .orders-table td {
     padding: 20px 16px;
-    border-top: 1px solid #edf0eb;
+    border-top: 1px solid var(--color-border);
+    color: var(--color-text);
     font-size: 14px;
     vertical-align: middle;
     overflow-wrap: anywhere;
 }
 
+.orders-table tbody tr {
+    transition: background-color var(--transition-fast);
+}
+
 .orders-table tbody tr:hover {
-    background: #fafcf9;
+    background: var(--color-background);
 }
 
 .order-number,
 .customer-name {
-    font-weight: bold;
-    color: #203529;
+    color: var(--color-primary);
+    font-weight: 700;
 }
 
 .order-number {
@@ -173,12 +184,10 @@ select {
 }
 
 .order-total {
-    font-weight: bold;
-    color: #416b4c;
+    color: var(--color-primary);
+    font-weight: 700;
     white-space: nowrap;
 }
-
-/* Sorting */
 
 .sort-btn {
     display: inline-flex;
@@ -188,22 +197,22 @@ select {
     padding: 6px 0;
     border: none;
     background: transparent;
-    color: #263b2b;
-    font-size: 14px;
-    font-weight: bold;
+    color: var(--color-primary);
+    font-size: 13px;
+    font-weight: 700;
     cursor: pointer;
     white-space: nowrap;
 }
 
 .sort-btn:hover,
 .sort-btn.active {
-    color: #416b4c;
+    color: var(--color-success);
 }
 
 .sort-btn:focus-visible {
-    outline: 2px solid #416b4c;
+    outline: 2px solid var(--color-primary);
     outline-offset: 3px;
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
 }
 
 .sort-icon {
@@ -212,70 +221,71 @@ select {
     flex-shrink: 0;
     text-align: center;
     font-size: 16px;
-    font-weight: normal;
-    color: #7b9680;
+    font-weight: 400;
+    color: var(--color-text-muted);
 }
 
 .sort-btn.active .sort-icon {
-    color: #416b4c;
+    color: var(--color-success);
 }
 
-/* Status */
-
 .order-status {
-    display: inline-block;
-    padding: 8px 12px;
-    border-radius: 30px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 14px;
+    border-radius: var(--radius-full);
     font-size: 12px;
-    font-weight: bold;
+    font-weight: 700;
     text-transform: capitalize;
     white-space: nowrap;
 }
 
 .status-pending {
-    background: #fff0cc;
-    color: #956200;
+    background: #fff3d6;
+    color: #946200;
 }
 
 .status-confirmed {
-    background: #e0f3e3;
-    color: #28723d;
+    background: #e5f5e9;
+    color: var(--color-success);
 }
 
 .status-cancelled {
-    background: #ffe2e2;
-    color: #b23d3d;
+    background: #fde8e8;
+    color: var(--color-error);
 }
 
-/* View Button */
-
 .view-btn {
-    padding: 10px 18px;
-    background: #416b4c;
-    color: #ffffff;
+    padding: 10px 20px;
+    background: var(--color-primary);
+    color: var(--color-white);
     border: none;
-    border-radius: 10px;
-    font-weight: bold;
+    border-radius: var(--radius-full);
+    font-size: 13px;
+    font-weight: 600;
     cursor: pointer;
-    transition: background 0.3s ease;
+    transition:
+        background-color var(--transition-fast),
+        transform var(--transition-fast);
 }
 
 .view-btn:hover {
-    background: #30553a;
+    background: var(--color-primary-hover);
+    transform: translateY(-2px);
 }
-
-/* Pagination */
 
 .pagination-container {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
     gap: 20px;
     margin-top: 25px;
 }
 
 .orders-count {
-    color: #818781;
+    margin: 0;
+    color: var(--color-text-muted);
     font-size: 14px;
 }
 
@@ -287,17 +297,22 @@ select {
 
 .pagination button {
     min-width: 90px;
-    padding: 11px 15px;
-    border: 1px solid #dfe8dc;
-    border-radius: 10px;
-    background: #ffffff;
-    color: #416b4c;
+    padding: 11px 18px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    background: var(--color-surface);
+    color: var(--color-primary);
+    font-size: 13px;
+    font-weight: 600;
     cursor: pointer;
-    transition: background 0.2s ease;
+    transition:
+        background-color var(--transition-fast),
+        border-color var(--transition-fast);
 }
 
 .pagination button:hover:not(:disabled) {
-    background: #eaf3e8;
+    background: #edf5ed;
+    border-color: var(--color-primary);
 }
 
 .pagination button:disabled {
@@ -307,25 +322,22 @@ select {
 
 #page-info {
     min-width: 90px;
+    color: var(--color-text-muted);
+    font-size: 13px;
     text-align: center;
-    color: #687469;
-    font-size: 14px;
     white-space: nowrap;
 }
-
-/* Empty State */
 
 .no-orders[hidden] {
     display: none;
 }
 
 .no-orders {
-    padding: 35px;
+    padding: 40px;
+    margin: 0;
+    color: var(--color-text-muted);
     text-align: center;
-    color: #818781;
 }
-
-/* Modal */
 
 .modal-overlay[hidden] {
     display: none;
@@ -339,7 +351,8 @@ select {
     align-items: center;
     justify-content: center;
     padding: 20px;
-    background: rgba(18, 34, 23, 0.55);
+    background: rgba(0, 35, 19, 0.6);
+    backdrop-filter: blur(4px);
 }
 
 .order-modal {
@@ -347,35 +360,46 @@ select {
     max-width: 850px;
     max-height: 90vh;
     overflow-y: auto;
-    background: #ffffff;
-    border-radius: 20px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 20px 60px rgba(0, 52, 30, 0.18);
+    animation: modalAppear 0.25s ease both;
 }
 
 .modal-header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
     gap: 15px;
     padding: 25px 30px;
-    border-bottom: 1px solid #edf0eb;
+    border-bottom: 1px solid var(--color-border);
 }
 
 .modal-header h2 {
-    color: #203529;
+    margin: 0;
+    color: var(--color-primary);
     font-size: 24px;
 }
 
 .close-modal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
     border: none;
-    background: transparent;
-    color: #777;
-    font-size: 32px;
+    border-radius: 50%;
+    background: var(--color-background);
+    color: var(--color-text-muted);
+    font-size: 28px;
     cursor: pointer;
+    transition: background-color var(--transition-fast);
 }
 
 .close-modal:hover {
-    color: #203529;
+    background: #edf5ed;
+    color: var(--color-primary);
 }
 
 .modal-content {
@@ -390,9 +414,9 @@ select {
 }
 
 .details-column h3 {
-    font-size: 17px;
-    color: #203529;
     margin: 20px 0 15px;
+    color: var(--color-primary);
+    font-size: 17px;
 }
 
 .details-column h3:first-child {
@@ -400,59 +424,55 @@ select {
 }
 
 .details-column p {
-    font-size: 14px;
-    color: #687469;
-    line-height: 1.7;
     margin-bottom: 8px;
+    color: var(--color-text-muted);
+    font-size: 14px;
+    line-height: 1.7;
     overflow-wrap: anywhere;
 }
-
-/* Order Items */
 
 .modal-item {
     display: flex;
     justify-content: space-between;
     gap: 15px;
     padding: 13px 0;
-    border-bottom: 1px solid #edf0eb;
+    border-bottom: 1px solid var(--color-border);
 }
 
 .modal-item-name {
-    font-weight: bold;
-    color: #263b2b;
+    color: var(--color-text);
     font-size: 14px;
+    font-weight: 700;
 }
 
 .modal-item-quantity {
-    color: #888;
-    font-size: 13px;
     margin-top: 5px;
+    color: var(--color-text-muted);
+    font-size: 13px;
 }
 
 .modal-item-price {
-    color: #416b4c;
-    font-weight: bold;
-    white-space: nowrap;
+    color: var(--color-primary);
     font-size: 14px;
+    font-weight: 700;
+    white-space: nowrap;
 }
-
-/* Summary */
 
 .summary-row {
     display: flex;
     justify-content: space-between;
     gap: 15px;
     margin-bottom: 16px;
-    color: #687469;
+    color: var(--color-text-muted);
     font-size: 14px;
 }
 
 .summary-total {
-    border-top: 1px solid #dfe8dc;
     padding-top: 18px;
+    border-top: 1px solid var(--color-border);
+    color: var(--color-primary);
     font-size: 18px;
-    font-weight: bold;
-    color: #203529;
+    font-weight: 700;
 }
 
 .update-heading {
@@ -462,33 +482,34 @@ select {
 #modal-status {
     width: 100%;
     padding: 14px;
-    border: 1px solid #dfe8dc;
-    border-radius: 10px;
-    background: #ffffff;
-    color: #253329;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    color: var(--color-text);
     outline: none;
     cursor: pointer;
 }
 
 #modal-status:focus {
-    border-color: #416b4c;
+    border-color: var(--color-primary);
 }
 
 .save-btn {
     width: 100%;
     margin-top: 18px;
-    padding: 15px;
+    padding: 14px 24px;
     border: none;
-    border-radius: 10px;
-    background: #416b4c;
-    color: #ffffff;
-    font-weight: bold;
+    border-radius: var(--radius-full);
+    background: var(--color-primary);
+    color: var(--color-white);
+    font-size: 14px;
+    font-weight: 600;
     cursor: pointer;
-    transition: background 0.3s ease;
+    transition: background-color var(--transition-fast);
 }
 
-.save-btn:hover {
-    background: #30553a;
+.save-btn:hover:not(:disabled) {
+    background: var(--color-primary-hover);
 }
 
 .save-btn:disabled {
@@ -498,19 +519,51 @@ select {
 
 .status-message {
     margin-top: 12px;
-    color: #28723d !important;
-    font-weight: bold;
+    color: var(--color-success) !important;
+    font-weight: 600;
 }
 
-/* Responsive */
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes modalAppear {
+    from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@media (max-width: 900px) {
+    .admin-orders-page {
+        padding: 50px 24px 70px;
+    }
+
+    .orders-table {
+        min-width: 1000px;
+    }
+}
 
 @media (max-width: 700px) {
     .admin-orders-page {
-        padding: 35px 20px;
+        padding: 36px 16px 60px;
     }
 
     .page-header h1 {
-        font-size: 32px;
+        font-size: 34px;
     }
 
     .orders-toolbar,
@@ -529,14 +582,43 @@ select {
 
     .pagination {
         justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .modal-overlay {
+        padding: 12px;
     }
 
     .modal-content {
         grid-template-columns: 1fr;
+        gap: 20px;
         padding: 20px;
     }
 
     .modal-header {
         padding: 20px;
+    }
+
+    .modal-header h2 {
+        font-size: 21px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .page-header,
+    .orders-toolbar,
+    .orders-table-wrapper,
+    .order-modal {
+        animation: none;
+    }
+
+    .view-btn,
+    .pagination button,
+    .save-btn {
+        transition: none;
+    }
+
+    .view-btn:hover {
+        transform: none;
     }
 }
