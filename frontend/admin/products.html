@@ -24,7 +24,7 @@
         <!-- Admin Products CSS -->
         <link
             rel="stylesheet"
-            href="../assets/css/pages/admin-products.css"
+            href="../assets/css/pages/admin-products.css?v=20261101"
         />
 
         <!-- Lucide Icons -->
@@ -42,9 +42,9 @@
         <!-- Admin Products JavaScript -->
         <script
             type="module"
-            src="../assets/js/admin/admin-products.js"
+            src="../assets/js/admin/admin-products.js?v=20261101"
         ></script>
-<script type="module" src="../assets/js/admin/admin-guard.js"></script><link rel="stylesheet" href="../assets/css/admin-overview-unified.css"><script src="../assets/js/components/feedback.js" defer></script></head>
+<script type="module" src="../assets/js/admin/admin-guard.js"></script><link rel="stylesheet" href="../assets/css/admin-overview-unified.css?v=20261101-admin"><script src="../assets/js/components/feedback.js" defer></script><script defer src="../assets/js/admin/admin-table-sort.js?v=20261101"></script></head>
 
     <body>
         <!-- Admin Page -->
@@ -141,6 +141,8 @@
                                 </select>
                             </div>
                         </div>
+
+                        <p id="productTableNotice" class="admin-products-notice" role="status" hidden></p>
 
                         <!-- Products Table -->
                         <div class="admin-table-wrapper">
@@ -322,15 +324,6 @@
                             </select>
                         </div>
 
-                        <!-- Optional recipient age suitability (migration_product_age.sql) -->
-                        <div class="form-group">
-                            <label class="form-label" for="productAgeMin">Suggested age from</label>
-                            <input class="form-control" type="number" id="productAgeMin" min="0" max="120" placeholder="e.g. 13">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="productAgeMax">Suggested age to</label>
-                            <input class="form-control" type="number" id="productAgeMax" min="0" max="120" placeholder="e.g. 25">
-                        </div>
                         <div class="form-group admin-product-full-width">
                             <label
                                 class="form-label"
@@ -352,7 +345,7 @@
                         class="admin-product-form-note"
                         id="productImageNote"
                     >
-                        Product images can be uploaded after creating the product.
+                        After saving the product, the Images manager will open so you can upload photos.
                     </p>
 
                     <p

@@ -1,3 +1,4 @@
+import {requireAccount} from './components/auth-cta.js';
 /* DONO Custom Box — catalog-backed wizard, server-calculated pricing. */
 (() => {
   'use strict';
@@ -83,9 +84,9 @@
   }
   function productCards(role) {
     const items=group(role); if (!items.length) return '<p class="builder-note">No products are available for this step yet. Ask an admin to assign existing products in Custom Box Catalog. No database migration is needed.</p>';
-    return `<div class="builder-grid">${items.map(p=>{
+    return `<div class="builder-grid custom-box-items-grid" data-grid-role="${role}">${items.map(p=>{
       const id=Number(p.id); const qty=role==='box' ? (Number(state.box)===id?1:0) : Number(state.items[role]?.[id]||0);
-      return `<article class="builder-product ${qty?'selected':''}"><img src="${esc(photo(p.image_url))}" alt="${esc(p.name)}" loading="lazy"><div class="builder-product-info"><h3>${esc(p.name)}</h3><strong>${money(cents(p.price))}</strong><small>${Number(p.stock_quantity)} in stock</small>${role==='box'||role==='card' ? `<button type="button" data-role="${role}" data-id="${id}" data-action="toggle" aria-pressed="${!!qty}">${qty?'✓ Selected':'Select'}</button>` : `<div class="builder-qty"><button type="button" data-role="${role}" data-id="${id}" data-action="minus" aria-label="Remove one ${esc(p.name)}">−</button><span>${qty}</span><button type="button" data-role="${role}" data-id="${id}" data-action="plus" aria-label="Add one ${esc(p.name)}">+</button></div>`}</div></article>`;
+      return `<article class="builder-product ${qty?'selected':''}" data-card-role="${role}" data-card-id="${id}" tabindex="0" role="group" aria-label="${esc(p.name)}, ${money(cents(p.price))}${qty?', selected':''}"><img src="${esc(photo(p.image_url))}" alt="${esc(p.name)}" loading="lazy"><div class="builder-product-info"><h3>${esc(p.name)}</h3><strong>${money(cents(p.price))}</strong><small>${Number(p.stock_quantity)} in stock</small>${role==='box'||role==='card' ? `<button type="button" data-role="${role}" data-id="${id}" data-action="toggle" aria-pressed="${!!qty}">${qty?'✓ Selected':'Select'}</button>` : `<div class="builder-qty"><button type="button" data-role="${role}" data-id="${id}" data-action="minus" aria-label="Remove one ${esc(p.name)}">−</button><span>${qty}</span><button type="button" data-role="${role}" data-id="${id}" data-action="plus" aria-label="Add one ${esc(p.name)}">+</button></div>`}</div></article>`;
     }).join('')}</div>`;
   }
   const field = (label, name, value, opts={}) => `<div class="builder-field ${opts.full?'full':''}"><label for="box-${name}">${label}</label>${opts.options ? `<select id="box-${name}" data-field="${name}" data-section="${opts.section||'personalization'}">${opts.options.map(([k,v])=>`<option value="${esc(k)}" ${value===k?'selected':''}>${esc(v)}</option>`).join('')}</select>` : opts.textarea ? `<textarea id="box-${name}" data-field="${name}" data-section="${opts.section||'personalization'}" maxlength="${opts.max||500}">${esc(value)}</textarea>` : `<input id="box-${name}" data-field="${name}" data-section="${opts.section||'personalization'}" type="${opts.type||'text'}" maxlength="${opts.max||120}" value="${esc(value)}">`}${opts.note?`<small>${esc(opts.note)}</small>`:''}</div>`;
@@ -125,6 +126,24 @@
     $('builder-next').disabled=loading;
     $('builder-feedback').textContent='';
   }
+  // Whole card can be selected without interfering with quantity buttons.
+  $('builder-content').addEventListener('click',event=>{
+    if (event.target.closest('button, a, input, select, textarea, label')) return;
+    const card = event.target.closest('.builder-product[data-card-role]');
+    if (!card) return;
+    const role=card.dataset.cardRole, id=Number(card.dataset.cardId);
+    if (role==='box' || role==='card') {
+      const qty=role==='box' ? (Number(state.box)===id?1:0) : Number(state.items.card?.[id] || 0);
+      updateSelection(role,id,role==='box'?1:(qty?0:1));
+    } else {
+      const qty=Number(state.items[role]?.[id] || 0);
+      updateSelection(role,id,qty?0:1);
+    }
+  });
+  $('builder-content').addEventListener('keydown',event=>{
+    if (!['Enter',' '].includes(event.key) || event.target !== event.target.closest('.builder-product[data-card-role]')) return;
+    event.preventDefault();event.target.click();
+  });
   $('builder-content').addEventListener('click',event=>{
     const button=event.target.closest('button[data-action]');if(!button) return;
     const {role,id,action}=button.dataset;const qty=Number(state.items[role]?.[id]||0);
@@ -150,6 +169,7 @@
     if(file.size>10*1024*1024){msg('Image must be 10 MB or smaller.');return;}
     const button=$('builder-next');button.disabled=true;
     try{
+      if (!(await requireAccount('upload a gift photo'))) return;
       const body=new FormData();body.set('photo',file);
       const response=await fetch(api+'/custom-box/upload',{method:'POST',credentials:'same-origin',body});
       const result=await response.json();if(!response.ok||!result.success)throw new Error(result.message||'Upload failed.');
@@ -167,6 +187,7 @@
       if(!state.card.message.trim()){msg('Please write a greeting message or deselect the card.');return;}
       if(state.card.add_sender_name==='yes'&&!state.card.sender_name.trim()){msg('Enter the sender name or select No.');return;}
     }
+    if (!(await requireAccount('create your custom gift box'))) return;
     if(loading)return;loading=true;$('builder-next').disabled=true;
     try{
       const response=await fetch(api+'/custom-box/cart',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({box_product_id:state.box,items:lines,personalization:state.personalization,card:state.card})});

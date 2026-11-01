@@ -1,0 +1,111 @@
+/* DONO customer UX update - public browsing + consistent CTAs */
+:root {--dono-forest:#063C28;--dono-pink:#E92891;--dono-cream:#FBFAF6}
+body.dono-guest {padding-left:0!important;margin-left:0!important;min-width:0;overflow-x:clip}
+body.dono-guest .dono-side,body.dono-guest .dono-mobile-menu,body.dono-guest .dono-side-shade{display:none!important}
+.dono-public-header{min-height:72px;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:10px clamp(14px,4vw,54px);background:var(--dono-cream);border-bottom:1px solid #e7e2db;position:relative;z-index:50;flex-wrap:wrap}
+.dono-public-brand{display:inline-flex;align-items:center;max-width:135px}.dono-public-brand img{display:block;width:112px;height:48px;object-fit:contain}
+.dono-public-header nav,.dono-public-actions{display:flex;align-items:center;gap:clamp(8px,2vw,22px);flex-wrap:wrap}
+.dono-public-header a{font:700 13px/1.4 'DM Sans',Arial,sans-serif;color:var(--dono-forest);text-decoration:none}
+.dono-public-header .dono-auth-primary,.dono-auth-primary{display:inline-flex;justify-content:center;align-items:center;background:var(--dono-forest);color:white!important;border-radius:999px;padding:11px 18px;font-weight:700;border:0;cursor:pointer}
+.dono-public-header a:hover{color:var(--dono-pink)}
+.dono-auth-modal{border:0;padding:0;max-width:min(94vw,440px);width:100%;border-radius:22px;box-shadow:0 22px 65px #062c2290;color:#213529;background:#fbfaf6}
+.dono-auth-modal::backdrop{background:#062b2299;backdrop-filter:blur(3px)}
+.dono-auth-modal-body{padding:clamp(24px,5vw,38px);text-align:center;font-family:'DM Sans',sans-serif}
+.dono-auth-modal-body h2{font:700 clamp(23px,4vw,30px)/1.2 'Playfair Display',Georgia,serif;margin:12px 0}
+.dono-auth-modal-body p{color:#597064;line-height:1.55;margin:0 0 17px}
+.dono-auth-modal-body .dono-auth-eyebrow{color:var(--dono-pink);font-size:11px;font-weight:800;letter-spacing:.17em;margin:0}
+.dono-auth-actions{display:flex;gap:12px;justify-content:center;margin:20px 0 12px}
+.dono-auth-actions button{padding:12px 20px;border:1px solid var(--dono-forest);border-radius:999px;background:transparent;color:var(--dono-forest);cursor:pointer;font-weight:700}
+.dono-auth-actions .dono-auth-primary{background:var(--dono-forest);color:#fff}
+.dono-auth-cancel{background:transparent;border:0;color:#64756c;font-weight:700;text-decoration:underline;cursor:pointer;padding:8px}
+.dono-auth-modal button:focus-visible,.dono-public-header a:focus-visible{outline:3px solid var(--dono-pink);outline-offset:3px}
+body.dono-guest main{width:100%;max-width:none;margin-left:auto;margin-right:auto}
+body.dono-guest .page-container{width:min(1200px,calc(100% - 32px));margin-top:18px}
+body.dono-guest .cart-page,body.dono-guest .wishlist-page,body.dono-guest .orders-page{max-width:1200px;margin-inline:auto}
+body.dono-guest .discover-hero{min-height:0;padding-top:clamp(28px,5vw,64px)}
+body.dono-guest .shop-list{padding-top:32px}
+body.dono-guest .site-footer{margin-top:24px}
+.dono-new-cta{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 22px;background:var(--dono-forest);color:#fff!important;border-radius:999px;text-decoration:none;font-weight:750;border:1px solid var(--dono-forest)}
+.dono-new-cta:hover{background:var(--dono-pink);border-color:var(--dono-pink)}
+.dono-page-cta{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap}
+.dono-product-reviews{scroll-margin-top:24px}
+body.dono-shell-enabled .dono-product-reviews,body.dono-guest .dono-product-reviews{margin:18px 0 32px!important;padding:clamp(16px,2.5vw,26px)!important}
+body.dono-shell-enabled .page-container{margin-top:14px!important}
+@media(max-width:680px){.dono-public-header{gap:6px;justify-content:center;padding:10px 12px}.dono-public-header nav{order:3;width:100%;justify-content:center}.dono-public-actions{gap:10px}.dono-auth-actions{flex-direction:column}.dono-product-layout{grid-template-columns:1fr!important}}
+
+/* Cart: gift and wrapping are a single order-level choice (existing order_gift_details). */
+.dono-cart-gift-options{padding:clamp(18px,3vw,28px);margin:20px 0;background:#fbfaf6;border:1px solid #e4e0d8;border-radius:20px;box-shadow:0 5px 22px #063c2808}
+.dono-gift-heading h2{font:700 clamp(22px,3vw,29px)/1.3 'Playfair Display',Georgia,serif;color:#063c28;margin:8px 0}
+.dono-gift-heading p{color:#66786e;margin:0 0 20px}
+.dono-cart-gift-options label{display:block;color:#163a2b;font-size:14px;font-weight:700;margin:12px 0}
+.dono-cart-gift-options input:not([type=radio]):not([type=checkbox]),.dono-cart-gift-options textarea{display:block;box-sizing:border-box;width:100%;border-radius:10px;border:1px solid #d6d9d2;background:#fff;padding:11px;margin-top:7px;color:#24382d}
+.dono-cart-gift-options .dono-gift-toggle{display:flex;gap:12px;align-items:center;font-size:15px}
+.dono-gift-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.dono-cart-gift-options .dono-wrapping-fieldset{border:0;padding:12px 0;margin:15px 0;border-top:1px solid #e4e0d8}
+.dono-wrapping-fieldset legend{font-weight:800;color:#063c28;padding-top:15px}
+.dono-cart-gift-options .dono-wrapping-choice{display:flex;align-items:center;gap:12px;padding:13px;border:1px solid #e4e0d8;border-radius:12px;margin-bottom:8px;background:#fff;cursor:pointer}
+.dono-wrapping-choice small{display:block;margin-top:3px;font-weight:500;color:#66786e}
+.dono-wrapping-choice:has(input:checked){border-color:#e92891;background:#fff5fa}
+.dono-gift-controls{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+#dono-gift-save{border:0;background:#063c28;color:#fff;border-radius:999px;padding:12px 23px;cursor:pointer;font-weight:800}
+#dono-gift-save:disabled{opacity:.5;cursor:not-allowed}
+#dono-gift-save-state{font-size:13px;color:#687e70}
+.dono-cart-options-note{margin:15px 0;color:#607567;font-size:14px;line-height:1.5}
+.dono-cart-link{display:inline-block;color:#063c28;font-weight:800;text-decoration:underline;text-underline-offset:4px;margin:8px 0}
+body.dono-shell-enabled .product-layout,body.dono-guest .product-layout{align-items:start!important;gap:clamp(16px,4vw,38px)!important}
+body.dono-shell-enabled .product-gallery,body.dono-guest .product-gallery{align-self:start!important}
+@media(max-width:650px){.dono-gift-fields{grid-template-columns:1fr}}
+
+@media(min-width:900px){body.dono-guest.dono-customer .explore-content{margin-left:0!important;width:100%!important}}
+body.dono-guest .site-footer{clear:both;background:#f1eef5;color:#283a2e;padding:20px clamp(16px,4vw,52px);width:100%;position:relative;z-index:1}
+body.dono-guest .site-footer .footer-container{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;max-width:1200px;margin:auto}
+body.dono-guest .site-footer .footer-logo img{width:115px;height:42px;object-fit:contain}
+body.dono-guest .site-footer p{margin:3px 0;font-size:13px;color:#67746a}
+
+/* Avoid guest/sidebar flash while the async session check is running. */
+@media(min-width:900px){body.dono-customer:not(.dono-shell-enabled) .explore-content{margin-left:0!important;width:100%!important}}
+body.dono-private-guest main{display:none!important}
+.dono-private-entry{text-align:center;margin:clamp(32px,7vh,75px) auto;max-width:650px;padding:clamp(24px,5vw,46px);border-radius:20px;background:#fbfaf6;border:1px solid #e7e0d8;color:#063c28}
+.dono-private-entry h1{font:700 clamp(28px,4vw,40px)/1.2 'Playfair Display',Georgia,serif;margin:0 0 14px}
+.dono-private-entry p{color:#718274;margin:0 0 20px}
+body.dono-guest .dono-side-shade{display:none}
+/* Final brand alignment across the redesigned actions. */
+body.dono-shell-enabled .primary-button,body.dono-guest .primary-button,
+body.dono-shell-enabled .checkout-btn,body.dono-guest .checkout-btn{
+  background:#063C28!important;color:#fff!important;border-color:#063C28!important
+}
+body.dono-shell-enabled .buy-now-button,body.dono-guest .buy-now-button{background:#E92891!important;color:white!important}
+body.dono-shell-enabled .primary-button:focus-visible,body.dono-guest .primary-button:focus-visible,
+body.dono-shell-enabled .checkout-btn:focus-visible,body.dono-guest .checkout-btn:focus-visible,
+body.dono-shell-enabled .dono-new-cta:focus-visible,body.dono-guest .dono-new-cta:focus-visible{outline:3px solid #E92891!important;outline-offset:3px}
+body.dono-guest .category-sticky button{color:#063C28;background:#FBFAF6;border-color:#063C28}
+body.dono-guest .category-sticky button.active,body.dono-guest .category-sticky button:hover{color:#fff;background:#063C28;border-color:#063C28}
+body.dono-shell-enabled .product-gallery .main-image-wrapper,body.dono-guest .product-gallery .main-image-wrapper{max-height:560px}
+body.dono-shell-enabled .main-product-image,body.dono-guest .main-product-image{max-height:540px;object-fit:contain}
+body.dono-shell-enabled .dono-review-navigation,body.dono-guest .dono-review-navigation{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:12px 0}
+body.dono-shell-enabled .dono-review-navigation button,body.dono-guest .dono-review-navigation button{width:auto;min-height:42px;margin:0;background:#fff;color:#063C28;border:1px solid #063C28;border-radius:12px;padding:10px 14px;cursor:pointer;font-weight:700}
+body.dono-shell-enabled .dono-review-navigation button:hover,body.dono-guest .dono-review-navigation button:hover{background:#fff0f7;border-color:#E92891}
+body.dono-shell-enabled .cart-header,body.dono-shell-enabled .wishlist-header,body.dono-shell-enabled .orders-header{margin-bottom:16px!important}
+body.dono-shell-enabled .site-footer{background:#f1eef5!important;color:#283a2e!important}
+
+/* Center the guest login CTA in the viewport regardless of page layout/reset CSS. */
+dialog.dono-auth-modal:modal {
+  position: fixed !important;
+  inset: 50% auto auto 50% !important;
+  transform: translate(-50%, -50%) !important;
+  margin: 0 !important;
+  width: min(440px, calc(100vw - 32px));
+  max-width: calc(100vw - 32px);
+  max-height: calc(100dvh - 32px);
+  overflow-y: auto;
+  z-index: 2147483647;
+  box-sizing: border-box;
+}
+dialog.dono-auth-modal:modal .dono-auth-actions button {
+  min-width: 0;
+  flex: 1 1 0;
+}
+@media (max-width: 480px) {
+  dialog.dono-auth-modal:modal .dono-auth-actions {flex-direction: column;}
+  dialog.dono-auth-modal:modal .dono-auth-actions button {width: 100%;flex: none;}
+}

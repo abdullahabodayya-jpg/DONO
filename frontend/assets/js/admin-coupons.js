@@ -46,7 +46,7 @@ let notificationTimeout;
 let currentPage = 1;
 let pageSize = Number(pageSizeSelect.value) || 10;
 
-// Sorting cycles: default -> ascending -> descending -> default.
+// Sorting cycles: ascending -> descending, preserving existing pagination.
 let sortKey = null;
 let sortDirection = null;
 
@@ -373,10 +373,10 @@ function updateSortHeaders() {
         }
 
         if (sortDirection === "asc") {
-            icon.textContent = "↓";
+            icon.textContent = "↑";
             button.setAttribute("aria-sort", "ascending");
         } else {
-            icon.textContent = "↑";
+            icon.textContent = "↓";
             button.setAttribute("aria-sort", "descending");
         }
     });
@@ -390,9 +390,6 @@ function handleSort(key) {
         sortDirection = "asc";
     } else if (sortDirection === "asc") {
         sortDirection = "desc";
-    } else if (sortDirection === "desc") {
-        sortKey = null;
-        sortDirection = null;
     } else {
         sortDirection = "asc";
     }

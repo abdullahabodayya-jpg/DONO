@@ -23,6 +23,7 @@
 
     <script type="module">
         import { api } from './assets/js/services/api.js';
+        import { safeReturnPath } from './assets/js/components/auth-cta.js';
 
         async function verify() {
             const params = new URLSearchParams(window.location.search);
@@ -47,7 +48,9 @@
                 if (res.data?.requiresProfileCompletion === true) {
                     window.location.replace('complete-profile.html');
                 } else if (res.data?.user) {
-                    window.location.replace(res.data.user.role === 'admin' ? 'admin/index.html' : 'products.html');
+                    const destination = safeReturnPath(sessionStorage.getItem('dono.postLoginReturn'));
+                    sessionStorage.removeItem('dono.postLoginReturn');
+                    window.location.replace(res.data.user.role === 'admin' ? 'admin/index.html' : (destination || 'products.html'));
                 } else {
                     throw new Error('Google login did not return a valid session.');
                 }

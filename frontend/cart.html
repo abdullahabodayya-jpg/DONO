@@ -12,9 +12,11 @@
 <link rel="stylesheet" href="assets/css/customer-shell.css">
 <link rel="stylesheet" href="assets/css/customer-theme.css">
 <script type="module" src="assets/js/components/customer-shell.js"></script>
-<script src="assets/js/components/feedback.js" defer></script><link rel="stylesheet" href="assets/css/customer-product-reference.css"></head>
+<script src="assets/js/components/feedback.js" defer></script><link rel="stylesheet" href="assets/css/customer-product-reference.css"><link rel="stylesheet" href="assets/css/dono-customer-ux.css">
+<link rel="stylesheet" href="assets/css/dono-brand-unified.css">
+</head>
 
-<body>
+<body class="dono-customer-theme" >
 
     <main class="cart-page">
 
@@ -43,6 +45,24 @@
                 </div>
 
                 <div id="cart-products"></div>
+                <section class="dono-cart-gift-options" id="dono-cart-gift-options" aria-labelledby="dono-gift-heading">
+                  <div class="dono-gift-heading"><span class="eyebrow">MAKE IT PERSONAL</span><h2 id="dono-gift-heading">Gift delivery & wrapping</h2><p>Customize your order here before secure checkout.</p></div>
+                  <form id="dono-gift-form">
+                    <label class="dono-gift-toggle"><input type="checkbox" id="dono-send-gift"> Send this order as a gift</label>
+                    <div id="dono-recipient-fields" hidden>
+                      <div class="dono-gift-fields"><label>Recipient name <input id="dono-recipient-name" type="text" maxlength="100" autocomplete="name"></label>
+                        <label>Recipient phone <input id="dono-recipient-phone" type="tel" maxlength="20" autocomplete="tel"></label></div>
+                      <label>Delivery address <textarea id="dono-recipient-address" rows="2" maxlength="255"></textarea></label>
+                      <label>Personal gift message <textarea id="dono-gift-message" rows="3" maxlength="2000"></textarea></label>
+                      <label class="dono-gift-toggle"><input type="checkbox" id="dono-hide-price" checked> Hide prices from the recipient</label>
+                    </div>
+                    <fieldset class="dono-wrapping-fieldset"><legend>Gift wrapping add-on</legend>
+                      <label class="dono-wrapping-choice"><input type="radio" name="dono-wrapping" value="Basic Wrapping" checked><span><strong>Basic Wrapping</strong><small>Included · Free</small></span></label>
+                      <label class="dono-wrapping-choice"><input type="radio" name="dono-wrapping" value="Premium Wrapping"><span><strong>Premium Wrapping</strong><small>+3.00 USD per order</small></span></label>
+                    </fieldset>
+                    <div class="dono-gift-controls"><button type="submit" id="dono-gift-save">Save Gift Options</button><span id="dono-gift-save-state" role="status" aria-live="polite"></span></div>
+                  </form>
+                </section>
 
                 <!-- Empty Cart -->
                 <div class="empty-cart" id="empty-cart" hidden>

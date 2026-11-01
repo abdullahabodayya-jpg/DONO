@@ -68,6 +68,9 @@ class ProductController
             ($type !== null && $type !== '' && !in_array($type, ['normal','package','custom_box'], true))) {
             Response::send(false, 'Invalid search filters.', null, 422);
         }
+        if ($age !== null && $age !== '') {
+            Response::send(false, 'Age filtering is not available for this catalog.', null, 422);
+        }
         $filters = ['search'=>$search,'category'=>$category,'age'=>$age,'type'=>$type];
         // Calculate how many products to skip
         $offset = ($page - 1) * $limit;
@@ -274,19 +277,6 @@ class ProductController
         }
     }
 
-    private function ageRange(array $input): array
-    {
-        $min = $input['age_min'] ?? null;
-        $max = $input['age_max'] ?? null;
-        if ($min === '' || $min === null) $min = null;
-        if ($max === '' || $max === null) $max = null;
-        if ($min === null && $max === null) return [null,null];
-        if ($min === null || $max === null || filter_var($min, FILTER_VALIDATE_INT, ['options'=>['min_range'=>0,'max_range'=>120]]) === false || filter_var($max, FILTER_VALIDATE_INT, ['options'=>['min_range'=>0,'max_range'=>120]]) === false || (int)$min > (int)$max) {
-            Response::send(false, 'Enter an appropriate minimum and maximum age from 0 to 120.', null, 422);
-        }
-        return [(int)$min,(int)$max];
-    }
-
     public function store(): void
     {
         // Read JSON data sent by the frontend
@@ -315,11 +305,6 @@ class ProductController
         $stockQuantity = $input["stock_quantity"] ?? null;
         $productType = $input["product_type"] ?? "normal";
         $isActive = $input["is_active"] ?? 1;
-
-        [$ageMin, $ageMax] = $this->ageRange($input);
-        if (($ageMin !== null || $ageMax !== null) && !$this->productRepository->hasAgeFields()) {
-            Response::send(false, 'Install migration_product_age.sql before assigning ages.', null, 503);
-        }
 
         // Validate product data
         $errors = $this->validateProduct($input);
@@ -361,7 +346,6 @@ class ProductController
                 $isActive
             );
 
-            $this->productRepository->setAgeRange((int)$productId, $ageMin, $ageMax);
 
             Response::send(
                 true,
@@ -448,11 +432,6 @@ class ProductController
             );
         }
 
-        [$ageMin, $ageMax] = $this->ageRange($input);
-        if (($ageMin !== null || $ageMax !== null) && !$this->productRepository->hasAgeFields()) {
-            Response::send(false, 'Install migration_product_age.sql before assigning ages.', null, 503);
-        }
-
         // Validate updated product data
         $errors = $this->validateProduct($input);
 
@@ -509,7 +488,6 @@ class ProductController
                 );
             }
 
-            $this->productRepository->setAgeRange($productId, $ageMin, $ageMax);
 
             Response::send(
                 true,

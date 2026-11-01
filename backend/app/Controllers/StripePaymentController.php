@@ -379,6 +379,12 @@ final class StripePaymentController
             /*
              * Create USD Stripe Checkout Session.
              */
+            // Display the selected wrapping in hosted checkout without altering the server-side total.
+            $giftWrapStmt = $this->pdo->prepare('SELECT wrapping_type FROM order_gift_details WHERE order_id = ? LIMIT 1');
+            $giftWrapStmt->execute([$orderId]);
+            $wrapType = $giftWrapStmt->fetchColumn();
+            $checkoutDescription = is_string($wrapType) && $wrapType !== ''
+                ? 'Gift wrapping: ' . $wrapType : 'DONO gift order';
             $checkout = \Stripe\Checkout\Session::create(
                 [
                     'mode' => 'payment',
@@ -394,6 +400,7 @@ final class StripePaymentController
                                 'product_data' => [
                                     'name' => 'DONO Order '
                                         . $order['order_number'],
+                                    'description' => $checkoutDescription,
                                 ],
                             ],
 

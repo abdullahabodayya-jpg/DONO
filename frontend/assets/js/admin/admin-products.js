@@ -405,7 +405,7 @@ async function openAddProduct() {
     // Set modal content
     addProductDialogTitle.textContent = "Add Product";
     addProductDialogSubtitle.textContent = "Enter the product information below.";
-    productImageNote.textContent = "Product images can be uploaded after creating the product.";
+    productImageNote.textContent = "After saving, manage photos in the Images dialog.";
 
     saveProductBtn.textContent = "Save Product";
     saveProductBtn.disabled = true;
@@ -440,8 +440,6 @@ async function openEditProduct(product) {
     document.getElementById("productDescription").value = product.description || "";
     document.getElementById("productPrice").value = product.price;
     document.getElementById("productStock").value = product.stock_quantity;
-    document.getElementById("productAgeMin").value = product.age_min ?? "";
-    document.getElementById("productAgeMax").value = product.age_max ?? "";
     document.getElementById("productType").value = product.product_type;
     document.getElementById("productStatus").value = String(product.is_active);
 
@@ -491,8 +489,6 @@ addProductForm.addEventListener("submit", async function (event) {
         description: document.getElementById("productDescription").value.trim(),
         price: Number(document.getElementById("productPrice").value),
         stock_quantity: Number(document.getElementById("productStock").value),
-        age_min: document.getElementById("productAgeMin").value === "" ? null : Number(document.getElementById("productAgeMin").value),
-        age_max: document.getElementById("productAgeMax").value === "" ? null : Number(document.getElementById("productAgeMax").value),
         product_type: document.getElementById("productType").value,
         is_active: Number(document.getElementById("productStatus").value),
     };
@@ -517,18 +513,24 @@ addProductForm.addEventListener("submit", async function (event) {
             body: JSON.stringify(productData),
         });
 
-        // Product created or updated successfully
-        showProductFormMessage(
-            result.message ||
-                (isEditing ? "Product updated successfully." : "Product added successfully."),
-        );
-
-        if (!isEditing) {
-            addProductForm.reset();
-        }
-
-        // Refresh products table
+        // The API succeeded: exit the edit form, refresh, and keep the image flow separate.
+        addProductDialog.close();
         await loadProducts();
+        const successMessage = isEditing ? "Product updated successfully." : "Product created successfully.";
+        const notice = document.getElementById("productTableNotice");
+        if (notice) {
+            notice.textContent = successMessage;
+            notice.hidden = false;
+        }
+        window.DonoUI?.toast?.(successMessage, "success");
+        if (!isEditing) {
+            const newId = Number(result?.data?.id);
+            if (Number.isSafeInteger(newId) && newId > 0) {
+                // A saved product has an ID, so the existing images API can now upload files.
+                const created = products.find(item => Number(item.id) === newId);
+                if (created) await openProductImages(created);
+            }
+        }
     } catch (error) {
         console.error("Save product error:", error);
 

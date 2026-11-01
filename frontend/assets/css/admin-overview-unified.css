@@ -38,3 +38,57 @@
 
 .admin-sidebar-footer #adminLogoutBtn{display:flex;align-items:center;gap:12px;width:100%;border:0;background:transparent;text-align:left;cursor:pointer;font:inherit;color:inherit;padding:12px 14px;border-radius:9px}
 .admin-sidebar-footer #adminLogoutBtn:hover{background:#e8f2eb}
+
+/* DONO Admin: dashboard-bound tables, shared sorting, restrained modals. */
+.admin-layout, .admin-layout .admin-main, .admin-layout .admin-content,
+.admin-layout .card, .admin-layout .panel, .admin-layout .admin-integrated-panel,
+.admin-layout .admin-products-section, .admin-layout .admin-orders-page,
+.admin-layout .admin-content-header, .admin-layout .admin-integrated-header {
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+.admin-layout .admin-table-wrapper,
+.admin-layout .admin-integrated-table-wrap,
+.admin-layout .orders-table-wrapper,
+.admin-layout .admin-reviews-table-wrapper,
+.admin-layout .admin-table-container,
+.admin-layout .table-wrapper,
+.admin-layout .table-responsive {
+    width: 100%; max-width: 100%; min-width: 0;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+}
+.admin-layout table {max-width: 100%; border-collapse: collapse;}
+.admin-layout table th, .admin-layout table td {overflow-wrap: anywhere; vertical-align: middle;}
+.admin-layout table th:last-child, .admin-layout table td:last-child {white-space: normal;}
+.admin-layout .dono-admin-sort-button {
+    display: inline-flex; align-items: center; justify-content: flex-start; gap: 7px;
+    font: inherit; color: inherit; text-align: left; width: 100%;
+    border: 0; padding: 4px 1px; background: transparent;
+    cursor: pointer; white-space: nowrap;
+}
+.admin-layout .dono-admin-sort-button:hover {color: #063c28;}
+.admin-layout .dono-admin-sort-button:focus-visible {outline: 2px solid #e92891; outline-offset: 2px; border-radius: 4px;}
+.admin-layout .dono-admin-sort-arrow {color: #6b8572; font-size: 1.1em;}
+.admin-layout .admin-products-notice {margin: 0 0 15px; color: #063c28; font-weight: 600;}
+/* Shared dialog sizing for all native admin modals. */
+body > dialog[class*="admin-"] {box-sizing: border-box; max-height: calc(100dvh - 28px);}
+body > dialog[class*="admin-"]:not(.admin-product-dialog)[open] {overflow-y: auto;}
+/* Coupon modal stays within viewport with its existing backdrop and form handlers. */
+.admin-layout ~ .modal .modal-content, .modal .modal-content {
+    width: min(880px, calc(100vw - 32px));
+    max-height: calc(100dvh - 32px);
+    box-sizing: border-box;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+@media(max-width:760px) {
+    .admin-layout .admin-content {padding: 16px!important;}
+    .admin-layout .admin-content-header {flex-wrap:wrap;gap:12px;}
+    .admin-layout table th,.admin-layout table td {padding:10px 9px;}
+}
+
+/* Respect coupon/confirmation modal hidden state even when a CSS display rule exists. */
+.modal[hidden] {display:none!important;}

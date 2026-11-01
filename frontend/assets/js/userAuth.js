@@ -1,3 +1,4 @@
+import {safeReturnPath} from './components/auth-cta.js';
 const landingEmail = new URLSearchParams(window.location.search).get('email');
 if (landingEmail && document.getElementById('email')) {
     document.getElementById('email').value = landingEmail;
@@ -24,7 +25,7 @@ if (loginForm) {
             if (res.data.user.role === 'admin') {
                 window.location.href = 'admin/index.html';
             } else {
-                window.location.replace('products.html');
+                window.location.replace(safeReturnPath(new URLSearchParams(location.search).get('return')) || 'products.html');
             }
         } catch (error) {
             const fieldErrors = error.data?.errors;
@@ -59,7 +60,7 @@ if (registerForm) {
         try {
             const result = await api.post('/auth/register', payload);
             if (!result?.data?.user) throw new Error('Account created but the session could not be confirmed. Please log in.');
-            window.location.replace('products.html');
+            window.location.replace(safeReturnPath(new URLSearchParams(location.search).get('return')) || 'products.html');
         } catch (error) {
             const fieldErrors = error.data?.errors;
             alertBox.textContent = fieldErrors ? Object.values(fieldErrors).join(' ') : error.message;
@@ -76,6 +77,8 @@ if (googleBtn) {
         if (googleBtn.disabled) return;
         googleBtn.disabled = true;
         try {
+            const afterLogin = safeReturnPath(new URLSearchParams(location.search).get('return'));
+            if (afterLogin) sessionStorage.setItem('dono.postLoginReturn', afterLogin);
             const res = await api.get('/auth/google/url');
             const destination = res.data?.url;
             if (typeof destination !== 'string' || !destination.startsWith('https://accounts.google.com/')) {
@@ -105,7 +108,9 @@ if (completeProfileForm) {
 
         try {
             await api.post('/auth/complete-profile', payload);
-            window.location.replace('products.html');
+            const destination = safeReturnPath(sessionStorage.getItem('dono.postLoginReturn'));
+            sessionStorage.removeItem('dono.postLoginReturn');
+            window.location.replace(destination || 'products.html');
         } catch (error) {
             const fieldErrors = error.data?.errors;
             alertBox.textContent = fieldErrors ? Object.values(fieldErrors).join(' ') : error.message;

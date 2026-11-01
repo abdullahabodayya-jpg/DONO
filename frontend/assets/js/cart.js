@@ -41,6 +41,52 @@ if (undoBox) {
 let cartSubtotal = 0;
 let couponCode = "";
 let requestVersion = 0;
+let giftDirty = false;
+let hasCartItems = false;
+const giftForm = document.getElementById('dono-gift-form');
+const sendGift = document.getElementById('dono-send-gift');
+const recipientFields = document.getElementById('dono-recipient-fields');
+const saveGift = document.getElementById('dono-gift-save');
+const giftSaveState = document.getElementById('dono-gift-save-state');
+const giftId = id => document.getElementById('dono-' + id);
+const giftEndpoint = cartApi + '/gift';
+function giftChoice() {return giftForm.querySelector('input[name="dono-wrapping"]:checked')?.value || 'Basic Wrapping';}
+function giftPayload() {
+  return {send_as_gift:sendGift.checked, wrapping_type:giftChoice(),
+    recipient_name:giftId('recipient-name').value.trim(), recipient_phone:giftId('recipient-phone').value.trim(),
+    recipient_address:giftId('recipient-address').value.trim(),gift_message:giftId('gift-message').value.trim(),
+    hide_price:giftId('hide-price').checked};
+}
+function renderGiftForm(gift) {
+  if (giftDirty) return;
+  const g=gift||{};
+  sendGift.checked=Boolean(g.recipient_name);
+  recipientFields.hidden=!sendGift.checked;
+  for(const [id,key] of [['recipient-name','recipient_name'],['recipient-phone','recipient_phone'],['recipient-address','recipient_address'],['gift-message','gift_message']]) giftId(id).value=g[key]||'';
+  giftId('hide-price').checked=g.hide_price==null||Number(g.hide_price)===1;
+  const wrapping=g.wrapping_type==='Premium Wrapping'?'Premium Wrapping':'Basic Wrapping';
+  giftForm.querySelectorAll('input[name="dono-wrapping"]').forEach(input=>{input.checked=input.value===wrapping;});
+}
+async function persistGift() {
+  if (!hasCartItems) throw new Error('Add a gift to your bag first.');
+  const payload=giftPayload();
+  if(payload.send_as_gift && (!payload.recipient_name||!payload.recipient_phone||!payload.recipient_address)) {
+    throw new Error('Please enter the recipient name, phone and address.');
+  }
+  saveGift.disabled=true;giftSaveState.textContent='Saving…';
+  try {
+    await apiRequest(giftEndpoint,'PUT',payload);
+    giftDirty=false;
+    giftSaveState.textContent='Saved ✓';
+    await loadCart();
+    return true;
+  } catch(error) {giftSaveState.textContent=error.message;window.DonoUI?.toast(error.message,'error');throw error;}
+  finally {saveGift.disabled=!hasCartItems;}
+}
+sendGift.addEventListener('change',()=>{recipientFields.hidden=!sendGift.checked;giftDirty=true;giftSaveState.textContent='Unsaved changes';});
+giftForm.querySelectorAll('input,textarea').forEach(el=>el.addEventListener('change',()=>{giftDirty=true;giftSaveState.textContent='Unsaved changes';}));
+giftForm.addEventListener('submit',async event=>{event.preventDefault();try{if(await persistGift())window.DonoUI?.toast('Gift preferences saved.','success');}catch{/* error rendered */}});
+
 
 // Send request to backend
 async function apiRequest(url, method = "GET", body = null) {
@@ -151,7 +197,10 @@ async function loadCart() {
         const shippingBox = document.getElementById('cart-shipping');
         if (shippingBox) shippingBox.textContent = Number(cart?.shipping_fee || 0).toFixed(2) + ' USD';
 
+        hasCartItems = items.length > 0;
+        saveGift.disabled = !hasCartItems;
         const gift = result.data.gift;
+        renderGiftForm(gift);
         const giftFee = Number(gift?.wrapping_fee || 0);
         const giftWrapRow = document.getElementById('wrapping-row');
         const giftWrapAmount = document.getElementById('cart-wrapping');
@@ -163,14 +212,14 @@ async function loadCart() {
             giftBox.hidden = false;
             const title = document.createElement('strong'); title.textContent = 'Gift preferences';
             const copy = document.createElement('p');
-            const recipient = gift.recipient_name ? 'For ' + gift.recipient_name + ' · ' : 'For myself · ';
+            const recipient = gift.recipient_name ? 'For ' + gift.recipient_name + ' · ' : 'Gift wrapping · ';
             copy.textContent = recipient + (gift.wrapping_type || 'Basic Wrapping') + (giftFee ? ` (+${giftFee.toFixed(2)} USD)` : '');
-            const reset = document.createElement('button');reset.type='button';reset.textContent='Remove gift preferences';
+            const reset = document.createElement('button');reset.type='button';reset.textContent='Clear Gift Options';
             reset.addEventListener('click', async () => {
                 reset.disabled = true;
                 try {
                     await apiRequest(cartApi + '/gift', 'PUT', {send_as_gift:false, wrapping_type:'Basic Wrapping'});
-                    await loadCart();
+                    giftDirty=false;await loadCart();
                     window.DonoUI?.toast('Gift settings cleared.', 'success');
                 } catch(e) {reset.disabled=false;window.DonoUI?.toast(e.message, 'error');}
             });
@@ -376,6 +425,7 @@ loadCart();
 checkoutBtn.addEventListener('click', async () => {
     checkoutBtn.disabled = true;
     try {
+        if(giftDirty) await persistGift();
         const endpoint = new URL('../backend/public/api/payments/checkout', document.baseURI).pathname;
         const result = await apiRequest(endpoint, 'POST', {coupon_code: couponCode.trim()});
         const destination = result?.data?.checkout_url;

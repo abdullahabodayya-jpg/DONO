@@ -1,0 +1,116 @@
+/* DONO shared storefront identity: deliberately independent of session state.
+   The login state may change navigation and permissions, but never the theme. */
+body.dono-customer-theme {
+  --dono-forest: #063C28;
+  --dono-brand-forest: #063C28;
+  --dono-pink: #E92891;
+  --dono-brand-pink: #E92891;
+  --dono-cream: #FBFAF6;
+  --dono-brand-cream: #FBFAF6;
+  --dono-green: #063C28;
+  --dono-primary: #063C28;
+  --dono-ink: #182f25;
+  --dono-muted: #66766d;
+  --dono-background: #FBFAF6;
+  --dono-surface: #fff;
+  --dono-border: #e5e4db;
+  --forest: #063C28;
+  --hot: #E92891;
+  --pink: #f9d7e9;
+  --lime: #e4efd9;
+  --sun: #faf0cc;
+  --cream: #FBFAF6;
+  --ink: #182f25;
+  --stroke: 1px solid #e5e4db;
+  font-family: 'DM Sans', Arial, sans-serif;
+  color: #182f25;
+  background: #FBFAF6;
+  min-width: 0;
+  overflow-x: clip;
+}
+body.dono-customer-theme :where(button,input,select,textarea) {font-family:inherit}
+body.dono-customer-theme :where(button,a,input,select,textarea):focus-visible {outline: 3px solid #E92891; outline-offset:3px}
+body.dono-customer-theme :where(.explore-content,.page-container,.builder-page) {min-width:0}
+/* Equal styling for guest/customer. No auth-specific selector used below. */
+body.dono-customer-theme .discover-hero {
+  min-height:0!important;
+  padding:clamp(28px,4vw,54px) clamp(18px,4vw,56px) 25px!important;
+  background:#f6f2e9!important;
+  color:#182f25;
+}
+body.dono-customer-theme .discover-hero:before,
+body.dono-customer-theme .discover-hero:after,
+body.dono-customer-theme .hero-art{display:none!important}
+body.dono-customer-theme .discover-hero h1 {
+  font-family:'Playfair Display',Georgia,serif!important;
+  font-size:clamp(46px,6vw,78px);
+  font-weight:700;line-height:1.08;color:#182f25;
+}
+body.dono-customer-theme .discover-hero h1 em {color:#E92891!important}
+body.dono-customer-theme .hero-intro,
+body.dono-customer-theme .hero-kicker,
+body.dono-customer-theme .discover-hero-foot {color:#617369}
+body.dono-customer-theme .discover-search {background:#fff;border:1px solid #dedfd4;border-radius:16px;box-shadow:0 8px 24px #063c2812}
+body.dono-customer-theme .discover-search button,
+body.dono-customer-theme .gift-card-actions a,
+body.dono-customer-theme .gift-card-actions button:not(:last-child){background:#063C28!important;color:#fff!important;border-color:#063C28!important}
+body.dono-customer-theme .discover-search button:hover,
+body.dono-customer-theme .gift-card-actions a:hover {background:#E92891!important;border-color:#E92891!important}
+body.dono-customer-theme .discovery-filters select {background:#fff;border:1px solid #dfddd2;color:#182f25;border-radius:10px}
+body.dono-customer-theme .shop-list {background:#FBFAF6!important;padding:clamp(22px,3vw,40px) clamp(18px,4vw,56px) 42px!important}
+body.dono-customer-theme .shop-list-heading h2 {font-family:'Playfair Display',Georgia,serif;color:#182f25}
+body.dono-customer-theme .category-sticky {background:#FBFAF6f5;border-color:#e5e4db}
+body.dono-customer-theme .category-sticky button {color:#063C28!important;background:#FBFAF6!important;border:1px solid #063C28!important;border-radius:999px!important}
+body.dono-customer-theme .category-sticky button:is(.active,:hover) {color:#fff!important;background:#063C28!important;border-color:#063C28!important}
+body.dono-customer-theme .gift-card{border:1px solid #e5e4db!important;border-radius:16px;box-shadow:0 10px 26px #063c2814!important}
+body.dono-customer-theme .gift-card-back {background:#f9e6ed;color:#182f25}
+body.dono-customer-theme .gift-card-back h3 {font-family:'Playfair Display',Georgia,serif}
+body.dono-customer-theme .gift-flip-button,
+body.dono-customer-theme .gift-close-button{background:#fff;color:#063C28;border:1px solid #e5e4db}
+body.dono-customer-theme .gift-card-actions button:last-child {background:white!important;color:#063C28!important;border:1px solid #dfddd2!important}
+body.dono-customer-theme .shop-pages button {background:#fff;color:#063C28;border:1px solid #e5e4db;box-shadow:none}
+body.dono-customer-theme .site-header {display:none!important}
+body.dono-customer-theme .page-container {max-width:1200px;margin:clamp(14px,2vw,24px) auto 26px!important}
+body.dono-customer-theme .product-layout {gap:clamp(22px,3vw,42px);align-items:start}
+body.dono-customer-theme .product-gallery {align-self:start}
+body.dono-customer-theme .dono-product-reviews {border:1px solid #e5e4db;border-radius:16px;background:#fff;box-shadow:none;margin:20px 0 32px!important}
+body.dono-customer-theme .site-footer {background:#f4f2eb!important;border-top:1px solid #e5e4db!important;color:#182f25!important;box-shadow:none}
+body.dono-customer-theme .site-footer p {color:#617369!important}
+body.dono-customer-theme .site-footer .footer-logo img {max-width:120px;height:42px;object-fit:contain}
+body.dono-customer-theme .dono-public-header {background:#FBFAF6}
+body.dono-customer-theme .dono-public-header a {color:#063C28}
+body.dono-customer-theme .dono-public-header .dono-auth-primary{color:#fff!important}
+body.dono-customer-theme :where(.primary-button,.checkout-btn,.dono-new-cta){background:#063C28!important;color:white!important;border-color:#063C28!important}
+body.dono-customer-theme :where(.primary-button,.checkout-btn,.dono-new-cta):hover {background:#0a573d!important;border-color:#0a573d!important}
+body.dono-customer-theme .buy-now-button {background:#E92891!important;color:#fff!important}
+/* Keep the sidebar visually part of the same identity, but CSS does not control its visibility. */
+body.dono-shell-enabled .dono-side {background:#063C28!important;color:#FBFAF6!important}
+body.dono-shell-enabled .dono-side a:is(:hover,[aria-current="page"]) {background:#ffffff20!important;color:#fff!important}
+body.dono-shell-enabled .dono-side-brand {background:#FBFAF6}
+body.dono-shell-enabled .dono-mobile-menu {color:#063C28;background:#FBFAF6;border-color:#063C28}
+/* Guest's only layout difference is the absence of the 76px rail. */
+@media(min-width:900px){
+ body.dono-customer-theme.dono-guest .explore-content{margin-left:0!important;width:100%!important}
+ body.dono-customer-theme.dono-shell-enabled.dono-customer .explore-content{margin-left:0!important;width:100%!important}
+}
+@media(max-width:650px){
+ body.dono-customer-theme .page-container{width:calc(100% - 28px)!important}
+ body.dono-customer-theme .discover-hero {padding:28px 18px 20px!important}
+}
+@media(prefers-reduced-motion:reduce){body.dono-customer-theme *,body.dono-customer-theme *:before,body.dono-customer-theme *:after {scroll-behavior:auto!important}}
+
+/* Saved hearts must be clearly red on Explore and Product Details. */
+body.dono-customer-theme .gift-card-actions button[data-wish].is-wishlisted,
+body.dono-customer-theme .gift-card-actions button[data-wish][aria-pressed="true"] {
+  background: #fff0f2 !important;
+  color: #d7193f !important;
+  border-color: #d7193f !important;
+  font-size: 21px;
+  line-height: 1;
+}
+body.dono-customer-theme .wishlist-button.is-wishlisted,
+body.dono-customer-theme .wishlist-button[aria-pressed="true"] {
+  background: #fff0f2 !important;
+  color: #d7193f !important;
+  border-color: #d7193f !important;
+}

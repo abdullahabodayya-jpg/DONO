@@ -39,24 +39,14 @@ class ProductRepository
             $where[] = 'p.product_type = :type';
             $params['type'] = (string)$filters['type'];
         }
-        if ($filters['age'] !== null && $filters['age'] !== '') {
-            if (!$this->hasAgeFields()) throw new DomainException('Run migration_product_age.sql to enable age filtering.');
-            $where[] = 'p.age_min IS NOT NULL AND p.age_max IS NOT NULL AND p.age_min <= :age AND p.age_max >= :age_max';
-            $params['age'] = $params['age_max'] = (int)$filters['age'];
-        }
         return [implode(' AND ', $where), $params];
     }
 
-    public function hasAgeFields(): bool
-    {
-        $query = $this->db->query("SHOW COLUMNS FROM products LIKE 'age_min'");
-        return (bool)$query->fetch(PDO::FETCH_ASSOC);
-    }
 
     public function getActiveProducts(int $limit = 12, int $offset = 0, array $filters = []): array
     {
         [$where, $params] = $this->publicFilters($filters);
-        $ageColumns = $this->hasAgeFields() ? 'p.age_min,p.age_max,' : 'NULL AS age_min,NULL AS age_max,';
+        $ageColumns = 'NULL AS age_min,NULL AS age_max,'; // Unsupported by the existing schema
         $sql = "SELECT p.id,p.name,p.description,p.price,p.product_type,p.stock_quantity,p.is_active,
                        {$ageColumns} c.id AS category_id,c.name AS category_name,pi.image_url
                 FROM products p
@@ -120,17 +110,6 @@ class ProductRepository
         foreach ($params as $key => $val) $stmt->bindValue(':' . $key, $val, is_int($val) ? PDO::PARAM_INT : PDO::PARAM_STR);
         $stmt->execute();
         return (int) $stmt->fetchColumn();
-    }
-
-    /** Optional age classification. The additive migration is mandatory before nonempty ages. */
-    public function setAgeRange(int $productId, ?int $minimum, ?int $maximum): void
-    {
-        if (!$this->hasAgeFields()) {
-            if ($minimum !== null || $maximum !== null) throw new DomainException('Install migration_product_age.sql first.');
-            return;
-        }
-        $stmt = $this->db->prepare('UPDATE products SET age_min=?,age_max=? WHERE id=? AND deleted_at IS NULL');
-        $stmt->execute([$minimum,$maximum,$productId]);
     }
 
     public function getById(int $productId): array|false

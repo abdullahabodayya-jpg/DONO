@@ -609,3 +609,52 @@
         min-width: 0;
     }
 }
+
+/* DONO Product Modal hotfix: large, responsive and keyboard-scrollable form. */
+.admin-product-dialog[open] {
+    display: flex;
+    flex-direction: column;
+    width: min(1040px, calc(100vw - 28px));
+    max-width: 1040px;
+    max-height: calc(100dvh - 28px);
+    overflow: hidden;
+    padding: 0;
+}
+.admin-product-dialog[open] > .admin-product-dialog-shell {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    flex: 1 1 auto;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+.admin-product-dialog[open] .admin-product-form {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    flex: 1 1 auto;
+}
+.admin-product-dialog[open] .admin-product-form-grid {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 2px 8px 14px 2px;
+    scrollbar-gutter: stable;
+}
+.admin-product-dialog[open] .admin-product-modal-header,
+.admin-product-dialog[open] .admin-product-modal-actions { flex-shrink:0; }
+.admin-product-dialog[open] .admin-product-modal-actions {margin-top:12px;padding-top:12px;}
+.admin-product-dialog[open] .admin-product-form-note {flex-shrink:0; margin-top:10px; padding:9px 12px;}
+.admin-product-dialog[open].admin-delete-dialog,
+.admin-product-dialog[open].admin-images-dialog {width:min(760px,calc(100vw - 28px));}
+.admin-product-dialog[open].admin-delete-dialog {width:min(490px,calc(100vw - 28px));}
+.admin-product-dialog[open].admin-delete-dialog > .admin-product-dialog-shell,
+.admin-product-dialog[open].admin-images-dialog > .admin-product-dialog-shell {overflow-y:auto;}
+@media(max-width:700px){
+ .admin-product-dialog[open] .admin-product-dialog-shell{padding:16px;}
+ .admin-product-dialog[open] .admin-product-form-grid{grid-template-columns:1fr;gap:12px;}
+ .admin-product-dialog[open] .admin-product-modal-actions{flex-direction:column-reverse;}
+ .admin-product-dialog[open] .admin-product-modal-actions .btn{width:100%;}
+}

@@ -260,3 +260,6 @@ body {
         transition: none;
     }
 }
+
+/* Wishlist page: visibly red saved hearts, consistent with Explore and Product Details. */
+.wishlist-heart.active {color: #d7193f; background-color: #fff0f2;}

@@ -1,148 +1,34 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<title>Create Account | DONO</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&amp;family=Playfair+Display:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="assets/css/auth-brand.css?v=20261101-simple-1" rel="stylesheet"/>
+<script defer="" src="assets/js/components/feedback.js"></script>
+<script defer="" src="assets/js/auth-ui.js?v=20261101-simple-1"></script>
+</head>
+<body class="dono-auth-page">
+<a class="auth-skip" href="#auth-main">Skip to form</a>
+<div class="auth-frame">
 
-    <title>Create Account - DONO</title>
+<main class="auth-panel" id="auth-main">
+<div class="auth-card register-card">
+<div class="auth-card-brand"><a aria-label="DONO home" class="auth-brand-logo" href="landing.html"><span aria-hidden="true" class="auth-logo-fallback">dono<span class="auth-logo-accent">.</span></span><img alt="" decoding="async" src="assets/img/dono-wordmark.png"/></a></div>
 
-    <link rel="stylesheet" href="./assets/css/auth.css">
-<link rel="stylesheet" href="assets/css/customer-shell.css">
-<link rel="stylesheet" href="assets/css/customer-theme.css">
-
-<script src="assets/js/components/feedback.js" defer></script><link rel="stylesheet" href="assets/css/customer-product-reference.css"></head>
-
-<body>
-
-    <div class="auth-container">
-
-        <div class="auth-card register-card">
-
-            <div class="auth-header">
-                <h1>Create Account</h1>
-                <p>Join DONO to start shopping</p>
-            </div>
-
-            <div class="alert-box error d-none" id="errorAlert"></div>
-
-            <form id="registerForm" >
-
-                <div class="form-group">
-                    <label for="name">Full Name <span class="required">*</span></label>
-                    <input
-                        type="text"
-                        id="name"
-                        class="form-control"
-                        placeholder="Enter your full name"
-                        required
-                    >
-                </div>
-
-                <div class="form-group">
-                    <label for="email">Email Address <span class="required">*</span></label>
-                    <input
-                        type="email"
-                        id="email"
-                        class="form-control"
-                        placeholder="Enter your email"
-                        required
-                    >
-                </div>
-
-                <div class="form-row">
-
-                    <div class="form-group">
-                        <label for="password">Password <span class="required">*</span></label>
-                        <input
-                            type="password"
-                            id="password"
-                            class="form-control"
-                            placeholder="Enter password"
-                            required
-                        >
-                    </div>
-
-                    <div class="form-group">
-                        <label for="confirmPassword">Confirm Password <span class="required">*</span></label>
-                        <input
-                            type="password"
-                            id="confirmPassword"
-                            class="form-control"
-                            placeholder="Confirm password"
-                            required
-                        >
-                    </div>
-
-                </div>
-
-                <div class="form-row">
-
-                    <div class="form-group">
-                        <label for="phone">Phone Number</label>
-                        <input
-                            type="tel"
-                            id="phone"
-                            class="form-control"
-                            placeholder="Enter phone number"
-                        >
-                    </div>
-
-                    <div class="form-group">
-                        <label for="gender">Gender</label>
-                        <select id="gender" class="form-control">
-                            <option value="">Select gender...</option>
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                        </select>
-                    </div>
-
-                </div>
-
-                <div class="form-group">
-                    <label for="address">Address</label>
-                    <textarea
-                        id="address"
-                        class="form-control"
-                        rows="3"
-                        placeholder="Enter your address"
-                    ></textarea>
-                </div>
-
-                <button type="submit" class="btn-primary">
-                    Create Account
-                </button>
-
-            </form>
-
-            <div class="divider">
-                <span>or sign up with</span>
-            </div>
-
-            <button type="button" class="google-btn" id="googleSignInBtn">
-
-                <svg width="20" height="20" viewBox="0 0 48 48">
-                    <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
-                    <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
-                    <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
-                    <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
-                </svg>
-
-                <span>Sign up with Google</span>
-
-            </button>
-
-            <div class="auth-footer">
-                <p>
-                    Already have an account?
-                    <a href="login.html">Sign in here</a>
-                </p>
-            </div>
-
-        </div>
-
-    </div>
-
-    <script type="module" src="./assets/js/userAuth.js"></script>
-
+<header class="auth-header"><p class="auth-eyebrow">WELCOME TO DONO</p><h1>Create your account</h1><p>Join DONO to discover, save and send thoughtful gifts.</p></header>
+<div aria-live="assertive" class="alert-box error d-none" id="errorAlert" role="alert"></div>
+<form id="registerForm"><div class="form-group"><label for="name">Full name <span aria-hidden="true" class="required">*</span></label><div class="auth-input-wrap"><input autocomplete="name" class="form-control" id="name" name="name" placeholder="Your full name" required="" type="text"/></div></div><div class="form-group"><label for="email">Email address <span aria-hidden="true" class="required">*</span></label><div class="auth-input-wrap"><input autocomplete="email" class="form-control" id="email" name="email" placeholder="you@example.com" required="" type="email"/></div></div><div class="form-row"><div class="form-group"><label for="password">Password <span aria-hidden="true" class="required">*</span></label><div class="auth-input-wrap"><input autocomplete="new-password" class="form-control" id="password" minlength="6" name="password" placeholder="At least 6 characters" required="" type="password"/><button aria-label="Show password" aria-pressed="false" class="auth-visibility" data-password-target="password" type="button">Show</button></div></div><div class="form-group"><label for="confirmPassword">Confirm password <span aria-hidden="true" class="required">*</span></label><div class="auth-input-wrap"><input autocomplete="new-password" class="form-control" id="confirmPassword" minlength="6" name="confirmPassword" placeholder="Repeat password" required="" type="password"/><button aria-label="Show confirm password" aria-pressed="false" class="auth-visibility" data-password-target="confirmPassword" type="button">Show</button></div></div></div><p class="auth-form-hint">Use at least 6 characters. A longer password is more secure.</p><details class="auth-optional-details"><summary><span>Additional details <small>(optional)</small></span><span aria-hidden="true" class="auth-optional-chevron">⌄</span></summary><div class="auth-optional-content"><div class="form-row"><div class="form-group"><label for="phone">Phone number <span class="auth-optional">(optional)</span></label><input autocomplete="tel" class="form-control" id="phone" name="phone" placeholder="Phone number" type="tel"/></div><div class="form-group"><label for="gender">Gender <span class="auth-optional">(optional)</span></label><select class="form-control" id="gender" name="gender"><option value="">Prefer not to say</option><option value="male">Male</option><option value="female">Female</option></select></div></div><div class="form-group"><label for="address">Address <span class="auth-optional">(optional)</span></label><textarea autocomplete="street-address" class="form-control" id="address" name="address" placeholder="Your address (optional)" rows="2"></textarea></div></div></details><button class="btn-primary" type="submit">Create Account <span aria-hidden="true">→</span></button></form>
+<div class="divider"><span>or join with</span></div>
+<button class="google-btn" id="googleSignInBtn" type="button"><svg aria-hidden="true" height="20" viewbox="0 0 48 48" width="20"><path d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" fill="#EA4335"></path><path d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z" fill="#4285F4"></path><path d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z" fill="#FBBC05"></path><path d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z" fill="#34A853"></path></svg><span>Continue with Google</span></button>
+<footer class="auth-footer"><p>Already part of DONO? <a data-preserve-return="" href="login.html">Log In</a></p></footer><div class="auth-back-row"><a class="auth-back" href="products.html">← Continue exploring gifts</a></div>
+</div>
+</main>
+</div>
+<script src="assets/js/userAuth.js" type="module"></script>
 </body>
 </html>

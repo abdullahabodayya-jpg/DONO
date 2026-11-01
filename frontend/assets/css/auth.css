@@ -2,22 +2,22 @@
 
 
 :root {
-    --primary: #416B4C;
-    --primary-hover: #30553A;
+    --primary: #063C28;
+    --primary-hover: #0D5137;
 
-    --dark-title: #1D3024;
-    --dark-text: #203529;
+    --dark-title: #063C28;
+    --dark-text: #1E3B2B;
 
-    --light-bg: #EAF3E8;
-    --border-color: #DFE8DC;
+    --light-bg: #EAF1E8;
+    --border-color: #DDE7DC;
 
-    --body-bg: #F9FBF9;
+    --body-bg: #FBFAF6;
     --card-bg: #FFFFFF;
 
-    --text-muted: #777777;
+    --text-muted: #637365;
     --text-desc: #687469;
 
-    --font-family: Arial, sans-serif;
+    --font-family: "DM Sans", Arial, sans-serif;
 }
 
 
@@ -320,5 +320,12 @@ select.form-control {
 
 /* Show backend errors when JavaScript removes d-none. */
 .alert-box:not(.d-none){display:block}.d-none{display:none!important}
-/* Customer auth inherits DONO brand; admin styles remain untouched. */
-body{background:#fff0a8;color:#063d2c}.auth-card{border:2px solid #063d2c;border-radius:22px;box-shadow:7px 7px 0 #063d2c;background:#fcfaf4}.auth-header h1{font-family:'Archivo',Arial,sans-serif;font-weight:900;letter-spacing:-.04em;color:#063d2c}.btn-primary{background:#063d2c;border-radius:99px}.btn-primary:hover{background:#e92891}.auth-footer a{color:#bd0f73}.google-btn{border-color:#063d2c!important}
+
+/* DONO legacy auth pages: same restrained palette, no yellow background. */
+body { background: #FBFAF6; color: #1E3B2B; }
+.auth-card { background: #fff; border: 1px solid #DDE7DC; border-radius: 20px; box-shadow: 0 14px 40px rgba(6,60,40,.07); }
+.auth-header h1 { color:#063C28; font-family: "Playfair Display", Georgia, serif; }
+.btn-primary { background:#063C28; border-radius:12px; }
+.btn-primary:hover { background:#0D5137; }
+.auth-footer a { color:#063C28; }
+.google-btn { border-color:#DDE7DC; }

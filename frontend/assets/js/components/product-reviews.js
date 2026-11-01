@@ -1,3 +1,4 @@
+import {requireAccount} from './auth-cta.js';
 /* ===================================
    DONO - PRODUCT REVIEWS COMPONENT
    Display Reviews and Submit Rating
@@ -296,6 +297,7 @@ export async function mountProductReviews(container, productId) {
 
     reviewForm.addEventListener("submit", async function (event) {
         event.preventDefault();
+        if (!(await requireAccount('write a review'))) return;
 
         // Get selected rating
         const selectedRating = reviewForm.querySelector('input[name="rating"]:checked');

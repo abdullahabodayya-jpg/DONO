@@ -1,3 +1,5 @@
+import {requireAccount} from '../components/auth-cta.js';
+import {getWishlistIds, toggleWishlist, paintWishlistButton} from '../components/wishlist-state.js';
 /* DONO Explore — server-side discovery, cards, progressive category tabs. */
 const apiRoot = new URL("../../../../backend/public/api", import.meta.url)
   .pathname;
@@ -5,7 +7,6 @@ const els = Object.fromEntries(
   Object.entries({
     grid: "shop-grid",
     message: "shop-message",
-    count: "shop-count",
     search: "shop-search",
     category: "shop-category",
     age: "shop-age",
@@ -123,7 +124,7 @@ function showProducts(items) {
     card.className = "gift-card";
     card.innerHTML = `<div class="gift-card-rotator">
  <div class="gift-card-front" aria-hidden="false"><img src="${img}" loading="lazy" alt="${name}" onerror="this.src='assets/img/gift-box.jpg'"/><div class="gift-card-gradient"></div><span class="gift-card-category">${category}</span><div class="gift-card-face-label"><h3>${name}</h3><span class="gift-card-hint">TAP TO FLIP <span aria-hidden="true">↻</span></span></div><button type="button" class="gift-flip-button" aria-label="Show details for ${name}" aria-expanded="false" data-flip>↗</button></div>
- <div class="gift-card-back" aria-hidden="true"><span class="gift-back-kicker">✳ ${category}</span><button type="button" class="gift-close-button" data-flip aria-label="Back to image">↶</button><h3>${name}</h3><p>${description}</p><strong class="gift-price">${priceLabel}</strong>${product.age_min !== null && product.age_max !== null ? `<small>Suggested ages: ${Number(product.age_min)}–${Number(product.age_max)}</small>` : ""}<div class="gift-card-actions"><a href="product-details.html?id=${id}">DETAILS ↗</a><button type="button" data-cart="${id}" aria-label="Add ${name} to cart">+ BAG</button><button type="button" data-wish="${id}" aria-label="Add ${name} to wishlist">♡</button></div></div></div>`;
+ <div class="gift-card-back" aria-hidden="true"><span class="gift-back-kicker">✳ ${category}</span><button type="button" class="gift-close-button" data-flip aria-label="Back to image">↶</button><h3>${name}</h3><p>${description}</p><strong class="gift-price">${priceLabel}</strong>${product.age_min !== null && product.age_max !== null ? `<small>Suggested ages: ${Number(product.age_min)}–${Number(product.age_max)}</small>` : ""}<div class="gift-card-actions"><a href="product-details.html?id=${id}">DETAILS ↗</a><button type="button" data-cart="${id}" aria-label="Add ${name} to cart">+ BAG</button><button type="button" data-wish="${id}" data-product-name="${name}" aria-label="Add ${name} to wishlist" aria-pressed="false">♡</button></div></div></div>`;
     card.querySelector(".gift-close-button").tabIndex = -1;
     card
       .querySelectorAll(".gift-card-actions button,.gift-card-actions a")
@@ -166,16 +167,21 @@ async function load() {
     if (myRequest !== requestToken) return;
     const items = Array.isArray(data?.items) ? data.items : [];
     totalPages = Math.max(1, Number(data?.pagination?.total_pages) || 1);
-    els.count.textContent = `${Number(data?.pagination?.total) || 0} thoughtful gifts`;
     els.page.textContent = `${page} / ${totalPages}`;
     els.prev.disabled = page <= 1;
     els.next.disabled = page >= totalPages;
     showProducts(items);
+    // Restore saved hearts from the backend for the current page of gifts.
+    getWishlistIds().then(ids => {
+      if (myRequest !== requestToken) return;
+      els.grid.querySelectorAll('[data-wish]').forEach(button => {
+        paintWishlistButton(button, ids.has(Number(button.dataset.wish)));
+      });
+    }).catch(error => console.warn('Wishlist state unavailable:', error.message));
     els.message.textContent = "";
   } catch (err) {
     if (myRequest !== requestToken) return;
     els.grid.replaceChildren();
-    els.count.textContent = "No results";
     els.message.textContent = err.message;
     els.prev.disabled = true;
     els.next.disabled = true;
@@ -234,28 +240,25 @@ els.grid.addEventListener("click", async (e) => {
   if (!button) return;
   const id = Number(button.dataset.cart || button.dataset.wish);
   const cart = button.hasAttribute("data-cart");
+  if (!(await requireAccount(cart ? 'add a gift to your bag' : 'save a favorite'))) return;
   button.disabled = true;
   try {
-    await getJson(cart ? "/cart" : "/wishlist/items", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(
-        cart ? { product_id: id, quantity: 1 } : { product_id: id },
-      ),
-    });
-    els.message.textContent = cart
-      ? "Added to your bag."
-      : "Saved to your wishlist.";
-    window.DonoUI?.toast(els.message.textContent, "success");
-  } catch (err) {
-    els.message.textContent =
-      err.message + (err.status === 401 ? " Please log in first." : "");
-    if (err.status === 401) {
-      const link = document.createElement("a");
-      link.href = "login.html";
-      link.textContent = " Log in →";
-      els.message.append(link);
+    if (cart) {
+      await getJson('/cart', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({product_id: id, quantity: 1}),
+      });
+      els.message.textContent = 'Added to your bag.';
+    } else {
+      const saved = await toggleWishlist(id);
+      paintWishlistButton(button, saved);
+      els.message.textContent = saved ? 'Saved to your wishlist.' : 'Removed from your wishlist.';
     }
+    window.DonoUI?.toast(els.message.textContent, 'success');
+  } catch (err) {
+    els.message.textContent = err.message + (err.status === 401 ? ' Please log in first.' : '');
+    window.DonoUI?.toast(els.message.textContent, 'error');
   } finally {
     button.disabled = false;
   }
