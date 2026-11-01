@@ -19,4 +19,8 @@
 .DS_Store
 Thumbs.db
 
-/backend/public/uploads/products//backend/vendor/
+/backend/public/uploads/products/
+/backend/vendor/
+
+# Keep the sample in Git, never commit the real .env.
+!/backend/.env.example

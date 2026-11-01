@@ -73,10 +73,17 @@ if (registerForm) {
 const googleBtn = document.getElementById('googleSignInBtn');
 if (googleBtn) {
     googleBtn.addEventListener('click', async () => {
+        if (googleBtn.disabled) return;
+        googleBtn.disabled = true;
         try {
             const res = await api.get('/auth/google/url');
-            window.location.href = res.data.url;
+            const destination = res.data?.url;
+            if (typeof destination !== 'string' || !destination.startsWith('https://accounts.google.com/')) {
+                throw new Error('Invalid Google authentication URL.');
+            }
+            window.location.assign(destination);
         } catch (error) {
+            googleBtn.disabled = false;
             const box = document.getElementById('errorAlert');
             if (box) { box.textContent = error.message; box.classList.remove('d-none'); }
         }

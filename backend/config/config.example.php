@@ -21,6 +21,8 @@ return [
     'google' => [
         'client_id' => '',
         'client_secret' => '',
-        'redirect_uri' => 'http://localhost/DONO/frontend/google-callback.html',
+        // For localhost the controller derives the exact project path automatically.
+        // For production set the registered full redirect URI here.
+        'redirect_uri' => '',
     ],
 ];

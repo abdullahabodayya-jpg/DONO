@@ -113,113 +113,165 @@ class AuthController
         ]);
     }
 
+    /**
+     * Resolve the callback from the actual Apache application path on localhost.
+     * This prevents stale /dono and /DONO URLs from breaking OAuth when the
+     * repository lives inside a longer XAMPP folder name.
+     * For hosted deployments, explicitly configure google.redirect_uri.
+     */
+    private function googleRedirectUri(): string
+    {
+        $configured = trim((string) ($this->config['google']['redirect_uri'] ?? ''));
+        $host = (string) ($_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? '');
+        $localHost = preg_match('/^(localhost|127\.0\.0\.1)(:[0-9]{1,5})?$/i', $host) === 1;
+
+        if (!$localHost) {
+            if (!filter_var($configured, FILTER_VALIDATE_URL)
+                || !in_array(strtolower((string) parse_url($configured, PHP_URL_SCHEME)), ['http', 'https'], true)) {
+                Response::send(false, 'Google redirect URI is not configured for this host.', null, 503);
+            }
+            return $configured;
+        }
+
+        $script = str_replace('\\', '/', (string) ($_SERVER['SCRIPT_NAME'] ?? ''));
+        if (!str_ends_with($script, '/backend/public/index.php')) {
+            Response::send(false, 'Could not determine the Google callback path.', null, 503);
+        }
+        $projectPath = substr($script, 0, -strlen('/backend/public/index.php'));
+        $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+        return $scheme . '://' . $host . $projectPath . '/frontend/google-callback.html';
+    }
+
     public function getGoogleAuthUrl(): void
     {
-        if (empty($this->config['google']['client_id']) || empty($this->config['google']['redirect_uri'])) {
+        if (empty($this->config['google']['client_id']) || empty($this->config['google']['client_secret'])) {
             Response::send(false, 'Google Sign-In is not configured.', null, 503);
         }
-        $params = [
-            'client_id'     => $this->config['google']['client_id'],
-            'redirect_uri'  => $this->config['google']['redirect_uri'],
-            'response_type' => 'code',
-            'scope'         => 'email profile',
-            'access_type'   => 'online',
-            'prompt'        => 'select_account'
-        ];
 
-        $authUrl = 'https://accounts.google.com/o/oauth2/v2/auth?' . http_build_query($params);
-        Response::success('Google auth URL generated.', ['url' => $authUrl]);
+        // OAuth CSRF protection: bind the Google return to this browser session.
+        $state = bin2hex(random_bytes(32));
+        $_SESSION['dono_google_oauth'] = ['state' => $state, 'created_at' => time()];
+        $params = [
+            'client_id' => $this->config['google']['client_id'],
+            'redirect_uri' => $this->googleRedirectUri(),
+            'response_type' => 'code',
+            'scope' => 'openid email profile',
+            'access_type' => 'online',
+            'prompt' => 'select_account',
+            'state' => $state,
+        ];
+        Response::success('Google auth URL generated.', [
+            'url' => 'https://accounts.google.com/o/oauth2/v2/auth?' . http_build_query($params, '', '&', PHP_QUERY_RFC3986),
+        ]);
     }
 
     public function handleGoogleCallback(): void
     {
-        $input = json_decode(file_get_contents('php://input'), true) ?? $_POST;
-        $code  = $input['code'] ?? '';
+        $input = json_decode((string) file_get_contents('php://input'), true);
+        if (!is_array($input)) {
+            Response::send(false, 'Invalid Google callback data.', null, 400);
+        }
 
-        if (empty($code)) {
+        $state = $input['state'] ?? null;
+        $pending = $_SESSION['dono_google_oauth'] ?? null;
+        unset($_SESSION['dono_google_oauth']); // Single-use state, even on failure.
+        if (!is_string($state) || !is_array($pending)
+            || !isset($pending['state'], $pending['created_at'])
+            || !is_string($pending['state'])
+            || !hash_equals($pending['state'], $state)
+            || abs(time() - (int) $pending['created_at']) > 600) {
+            Response::send(false, 'Google login session expired or invalid. Please try again.', null, 400);
+        }
+
+        $code = $input['code'] ?? null;
+        if (!is_string($code) || $code === '') {
             Response::send(false, 'Authorization code is missing.', null, 400);
         }
-
-        if (empty($this->config['google']['client_id']) || empty($this->config['google']['client_secret']) || empty($this->config['google']['redirect_uri'])) {
+        if (empty($this->config['google']['client_id']) || empty($this->config['google']['client_secret'])) {
             Response::send(false, 'Google Sign-In is not configured.', null, 503);
         }
+        if (!function_exists('curl_init')) {
+            Response::send(false, 'PHP cURL extension is required for Google Sign-In.', null, 503);
+        }
+
         $postData = [
-            'code'          => $code,
-            'client_id'     => $this->config['google']['client_id'],
+            'code' => $code,
+            'client_id' => $this->config['google']['client_id'],
             'client_secret' => $this->config['google']['client_secret'],
-            'redirect_uri'  => $this->config['google']['redirect_uri'],
-            'grant_type'    => 'authorization_code'
+            'redirect_uri' => $this->googleRedirectUri(),
+            'grant_type' => 'authorization_code',
         ];
-
         $ch = curl_init('https://oauth2.googleapis.com/token');
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($postData));
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+        curl_setopt_array($ch, [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => http_build_query($postData, '', '&', PHP_QUERY_RFC3986),
+            CURLOPT_HTTPHEADER => ['Content-Type: application/x-www-form-urlencoded'],
+            CURLOPT_SSL_VERIFYPEER => true,
+            CURLOPT_SSL_VERIFYHOST => 2,
+            CURLOPT_CONNECTTIMEOUT => 8,
+            CURLOPT_TIMEOUT => 20,
+        ]);
         $tokenResponse = curl_exec($ch);
+        $tokenStatus = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
-
-        $tokenData = json_decode($tokenResponse, true);
-
-        if (!isset($tokenData['access_token'])) {
-            Response::send(false, 'Failed to authenticate with Google.', null, 401);
+        $tokenData = is_string($tokenResponse) ? json_decode($tokenResponse, true) : null;
+        if ($tokenStatus !== 200 || !is_array($tokenData) || empty($tokenData['access_token'])) {
+            error_log('DONO Google OAuth token exchange failed (HTTP ' . $tokenStatus . ').');
+            Response::send(false, 'Google authorization could not be completed. Please try again.', null, 401);
         }
 
         $ch = curl_init('https://www.googleapis.com/oauth2/v3/userinfo');
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Bearer ' . $tokenData['access_token']]);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+        curl_setopt_array($ch, [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HTTPHEADER => ['Authorization: Bearer ' . $tokenData['access_token']],
+            CURLOPT_SSL_VERIFYPEER => true,
+            CURLOPT_SSL_VERIFYHOST => 2,
+            CURLOPT_CONNECTTIMEOUT => 8,
+            CURLOPT_TIMEOUT => 20,
+        ]);
         $userResponse = curl_exec($ch);
+        $userStatus = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
-
-        $googleUser = json_decode($userResponse, true);
-
-        if (!isset($googleUser['email'])) {
-            Response::send(false, 'Could not retrieve email from Google.', null, 400);
+        $googleUser = is_string($userResponse) ? json_decode($userResponse, true) : null;
+        if ($userStatus !== 200 || !is_array($googleUser)
+            || ($googleUser['email_verified'] ?? false) !== true
+            || !filter_var($googleUser['email'] ?? null, FILTER_VALIDATE_EMAIL)) {
+            error_log('DONO Google OAuth userinfo failed or email was not verified (HTTP ' . $userStatus . ').');
+            Response::send(false, 'Google did not return a verified email address.', null, 401);
         }
 
-        $email = $googleUser['email'];
-        $name  = $googleUser['name'] ?? 'Google User';
-
+        $email = strtolower(trim((string) $googleUser['email']));
+        $name = trim((string) ($googleUser['name'] ?? 'Google User'));
+        $name = $name !== '' ? $name : 'Google User';
+        $name = function_exists('mb_substr') ? mb_substr($name, 0, 100) : substr($name, 0, 100);
         $existingUser = $this->userRepository->findByEmail($email);
 
         if ($existingUser) {
             if (empty($existingUser['phone']) || empty($existingUser['gender']) || empty($existingUser['address'])) {
                 $_SESSION['temp_google_user'] = [
-                    'id'    => $existingUser['id'],
-                    'name'  => $existingUser['name'],
-                    'email' => $existingUser['email']
+                    'id' => $existingUser['id'],
+                    'name' => $existingUser['name'],
+                    'email' => $existingUser['email'],
                 ];
-
-                Response::success('Profile completion required.', [
-                    'requiresProfileCompletion' => true
-                ]);
+                Response::success('Profile completion required.', ['requiresProfileCompletion' => true]);
             }
-
             session_regenerate_id(true);
+            unset($_SESSION['temp_google_user']);
             $_SESSION['user'] = [
-                'id'    => $existingUser['id'],
-                'name'  => $existingUser['name'],
+                'id' => $existingUser['id'],
+                'name' => $existingUser['name'],
                 'email' => $existingUser['email'],
-                'role'  => $existingUser['role']
+                'role' => $existingUser['role'],
             ];
-
             Response::success('Login successful.', [
                 'requiresProfileCompletion' => false,
-                'user'                      => $_SESSION['user']
+                'user' => $_SESSION['user'],
             ]);
         }
 
-        $_SESSION['temp_google_user'] = [
-            'name'  => $name,
-            'email' => $email
-        ];
-
-        Response::success('Profile completion required.', [
-            'requiresProfileCompletion' => true
-        ]);
+        $_SESSION['temp_google_user'] = ['name' => $name, 'email' => $email];
+        Response::success('Profile completion required.', ['requiresProfileCompletion' => true]);
     }
 
     public function completeProfile(): void

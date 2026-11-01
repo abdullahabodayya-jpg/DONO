@@ -25,23 +25,34 @@
         import { api } from './assets/js/services/api.js';
 
         async function verify() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const code = urlParams.get('code');
+            const params = new URLSearchParams(window.location.search);
+            const code = params.get('code');
+            const state = params.get('state');
+            const googleError = params.get('error');
 
-            if (!code) {
-                showError('Missing authorization code.');
+            // Remove the one-time authorization code from browser history.
+            window.history.replaceState(null, '', window.location.pathname);
+
+            if (googleError) {
+                showError('Google sign-in was cancelled or denied. Please try again.');
+                return;
+            }
+            if (!code || !state) {
+                showError('Missing Google authorization data. Please start again from Login.');
                 return;
             }
 
             try {
-                const res = await api.post('/auth/google/callback', { code });
-                if (res.data.requiresProfileCompletion) {
+                const res = await api.post('/auth/google/callback', { code, state });
+                if (res.data?.requiresProfileCompletion === true) {
                     window.location.replace('complete-profile.html');
+                } else if (res.data?.user) {
+                    window.location.replace(res.data.user.role === 'admin' ? 'admin/index.html' : 'products.html');
                 } else {
-                    window.location.replace(res.data?.user?.role === 'admin' ? 'admin/index.html' : 'products.html');
+                    throw new Error('Google login did not return a valid session.');
                 }
             } catch (err) {
-                showError(err.message || 'Authentication failed.');
+                showError(err.message || 'Google authentication failed. Please try again.');
             }
         }
 

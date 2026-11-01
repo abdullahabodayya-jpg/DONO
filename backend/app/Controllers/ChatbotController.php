@@ -24,13 +24,18 @@ final class ChatbotController
         $recent[] = $now;
         $_SESSION['dono_chat_requests'] = $recent;
 
-        $apiKey = $this->config['gemini']['api_key'] ?? '';
+        // Prefer server-side environment secrets over optional local config.php values.
+        $apiKey = getenv('GEMINI_API_KEY');
         if (!is_string($apiKey) || trim($apiKey) === '') {
-            $apiKey = getenv('GEMINI_API_KEY') ?: '';
+            $apiKey = getenv('GOOGLE_API_KEY');
         }
-        if (!is_string($apiKey) || trim($apiKey) === '' || str_contains($apiKey, 'REPLACE_ME')) {
-            Response::send(false, 'Shopping assistant is not configured. Ask the site administrator to set GEMINI_API_KEY.', null, 503);
+        if (!is_string($apiKey) || trim($apiKey) === '') {
+            $apiKey = $this->config['gemini']['api_key'] ?? '';
         }
+        if (!is_string($apiKey) || trim($apiKey) === '' || str_contains($apiKey, 'REPLACE_ME') || str_contains($apiKey, 'YOUR_GEMINI_API_KEY_HERE')) {
+            Response::send(false, 'Shopping assistant is not configured. Set GEMINI_API_KEY in backend/.env.', null, 503);
+        }
+        $apiKey = trim($apiKey);
 
         try {
             // Only recommend real, active products; reuse current project's database + images.
@@ -45,7 +50,7 @@ final class ChatbotController
             if (!$catalog) {
                 Response::success('No products available.', ['reply' => 'No gifts are available in our catalog yet.', 'products' => []]);
             }
-            $model = (string)($this->config['gemini']['model'] ?? 'gemini-2.5-flash');
+            $model = (string)(getenv('GEMINI_MODEL') ?: ($this->config['gemini']['model'] ?? 'gemini-2.5-flash'));
             if (!preg_match('/^[a-zA-Z0-9._-]{3,80}$/', $model)) $model = 'gemini-2.5-flash';
             $gemini = new GeminiService($apiKey, $model);
             $result = $gemini->searchAndRecommend(trim($message), $catalog);
@@ -59,8 +64,13 @@ final class ChatbotController
                 'reply' => $result['reply'],
                 'products' => $selected,
             ]);
+        } catch (GeminiServiceException $e) {
+            // Only safe, predefined messages are returned to visitors.
+            error_log('DONO chatbot provider issue: ' . $e->getMessage());
+            Response::send(false, $e->getMessage(), null, $e->httpStatus());
         } catch (Throwable $e) {
-            error_log('DONO chatbot: ' . $e->getMessage());
+            // Avoid logging raw provider replies or secrets.
+            error_log('DONO chatbot unexpected failure; error_type=' . get_class($e));
             Response::send(false, 'Shopping assistant is temporarily unavailable. Please try again.', null, 503);
         }
     }

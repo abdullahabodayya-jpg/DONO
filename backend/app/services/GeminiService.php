@@ -2,6 +2,20 @@
 
 declare(strict_types=1);
 
+/** Safe error messages for provider/configuration issues. Never include API keys. */
+final class GeminiServiceException extends RuntimeException
+{
+    public function __construct(string $message, private int $status = 503)
+    {
+        parent::__construct($message);
+    }
+
+    public function httpStatus(): int
+    {
+        return $this->status;
+    }
+}
+
 /** Team chatbot Gemini integration, adapted for DONO's existing PHP router. */
 final class GeminiService
 {
@@ -46,8 +60,21 @@ final class GeminiService
         $curlError = curl_error($handle);
         curl_close($handle);
         if (!is_string($response) || $curlError !== '' || $httpCode < 200 || $httpCode >= 300) {
-            error_log('DONO chatbot provider request failed; http_code=' . $httpCode . '; curl=' . ($curlError !== '' ? 'connection_failed' : 'none'));
-            throw new RuntimeException('Shopping assistant is temporarily unavailable. Please try again.');
+            // Never log the request URL with credentials, headers, or the raw provider response.
+            error_log('DONO Gemini API request failed; http_code=' . $httpCode . '; connection_error=' . ($curlError !== '' ? 'yes' : 'no'));
+            if (in_array($httpCode, [401, 403], true)) {
+                throw new GeminiServiceException('The shopping assistant API key was rejected. Check GEMINI_API_KEY on the server.');
+            }
+            if ($httpCode === 400) {
+                throw new GeminiServiceException('Gemini rejected the request. Check the API key, model and API access.');
+            }
+            if ($httpCode === 404) {
+                throw new GeminiServiceException('The configured Gemini model is unavailable. Check GEMINI_MODEL.');
+            }
+            if ($httpCode === 429) {
+                throw new GeminiServiceException('The shopping assistant reached its API quota. Try again later.', 429);
+            }
+            throw new GeminiServiceException('Shopping assistant cannot contact Gemini right now. Please try again.');
         }
         $body = json_decode($response, true);
         $raw = $body['candidates'][0]['content']['parts'][0]['text'] ?? '';
